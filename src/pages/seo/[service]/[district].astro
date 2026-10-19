@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaceholderImage from '../../../components/common/PlaceholderImage.astro';
 import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, type SeoPageConfig } from '../../../data/pages';
 
 export async function getStaticPaths() {
@@ -69,7 +68,7 @@ const relatedPublishedPages = SEO_PAGES.filter(
           </svg>
           <span>전화 상담 문의 (010-8492-6900)</span>
         </a>
-        <span class="text-xs text-[#5C5549]/80">※ 현장 사진을 문자로 보내주시면 빠른 확인이 가능합니다.</span>
+        <span class="text-xs text-[#5C5549]/80">※ 현장 사진을 문자로 보내주시면 전화 상담 시 상태 확인에 도움이 됩니다.</span>
       </div>
     </header>
 
@@ -111,10 +110,10 @@ const relatedPublishedPages = SEO_PAGES.filter(
         <div class="space-y-1.5 max-w-2xl">
           <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">WALL CONDITION CHECK</p>
           <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-            시공 전 벽면 상태 자가 진단
+            시공 전 벽면 상태 확인 가이드
           </h2>
           <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-            탄성코트 도포 전 벽면의 기본 바탕 상태를 확인하여 전처리 방식을 결정합니다.
+            도포 작업 전 벽면의 기본 바탕 상태를 확인하여 필요한 보수 및 준비 범위를 결정합니다.
           </p>
         </div>
 
@@ -152,7 +151,7 @@ const relatedPublishedPages = SEO_PAGES.filter(
             작업 범위와 견적에 영향을 주는 실제 조건
           </h2>
           <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-            단순 평형뿐만 아니라 현장의 벽체 바탕면 상태에 따라 공정 소요 시간이 달라집니다.
+            공간 면적뿐만 아니라 현장의 벽체 바탕면 상태와 작업 환경에 따라 준비 범위가 달라집니다.
           </p>
         </div>
 
@@ -176,24 +175,16 @@ const relatedPublishedPages = SEO_PAGES.filter(
       </section>
     )}
 
-    <!-- 현장 사진 등록 안내 (플레이스홀더 영역) -->
-    <section class="space-y-4">
-      <div class="space-y-1.5 max-w-2xl">
-        <h2 class="text-lg sm:text-xl font-bold text-[#3E443B]">현장 시공 사진 준비</h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          올케어탄성은 신뢰할 수 있는 정품 시공을 위해 승인된 실제 현장 사진만을 등록합니다.
-        </p>
+    <!-- 시공 사진 안내 영역 (컴팩트 카드 디자인) -->
+    <section class="p-5 sm:p-6 rounded-xl bg-[#FAF8F5] border border-[#E7D9C1] space-y-2 text-left">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-[#4F5844]"></span>
+        <h2 class="text-sm sm:text-base font-bold text-[#3E443B]">현장 시공 사진 등록 안내</h2>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <PlaceholderImage
-          label="시공 전 바탕면 사진 등록 예정"
-          subLabel="현장 검증 후 실제 시공 전 벽면 상태 이미지가 등록됩니다."
-        />
-        <PlaceholderImage
-          label="시공 후 세라믹 마감 사진 등록 예정"
-          subLabel="현장 검증 후 실제 시공 후 균일 도막 이미지가 등록됩니다."
-        />
-      </div>
+      <p class="text-xs text-[#5C5549] leading-relaxed">
+        올케어탄성은 신뢰할 수 있는 정보 제공을 위해 승인된 실제 시공 현장 사진만을 등록합니다.
+        시공 전/후 사진은 현장 검증을 거친 후 순차적으로 업데이트될 예정입니다.
+      </p>
     </section>
 
     <!-- 07. 상담 전 확인할 사항 (Consultation Prep) -->
@@ -202,10 +193,10 @@ const relatedPublishedPages = SEO_PAGES.filter(
         <div class="space-y-1.5 max-w-2xl">
           <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">HOW TO PREPARE</p>
           <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-            상담 전 사진 접수 안내
+            전화 상담 전 확인 사항
           </h2>
           <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-            아래 4가지 항목을 확인하여 사진을 보내주시면 신속하고 정직하게 안내해 드립니다.
+            아래 사항을 미리 확인하여 사진을 준비해 주시면 전화 상담 시 현장 상태를 설명하는 데 도움이 됩니다.
           </p>
         </div>
 
@@ -231,10 +222,10 @@ const relatedPublishedPages = SEO_PAGES.filter(
         <div class="space-y-1.5 max-w-2xl">
           <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">WORK PROCESS</p>
           <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-            올케어 표준 시공 과정
+            탄성코트 시공 과정 안내
           </h2>
           <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-            현장 방문부터 밑작업, 도포, 양생 확인까지 정석 절차를 준수합니다.
+            현장 확인부터 보양, 바탕면 정리, 도포, 양생 안내까지의 일반적인 작업 흐름입니다.
           </p>
         </div>
 
@@ -259,7 +250,7 @@ const relatedPublishedPages = SEO_PAGES.filter(
             {region?.name} 시공 관련 자주 묻는 질문
           </h2>
           <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-            상담 전 가장 많이 궁금해하시는 사항을 투명하게 안내해 드립니다.
+            상담 전 가장 많이 문의하시는 질문을 투명하게 안내해 드립니다.
           </p>
         </div>
 
@@ -307,10 +298,10 @@ const relatedPublishedPages = SEO_PAGES.filter(
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
         <div class="space-y-1.5">
           <h2 class="text-lg sm:text-xl font-bold tracking-tight">
-            {region?.name} 탄성코트 시공 사진 상담
+            {region?.name} 탄성코트 시공 상담 안내
           </h2>
           <p class="text-xs sm:text-sm text-[#F5F3EE]/80 leading-relaxed">
-            베란다와 세탁실의 벽면 사진을 보내주시면 작업 범위와 시공 일정을 친절히 안내합니다.
+            베란다와 세탁실의 벽면 상태를 사진과 함께 문의해 주시면 작업 범위와 일정을 안내해 드립니다.
           </p>
         </div>
         <div class="shrink-0 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
