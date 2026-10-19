@@ -19,3 +19,6 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+
+# Test & QA artifacts
+artifacts/
