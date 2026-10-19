@@ -506,7 +506,7 @@ for (const service of SERVICES) {
       serviceSlug: service.slug,
       districtSlug: region.slug,
       urlPath: `/seo/${service.slug}/${region.slug}.html`,
-      isPublished: false, // STEP 3-E 크로스 지역 파일럿 검증 완료 후 전 조합 비공개(false) 안전 원복
+      isPublished: false, // STEP 3-F 최종 비공개 원복 (24개 전체 false)
       contentStatus,
       metaTitle,
       metaDescription,
@@ -519,15 +519,18 @@ for (const service of SERVICES) {
 }
 
 /**
- * 공개 상태 안전 장치:
- * - isPublished === true 이면서,
- * - contentStatus === 'approved' (또는 로컬 검증 시 'in_review')인 페이지만 정적 빌드 허용
- * - 'draft'인 미완성 페이지는 실수로 isPublished가 켜져도 절대 빌드되지 않음
+ * 공개 상태 안전 판정 함수:
+ * - 반드시 isPublished === true 이며,
+ * - contentStatus === 'approved' (운영자 최종 검수 및 승인 완료)
+ * 두 조건이 동시에 충족된 페이지만 정적 HTML 빌드 및 내부 링크 공개 대상으로 판정합니다.
+ * 'draft' 및 검토 중인 'in_review' 페이지는 isPublished가 켜져 있어도 절대 공개되지 않습니다.
  */
+export function isPagePublished(page: SeoPageConfig): boolean {
+  return page.isPublished === true && page.contentStatus === 'approved';
+}
+
 export function getPublishedSeoPages(): SeoPageConfig[] {
-  return SEO_PAGES.filter(
-    (page) => page.isPublished && (page.contentStatus === 'approved' || page.contentStatus === 'in_review')
-  );
+  return SEO_PAGES.filter(isPagePublished);
 }
 
 export function getSeoPage(serviceSlug: string, districtSlug: string): SeoPageConfig | undefined {

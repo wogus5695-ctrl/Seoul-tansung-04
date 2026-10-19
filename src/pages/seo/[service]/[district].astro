@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, type SeoPageConfig } from '../../../data/pages';
+import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, isPagePublished, type SeoPageConfig } from '../../../data/pages';
 
 export async function getStaticPaths() {
-  // isPublished === true인 페이지만 정적 경로 생성
+  // isPublished === true && contentStatus === 'approved'인 페이지만 정적 경로 생성
   const publishedPages = getPublishedSeoPages();
   return publishedPages.map((page) => ({
     params: {
@@ -25,9 +25,9 @@ const region = getRegionById(page.regionId);
 const service = getServiceById(page.serviceId);
 const content = page.content;
 
-// 관련 공개 페이지 목록 (동일 지역 타 서비스 또는 타 지역 공개 페이지)
+// 관련 공개 페이지 목록 (공개 승인된 동일 지역 타 서비스 또는 타 지역 공개 페이지)
 const relatedPublishedPages = SEO_PAGES.filter(
-  (p) => p.isPublished && p.id !== page.id
+  (p) => isPagePublished(p) && p.id !== page.id
 );
 ---
 

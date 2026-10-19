@@ -2,17 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/common/PlaceholderImage.astro';
 import { REGIONS } from '../data/regions';
-import { SEO_PAGES } from '../data/pages';
+import { SEO_PAGES, isPagePublished } from '../data/pages';
 
 // 실제 시공 사진 보유 여부 플래그 (현재 미확보 상태이므로 false)
 // 향후 실제 현장 사진 등록 시 true로 전환하면 2열 Before & After 비교 레이아웃이 자동 활성화됩니다.
 const hasRealPhotos = false;
 
-// 각 지역별 공개 상세 페이지 매핑 (현재 24개 모두 isPublished=false)
-// 향후 특정 지역의 페이지가 공개되면(단일 또는 복수 작업) 해당 링크가 자동 연동되는 구조
+// 각 지역별 공개 상세 페이지 매핑 (isPublished=true && contentStatus='approved'만 연결)
+// 향후 특정 지역의 페이지가 공식 승인/공개되면 해당 링크가 자동 연동되는 구조
 const regionStatusList = REGIONS.map((region) => {
   const publishedPages = SEO_PAGES.filter(
-    (page) => page.regionId === region.id && page.isPublished
+    (page) => page.regionId === region.id && isPagePublished(page)
   );
   return {
     ...region,
