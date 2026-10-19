@@ -1,0 +1,59 @@
+---
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  variant?: 'main' | 'district';
+  class?: string;
+}
+
+const {
+  items = [],
+  variant = 'district',
+  class: className = '',
+} = Astro.props;
+
+const isMain = variant === 'main';
+
+// 'Q1.' 와 같은 기존 접두사 유무를 확인하여 누락 시에만 번호 부여
+function formatQuestion(q: string, idx: number): string {
+  if (/^Q\d+\.\s*/i.test(q)) {
+    return q;
+  }
+  return `Q${idx + 1}. ${q}`;
+}
+---
+
+<div class:list={['space-y-3 max-w-3xl', className]}>
+  {items.map((faq, idx) => {
+    const formattedQ = formatQuestion(faq.question, idx);
+    return isMain ? (
+      <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
+        <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
+          <span class="leading-snug">{formattedQ}</span>
+          <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">
+            ▼
+          </span>
+        </summary>
+        <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
+          {faq.answer}
+        </p>
+      </details>
+    ) : (
+      <details class="group p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7D9C1] transition-colors">
+        <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
+          <span class="leading-snug">{formattedQ}</span>
+          <span class="text-[#4F5844] text-xs transition-transform group-open:rotate-180 shrink-0">
+            ▼
+          </span>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-[#E7D9C1]/60 text-xs text-[#5C5549] leading-relaxed space-y-1.5">
+          <p>{faq.answer}</p>
+        </div>
+      </details>
+    );
+  })}
+</div>

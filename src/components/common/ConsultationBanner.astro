@@ -1,0 +1,106 @@
+---
+import { SITE_CONTACT } from '../../data/siteConfig';
+
+interface Props {
+  variant?: 'main' | 'district';
+  id?: string;
+  badge?: string;
+  title: string;
+  description: string;
+  buttonLabel?: string;
+  checklistTitle?: string;
+  checklist?: string[];
+  notice?: string;
+  class?: string;
+}
+
+const {
+  variant = 'district',
+  id,
+  badge = 'DIRECT CONSULTATION',
+  title,
+  description,
+  buttonLabel,
+  checklistTitle = '상담 시 미리 준비하면 좋은 정보',
+  checklist,
+  notice,
+  class: className = '',
+} = Astro.props;
+
+const isMain = variant === 'main';
+---
+
+{isMain ? (
+  <section id={id || 'consultation'} class:list={['w-full py-12 sm:py-20 bg-[#2D322A] text-[#F5F3EE]', className]}>
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 max-w-2xl">
+      <div class="space-y-2">
+        {badge && (
+          <p class="text-[11px] font-semibold text-[#E7D9C1]/80 tracking-wider uppercase">
+            {badge}
+          </p>
+        )}
+        <h2 class="text-xl sm:text-3xl font-bold text-[#F5F3EE] tracking-tight">
+          {title}
+        </h2>
+        <p class="text-xs sm:text-sm text-[#E7D9C1]/90 leading-relaxed text-pretty">
+          {description}
+        </p>
+      </div>
+
+      {checklist && checklist.length > 0 && (
+        <div class="p-4 rounded-xl bg-[#3E443B]/80 border border-[#E7D9C1]/20 text-left space-y-2">
+          {checklistTitle && (
+            <p class="text-[11px] font-semibold text-[#E7D9C1] tracking-wider uppercase">
+              {checklistTitle}
+            </p>
+          )}
+          <ul class="text-xs text-[#E7D9C1]/90 space-y-1 list-disc list-inside">
+            {checklist.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div class="pt-1">
+        <a
+          href={SITE_CONTACT.telHref}
+          class="w-full sm:w-auto px-7 py-3.5 rounded-md bg-[#4F5844] text-[#F5F3EE] font-bold text-sm sm:text-base hover:bg-[#3E443B] transition-colors shadow-md inline-flex items-center justify-center gap-2 active:scale-95"
+          aria-label={`대표 전화 상담 바로 연결 ${SITE_CONTACT.phone}`}
+        >
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+          </svg>
+          <span>{buttonLabel || `전화 상담 연결 (${SITE_CONTACT.phone})`}</span>
+        </a>
+      </div>
+
+      {notice && (
+        <p class="text-[11px] text-[#E7D9C1]/70">
+          {notice}
+        </p>
+      )}
+    </div>
+  </section>
+) : (
+  <section class:list={['p-6 sm:p-8 rounded-2xl bg-[#4F5844] text-[#F5F3EE] space-y-4 text-center sm:text-left', className]}>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="space-y-1.5">
+        <h2 class="text-lg sm:text-xl font-bold tracking-tight">
+          {title}
+        </h2>
+        <p class="text-xs sm:text-sm text-[#F5F3EE]/80 leading-relaxed">
+          {description}
+        </p>
+      </div>
+      <div class="shrink-0 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <a
+          href={SITE_CONTACT.telHref}
+          class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#FAF8F5] text-[#3E443B] font-bold text-xs sm:text-sm hover:bg-[#F5F3EE] transition-colors shadow-sm"
+        >
+          <span>{buttonLabel || `전화 상담 (${SITE_CONTACT.phone})`}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+)}

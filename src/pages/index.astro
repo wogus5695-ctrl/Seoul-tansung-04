@@ -1,9 +1,37 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/common/PlaceholderImage.astro';
+import SectionHeader from '../components/common/SectionHeader.astro';
+import FaqAccordion from '../components/common/FaqAccordion.astro';
+import ConsultationBanner from '../components/common/ConsultationBanner.astro';
 import { REGIONS } from '../data/regions';
 import { SEO_PAGES, isPagePublished } from '../data/pages';
 import { getSiteUrl, getCanonicalUrl, buildWebSiteJsonLd, buildWebPageJsonLd } from '../utils/seo';
+
+// 메인 페이지 전용 FAQ 5문항 데이터
+const MAIN_FAQS = [
+  {
+    question: 'Q1. 시공 전에 벽면 상태를 먼저 확인하는 이유가 무엇인가요?',
+    answer: '같은 아파트, 같은 평형이라도 환기 습관과 외벽 접합 여부에 따라 벽면 상태가 완전히 다릅니다. 단순히 페인트를 덧바르는 것이 아니라 기존 도막 들뜸이나 곰팡이 오염도를 미리 확인해야 그에 맞는 스크래핑과 퍼티 보수 등 필수 전처리를 결정할 수 있기 때문입니다.',
+  },
+  {
+    question: 'Q2. 기존 페인트가 들뜨거나 부푼 경우 어떻게 작업하나요?',
+    answer: '들뜨거나 부푼 기존 페인트 위에 바로 도포하면 얼마 지나지 않아 함께 떨어질 수 있습니다. 따라서 스크래퍼 장비로 부실한 도막을 깨끗이 긁어낸 뒤, 퍼티로 단차를 맞추고 하도 작업을 거쳐 탄성코트를 도포합니다.',
+  },
+  {
+    question: 'Q3. 베란다와 세탁실은 점검할 때 어떤 차이가 있나요?',
+    answer: '베란다는 외부 창호와 맞닿아 있어 결로와 일조량, 외부 온도 차이에 따른 창가 주변 실금 점검이 중요합니다. 반면 세탁실은 물 사용과 가전 배치로 습도가 높기 쉬우므로, 배관 주변 습기 자국과 가전 뒤편 사각지대 곰팡이를 집중 점검합니다.',
+  },
+  {
+    question: 'Q4. 시공 비용과 작업 범위를 결정하는 기준은 무엇인가요?',
+    answer: '올케어탄성은 지역명만으로 획일적인 가격을 책정하지 않습니다. 시공 대상 공간 개수(베란다, 세탁실, 실외기실 등)와 면적, 기존 벽면의 들뜸·곰팡이 면적에 따른 전처리 작업 난이도를 종합 검토하여 꼭 필요한 작업 범위에 맞추어 합리적인 비용을 안내합니다.',
+  },
+  {
+    question: 'Q5. 상담할 때 미리 준비하면 좋은 정보나 사진이 있나요?',
+    answer: '시공을 희망하시는 공간의 전체 구도가 보이는 사진 1~2장과, 도막 들뜸이나 곰팡이, 균열이 보이는 부위의 근접 사진을 함께 준비해 주시면 현장 방문 전에도 대략적인 바탕면 상태와 작업 범위를 훨씬 빠르고 정확하게 안내받으실 수 있습니다.',
+  },
+];
+
 
 // 실제 시공 사진 보유 여부 플래그 (현재 미확보 상태이므로 false)
 // 향후 실제 현장 사진 등록 시 true로 전환하면 2열 Before & After 비교 레이아웃이 자동 활성화됩니다.
@@ -103,17 +131,11 @@ const jsonLd = siteUrl ? [
   <!-- 03. 실제 작업 현장 / BEFORE & AFTER (사진 미확보 상태: 컴팩트 안내 박스로 최적화) -->
   <section id="before-after" class="w-full py-12 sm:py-16 bg-[#FAF8F5] border-b border-[#E7D9C1]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-      <div class="space-y-2 max-w-2xl text-left">
-        <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">
-          FIELDWORK PREVIEW
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-          시공 전·후 현장사진
-        </h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          실제 시공 현장사진을 비교하여 확인하실 수 있도록 준비 중입니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="FIELDWORK PREVIEW"
+        title="시공 전·후 현장사진"
+        description="실제 시공 현장사진을 비교하여 확인하실 수 있도록 준비 중입니다."
+      />
 
       {hasRealPhotos ? (
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -142,17 +164,12 @@ const jsonLd = siteUrl ? [
   <!-- 04. 벽면 상태 확인 (핵심 설명 항상 표시 + 상세 확인 접힘 기능 적용) -->
   <section id="wall-check" class="w-full py-12 sm:py-16 bg-[#2D322A] text-[#F5F3EE] border-b border-[#3E443B]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div class="max-w-2xl space-y-2 text-left">
-        <p class="text-[11px] font-semibold text-[#E7D9C1]/80 tracking-wider uppercase">
-          WALL CONDITION CHECK
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#F5F3EE] tracking-tight">
-          벽면 상태 확인 포인트
-        </h2>
-        <p class="text-xs sm:text-sm text-[#E7D9C1]/90 leading-relaxed">
-          같은 탄성코트 시공이라도 기존 벽면 상태에 따라 필요한 전처리 작업과 시공 범위가 달라집니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="WALL CONDITION CHECK"
+        title="벽면 상태 확인 포인트"
+        description="같은 탄성코트 시공이라도 기존 벽면 상태에 따라 필요한 전처리 작업과 시공 범위가 달라집니다."
+        theme="dark"
+      />
 
       <!-- 4개 체크 포인트 그리드 (컴팩트 카드 + 세부 확인사항 접힘) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -248,17 +265,11 @@ const jsonLd = siteUrl ? [
   <!-- 05. 공간별 시공 포인트 (설명 압축 & 여백 최적화) -->
   <section id="spaces" class="w-full py-12 sm:py-16 bg-[#F5F3EE] border-b border-[#E7D9C1]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div class="max-w-2xl space-y-2 text-left">
-        <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">
-          RESIDENTIAL SPACES
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-          공간별 시공 포인트
-        </h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          공간의 이용 형태와 배관 위치에 따라 점검해야 할 핵심 사항을 안내합니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="RESIDENTIAL SPACES"
+        title="공간별 시공 포인트"
+        description="공간의 이용 형태와 배관 위치에 따라 점검해야 할 핵심 사항을 안내합니다."
+      />
 
       <!-- 3개 공간 컴팩트 카드 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
@@ -301,17 +312,11 @@ const jsonLd = siteUrl ? [
   <!-- 06. 시공 과정 (PC/MO 반응형 타임라인 및 간결한 흐름) -->
   <section id="process" class="w-full py-12 sm:py-16 bg-[#FAF8F5] border-b border-[#E7D9C1]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <div class="max-w-2xl space-y-2 text-left">
-        <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">
-          WORK PROCESS
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-          시공 과정
-        </h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          현장 상태 점검부터 보양, 뿜칠, 마감 확인까지의 일반적인 작업 흐름입니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="WORK PROCESS"
+        title="시공 과정"
+        description="현장 상태 점검부터 보양, 뿜칠, 마감 확인까지의 일반적인 작업 흐름입니다."
+      />
 
       <!-- 5단계 반응형 프로세스 흐름 -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-3.5">
@@ -375,17 +380,11 @@ const jsonLd = siteUrl ? [
   <!-- 07. 서울 지역별 시공 안내 (반복 배지 제거 & 간결한 12개 자치구 목록) -->
   <section id="regions" class="w-full py-12 sm:py-16 bg-[#F5F3EE] border-b border-[#E7D9C1]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-      <div class="space-y-2 max-w-2xl text-left">
-        <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">
-          SERVICE AREAS
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-          서울 지역별 시공 안내
-        </h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          올케어탄성은 서울 전역의 주거 공간을 대상으로 정직한 시공 상담을 제공합니다. 현재 아래 12개 자치구를 중심으로 우선 방문 상담을 진행하고 있습니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="SERVICE AREAS"
+        title="서울 지역별 시공 안내"
+        description="올케어탄성은 서울 전역의 주거 공간을 대상으로 정직한 시공 상담을 제공합니다. 현재 아래 12개 자치구를 중심으로 우선 방문 상담을 진행하고 있습니다."
+      />
 
       <!-- 12개 자치구 목록 그리드 (반복 배지 제거, 컴팩트 2열/4열 배치, 텍스트 충돌 방지) -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3">
@@ -422,122 +421,30 @@ const jsonLd = siteUrl ? [
   <!-- 08. FAQ (Q4 불균형 해소 & 일관된 화살표 간격) -->
   <section id="faq" class="w-full py-12 sm:py-16 bg-[#FAF8F5] border-b border-[#E7D9C1]">
     <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-      <div class="space-y-2 max-w-2xl text-left">
-        <p class="text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase">
-          FREQUENTLY ASKED QUESTIONS
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] tracking-tight">
-          자주 묻는 질문 (FAQ)
-        </h2>
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          탄성코트 시공 전 가장 자주 문의하시는 5문항입니다. 질문을 클릭하시면 답변을 확인하실 수 있습니다.
-        </p>
-      </div>
+      <SectionHeader
+        label="FREQUENTLY ASKED QUESTIONS"
+        title="자주 묻는 질문 (FAQ)"
+        description="탄성코트 시공 전 가장 자주 문의하시는 5문항입니다. 질문을 클릭하시면 답변을 확인하실 수 있습니다."
+      />
 
-      <!-- FAQ 아코디언 리스트 (초기 상태 모두 접힘, 질문과 화살표 간격 충분) -->
-      <div class="space-y-3 max-w-3xl">
-        <!-- Q1 -->
-        <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
-          <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
-            <span class="leading-snug">Q1. 시공 전에 벽면 상태를 먼저 확인하는 이유가 무엇인가요?</span>
-            <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
-            같은 아파트, 같은 평형이라도 환기 습관과 외벽 접합 여부에 따라 벽면 상태가 완전히 다릅니다. 단순히 페인트를 덧바르는 것이 아니라 기존 도막 들뜸이나 곰팡이 오염도를 미리 확인해야 그에 맞는 스크래핑과 퍼티 보수 등 필수 전처리를 결정할 수 있기 때문입니다.
-          </p>
-        </details>
-
-        <!-- Q2 -->
-        <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
-          <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
-            <span class="leading-snug">Q2. 기존 페인트가 들뜨거나 부푼 경우 어떻게 작업하나요?</span>
-            <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
-            들뜨거나 부푼 기존 페인트 위에 바로 도포하면 얼마 지나지 않아 함께 떨어질 수 있습니다. 따라서 스크래퍼 장비로 부실한 도막을 깨끗이 긁어낸 뒤, 퍼티로 단차를 맞추고 하도 작업을 거쳐 탄성코트를 도포합니다.
-          </p>
-        </details>
-
-        <!-- Q3 -->
-        <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
-          <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
-            <span class="leading-snug">Q3. 베란다와 세탁실은 점검할 때 어떤 차이가 있나요?</span>
-            <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
-            베란다는 외부 창호와 맞닿아 있어 결로와 일조량, 외부 온도 차이에 따른 창가 주변 실금 점검이 중요합니다. 반면 세탁실은 물 사용과 가전 배치로 습도가 높기 쉬우므로, 배관 주변 습기 자국과 가전 뒤편 사각지대 곰팡이를 집중 점검합니다.
-          </p>
-        </details>
-
-        <!-- Q4 (보조 문구 제거, 정상 줄바꿈 및 간격 확보) -->
-        <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
-          <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
-            <span class="leading-snug">Q4. 시공 비용과 작업 범위를 결정하는 기준은 무엇인가요?</span>
-            <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
-            올케어탄성은 지역명만으로 획일적인 가격을 책정하지 않습니다. 시공 대상 공간 개수(베란다, 세탁실, 실외기실 등)와 면적, 기존 벽면의 들뜸·곰팡이 면적에 따른 전처리 작업 난이도를 종합 검토하여 꼭 필요한 작업 범위에 맞추어 합리적인 비용을 안내합니다.
-          </p>
-        </details>
-
-        <!-- Q5 -->
-        <details class="group p-4 sm:p-5 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] transition-colors">
-          <summary class="flex items-center justify-between gap-4 cursor-pointer font-bold text-[#3E443B] text-xs sm:text-sm select-none">
-            <span class="leading-snug">Q5. 상담할 때 미리 준비하면 좋은 정보나 사진이 있나요?</span>
-            <span class="text-xs text-[#5C5549] shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <p class="mt-2.5 text-xs text-[#5C5549] leading-relaxed pt-2 border-t border-[#E7D9C1]">
-            시공을 희망하시는 공간의 전체 구도가 보이는 사진 1~2장과, 도막 들뜸이나 곰팡이, 균열이 보이는 부위의 근접 사진을 함께 준비해 주시면 현장 방문 전에도 대략적인 바탕면 상태와 작업 범위를 훨씬 빠르고 정확하게 안내받으실 수 있습니다.
-          </p>
-        </details>
-      </div>
+      <!-- FAQ 아코디언 리스트 -->
+      <FaqAccordion items={MAIN_FAQS} variant="main" />
     </div>
   </section>
 
   <!-- 09. FINAL CONSULTATION CTA -->
-  <section id="consultation" class="w-full py-12 sm:py-20 bg-[#2D322A] text-[#F5F3EE]">
-    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 max-w-2xl">
-      <div class="space-y-2">
-        <p class="text-[11px] font-semibold text-[#E7D9C1]/80 tracking-wider uppercase">
-          DIRECT CONSULTATION
-        </p>
-        <h2 class="text-xl sm:text-3xl font-bold text-[#F5F3EE] tracking-tight">
-          우리 집 벽면 상태부터 확인해보세요
-        </h2>
-        <p class="text-xs sm:text-sm text-[#E7D9C1]/90 leading-relaxed text-pretty">
-          사진이나 현재 벽면 상태를 알려주시면 확인해야 할 부분과 필요한 작업 범위를 정직하게 상담해 드립니다.
-        </p>
-      </div>
-
-      <!-- 상담 준비 체크리스트 박스 (컴팩트화) -->
-      <div class="p-4 rounded-xl bg-[#3E443B]/80 border border-[#E7D9C1]/20 text-left space-y-2">
-        <p class="text-[11px] font-semibold text-[#E7D9C1] tracking-wider uppercase">
-          상담 시 미리 준비하면 좋은 정보
-        </p>
-        <ul class="text-xs text-[#E7D9C1]/90 space-y-1 list-disc list-inside">
-          <li>벽면 전체 구도가 보이는 사진</li>
-          <li>도막 들뜸, 곰팡이, 균열 부위의 근접 사진</li>
-          <li>작업 희망 공간 (베란다, 세탁실 등)</li>
-        </ul>
-      </div>
-
-      <!-- 전화 상담 메인 버튼 -->
-      <div class="pt-1">
-        <a
-          href="tel:01084926900"
-          class="w-full sm:w-auto px-7 py-3.5 rounded-md bg-[#4F5844] text-[#F5F3EE] font-bold text-sm sm:text-base hover:bg-[#3E443B] transition-colors shadow-md inline-flex items-center justify-center gap-2 active:scale-95"
-          aria-label="대표 전화 상담 바로 연결 010-8492-6900"
-        >
-          <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-          </svg>
-          <span>전화 상담 연결 (010-8492-6900)</span>
-        </a>
-      </div>
-
-      <p class="text-[11px] text-[#E7D9C1]/70">
-        불필요한 과잉 작업을 권하지 않고, 현재 공간에 꼭 필요한 작업 범위부터 투명하게 안내합니다.
-      </p>
-    </div>
-  </section>
+  <ConsultationBanner
+    variant="main"
+    badge="DIRECT CONSULTATION"
+    title="우리 집 벽면 상태부터 확인해보세요"
+    description="사진이나 현재 벽면 상태를 알려주시면 확인해야 할 부분과 필요한 작업 범위를 정직하게 상담해 드립니다."
+    checklistTitle="상담 시 미리 준비하면 좋은 정보"
+    checklist={[
+      "벽면 전체 구도가 보이는 사진",
+      "도막 들뜸, 곰팡이, 균열 부위의 근접 사진",
+      "작업 희망 공간 (베란다, 세탁실 등)"
+    ]}
+    buttonLabel="전화 상담 연결 (010-8492-6900)"
+    notice="불필요한 과잉 작업을 권하지 않고, 현재 공간에 꼭 필요한 작업 범위부터 투명하게 안내합니다."
+  />
 </BaseLayout>
