@@ -66,7 +66,7 @@ export interface SeoPageConfig {
 }
 
 // 12개 자치구 x 2개 작업명 = 총 24개 조합 관리
-// 노원구 탄성코트 파일럿 전용 상세 콘텐츠 데이터 (STEP 3-C 사실성 교정 완료)
+// 1. 노원구 탄성코트 파일럿 전용 상세 콘텐츠 (STEP 3-D 전면 사실성 정밀 보정)
 const NOWON_ELASTIC_CONTENT: SeoPageContent = {
   targetSpaces: [
     {
@@ -90,37 +90,37 @@ const NOWON_ELASTIC_CONTENT: SeoPageContent = {
       num: '01',
       title: '도막 들뜸 및 박리',
       description: '기존 페인트가 부풀어 오르거나 가루처럼 떨어지는 상태',
-      detail: '도막이 들뜬 상태 위에 칠을 올리면 접착이 약해질 수 있으므로, 들뜬 부위를 긁어내고 바탕면을 정돈하는 작업이 선행됩니다.',
+      detail: '도막이 들뜬 상태 위에 칠을 올리면 접착이 약해질 수 있으므로, 현장 상태에 맞춰 들뜬 부위를 정리하고 바탕면을 정돈하는 작업이 선행됩니다.',
     },
     {
       num: '02',
       title: '벽면 균열 (크랙)',
       description: '창호 모서리나 벽체 이음매에 실금이 발생한 상태',
-      detail: '균열 틈새로 습기가 스며들지 않도록 균열 폭과 깊이에 맞춰 퍼티 등으로 면을 고르게 메우는 보강을 진행합니다.',
+      detail: '균열 틈새로 습기가 스며들지 않도록 균열 폭과 상태를 확인하여 적절한 메꿈재로 면을 정돈하는 보수 여부를 판단합니다.',
     },
     {
       num: '03',
       title: '곰팡이 및 오염 흔적',
       description: '구석 모서리와 외벽 접합부에 거뭇한 얼룩이 번진 상태',
-      detail: '단순 표면 닦아내기를 넘어 오염부를 깨끗이 닦아내고 바탕면 처리 작업을 거쳐 도막 손상을 줄입니다.',
+      detail: '단순 표면 닦아내기를 넘어 오염부를 정돈하고 벽면 상태에 맞는 전처리 과정을 진행합니다.',
     },
     {
       num: '04',
       title: '습기 및 결로 자국',
       description: '창가 주변 벽체에 물방울 맺힘이나 축축한 흔적이 남은 상태',
-      detail: '현재 벽면의 습기 상태를 점검하여 벽면이 충분히 건조된 상태에서 도포 작업이 이루어지도록 시점을 조율합니다.',
+      detail: '벽면의 습윤도를 살펴보고, 도포 작업에 무리가 없도록 벽면 건조 상태를 확인한 뒤 작업 일정을 협의합니다.',
     },
   ],
   scopeFactors: [
     {
       title: '기존 도막 상태 (들뜸·노후도)',
       condition: '기존 페인트의 벗겨짐 면적이 넓거나 들뜸이 많은 경우',
-      impact: '도포 전 들뜬 도막을 긁어내고 면을 정리하는 밑작업 시간이 추가되어 기초 준비 범위가 넓어집니다.',
+      impact: '도포 전 들뜬 도막을 정리하고 면을 고르는 밑작업 시간이 추가되어 준비 범위가 달라집니다.',
     },
     {
       title: '균열 및 실리콘 상태',
       condition: '창호 주변 실리콘 노후화 및 벽체 틈새 균열이 있는 경우',
-      impact: '도장면 접착력 유지와 평탄한 마감을 위해 균열 메꿈 및 보수 작업이 사전에 병행되어야 합니다.',
+      impact: '도장면 접착력 유지와 마감을 위해 바탕면 균열 메꿈 및 정리 작업이 사전에 병행되어야 합니다.',
     },
     {
       title: '작업 공간 시설물 및 보양 난이도',
@@ -137,7 +137,7 @@ const NOWON_ELASTIC_CONTENT: SeoPageContent = {
     {
       num: '02',
       title: '문제 부위 근접 사진',
-      description: '페인트가 부풀었거나 곰팡이 얼룩, 벽면 균열이 있는 부위를 가까이에서 찍어주시면 필요한 보수 범위를 가늠하는 데 도움이 됩니다.',
+      description: '페인트가 부풀었거나 오염 얼룩, 벽면 균열이 있는 부위를 가까이에서 찍어주시면 필요한 보수 범위를 가늠하는 데 도움이 됩니다.',
     },
     {
       num: '03',
@@ -154,7 +154,7 @@ const NOWON_ELASTIC_CONTENT: SeoPageContent = {
     {
       step: 'STEP 01',
       title: '현장 확인 및 보양 작업',
-      description: '창호, 샷시, 계량기, 바닥 타일 등 비도장 구역을 보양 테이프로 감싸 도료가 묻지 않도록 보호합니다.',
+      description: '창호, 샷시, 계량기, 바닥 타일 등 비도장 구역을 보양재로 감싸 도료가 묻지 않도록 보호합니다.',
     },
     {
       step: 'STEP 02',
@@ -168,30 +168,160 @@ const NOWON_ELASTIC_CONTENT: SeoPageContent = {
     },
     {
       step: 'STEP 04',
-      title: '보양재 제거 및 마감 확인',
-      description: '보양 테이프를 조심스럽게 제거한 뒤 도막 상태를 육안으로 확인하고 일상 환기 및 양생 요령을 안내합니다.',
+      title: '보양재 제거 및 마감 안내',
+      description: '보양 테이프를 조심스럽게 제거한 뒤 도막 상태를 육안으로 확인하고 일상 환기 및 관리 요령을 안내합니다.',
     },
   ],
   faqs: [
     {
       question: '노원구 지역은 방문 상담이나 시공 상담이 가능한가요?',
-      answer: '노원구를 포함한 서울 전역 시공 상담이 가능합니다. 현장 일정 조율 및 작업 조건 확인을 위해 베란다와 세탁실 벽면 사진을 문자로 먼저 보내주시면 더욱 수월하게 상담받으실 수 있습니다.',
+      answer: '노원구를 포함한 서울 지역 시공 상담이 가능합니다. 현장 일정 조율 및 작업 조건 확인을 위해 전화 상담 시 필요한 사진과 전달 방법을 안내받으실 수 있습니다.',
     },
     {
       question: '거주 중인 살림집인데 시공이 가능한가요?',
-      answer: '거주 중인 세대도 시공이 가능하지만, 도포 시공 특성상 발코니 및 세탁실 내부의 짐은 작업 공간 밖으로 미리 이동해 주셔야 합니다. 이동이 어려운 대형 가전의 경우 현장 사진을 통해 보양 및 작업 가능 여부를 협의합니다.',
+      answer: '거주 중 시공 가능 여부는 작업 공간의 상태와 짐·시설물 배치 등을 확인한 후 안내받으실 수 있습니다. 도포 작업 특성상 작업 공간 내 물품 이동 및 보양 협의가 사전에 필요합니다.',
     },
     {
       question: '시공 후 냄새와 건조 시간은 어느 정도 걸리나요?',
-      answer: '수성 도료 특성상 자극적인 시너 냄새는 거의 없으나 건조 과정에서 특유의 도료취가 남을 수 있습니다. 표면 건조는 보통 1~2일 내외, 속건조까지는 계절과 습도, 환기 여건에 따라 수일이 소요되므로 시공 후 충분한 자연 환기를 권장합니다.',
+      answer: '수성 도료 특성상 자극적인 냄새는 적으나 건조 과정에서 특유의 도료취가 남을 수 있습니다. 건조 시간과 관리 방법은 사용 도료 및 온도·습도·환기 여건 등에 따라 달라지므로 구체적인 내용은 상담 시 확인이 필요합니다.',
     },
     {
-      question: '탄성코트를 시공하면 결로와 곰팡이를 완전히 방지할 수 있나요?',
-      answer: '탄성코트는 벽면의 쾌적한 마감과 통기성 관리를 돕는 기능성 도료입니다. 다만 건물 외부 균열로 인한 누수나 환기 부재로 인한 심한 결로를 완전히 차단하는 것은 아니므로, 시공 후에도 규칙적인 환기 관리가 필요합니다.',
+      question: '탄성코트를 시공하면 결로와 누수를 완전히 해결할 수 있나요?',
+      answer: '탄성코트는 벽면 마감을 위한 기능성 도장 작업입니다. 기존 누수나 외벽 크랙, 환기 부족 등 결로 발생의 근본적인 원인을 완전히 차단하는 것은 아니므로, 방수 점검과 주기적인 환기 관리가 병행되어야 합니다.',
     },
     {
       question: '기존 페인트가 많이 들떠 있으면 작업 범위나 견적이 달라지나요?',
-      answer: '기존 도막의 들뜸이나 박리 면적이 넓거나 균열 보수가 광범위한 경우, 긁어내기와 메꿈 등 바탕면 밑작업에 필요한 시간과 작업 범위가 늘어날 수 있습니다. 현장 사진을 미리 확인하면 필요한 밑작업 범위를 사전에 안내받으실 수 있습니다.',
+      answer: '현장 상태를 확인하고 필요한 작업 범위를 안내합니다. 기존 도막의 들뜸이나 박리 면적이 넓거나 균열 보수가 광범위한 경우, 긁어내기와 메꿈 등 바탕면 밑작업에 필요한 시간과 공정에 따라 작업 범위가 달라질 수 있습니다.',
+    },
+  ],
+};
+
+// 2. 노원구 베란다탄성코트 파일럿 전용 상세 콘텐츠 (STEP 3-D 신규 설계)
+const NOWON_BALCONY_ELASTIC_CONTENT: SeoPageContent = {
+  targetSpaces: [
+    {
+      title: '전면 베란다 (거실·안방 창가)',
+      subtitle: '창호 주변 도막 들뜸과 햇빛 노출 점검',
+      description: '직사광선과 외부 기온 변화를 가장 크게 받는 공간으로, 창가 실리콘 접합부와 하부 벽면의 페인트 부스러짐을 중점 확인합니다.',
+    },
+    {
+      title: '후면 베란다 (주방 인접 공간)',
+      subtitle: '외벽 환기구 주변 및 그늘진 벽체 습기 점검',
+      description: '환기 여건이 상대적으로 취약하고 그늘진 외벽 벽체에 결로 흔적이나 모서리 오염 얼룩이 머물기 쉬운 공간입니다.',
+    },
+    {
+      title: '베란다 창고 · 수납장 내부',
+      subtitle: '밀폐 구역 공기 정체 및 벽면 통기 환경 확인',
+      description: '수납 선반 철거 자국이나 닫힌 문 안쪽의 통기 부족으로 인한 벽면 얼룩 상태를 파악하고 보양 범위를 결정합니다.',
+    },
+  ],
+  wallConditions: [
+    {
+      num: '01',
+      title: '창호 주변 실리콘 및 도막 들뜸',
+      description: '샤시 프레임과 콘크리트 경계면의 페인트가 들떠 있는 상태',
+      detail: '창가 실리콘 노후화와 온도 차이로 인해 들뜬 페인트는 도포 전 면을 긁어내고 바탕면을 정돈하는 보수 여부를 먼저 확인합니다.',
+    },
+    {
+      num: '02',
+      title: '베란다 외벽 실금 및 균열',
+      description: '외기에 맞닿은 벽체나 천장 모서리에 미세한 실금이 생긴 상태',
+      detail: '미세 크랙 틈새를 적절한 메꿈재로 평탄화하여 도포 후 마감이 고르게 유지되도록 사전 밑작업 범위를 조율합니다.',
+    },
+    {
+      num: '03',
+      title: '그늘진 모서리 얼룩 및 오염',
+      description: '가구 뒷면이나 베란다 구석 벽면에 거뭇한 흔적이 남은 상태',
+      detail: '표면 얼룩을 깨끗이 정돈하고, 벽면 내부 상태를 살펴본 뒤 도장면 손상을 방지하는 밑작업 과정을 확인합니다.',
+    },
+    {
+      num: '04',
+      title: '창가 결로수 흘러내림 흔적',
+      description: '겨울철 창문 결로수가 벽체를 타고 흘러내려 얼룩진 상태',
+      detail: '벽체가 충분히 건조되었는지 확인하는 것이 필수적이며, 계절과 날씨에 맞춰 도포 작업이 가능한 시점을 협의합니다.',
+    },
+  ],
+  scopeFactors: [
+    {
+      title: '베란다 창호 주변 코킹 및 균열 상태',
+      condition: '창틀 코킹이 노후되었거나 외벽 접합부 균열이 보이는 경우',
+      impact: '도료의 접착력 유지와 고른 마감을 위해 바탕면 메꿈 보강 작업이 필요하여 준비 공정에 영향을 줍니다.',
+    },
+    {
+      title: '베란다 화단 철거 흔적 및 벽면 요철',
+      condition: '화단 턱 철거 부위나 선반 거치 자국의 단차가 심한 경우',
+      impact: '단차를 고르게 맞추는 바탕면 평탄화 밑작업 범위가 넓어져 작업 소요 시간에 영향을 미칩니다.',
+    },
+    {
+      title: '베란다 내 시설물 및 보양 난이도',
+      condition: '빨래건조대, 창고장, 실외기 설비 등이 베란다에 밀집된 경우',
+      impact: '도료 오염을 방지하기 위한 정밀 비닐 보양 테이핑 작업과 시공자 작업 동선 확보 여건이 중요해집니다.',
+    },
+  ],
+  consultationPreps: [
+    {
+      num: '01',
+      title: '베란다 창가 전체 전경 사진',
+      description: '창호와 벽면, 바닥 타일이 한눈에 보이는 베란다 전체 구조 사진을 준비해 주시면 현장 구조를 파악하는 데 도움이 됩니다.',
+    },
+    {
+      num: '02',
+      title: '창호 주변 및 균열 근접 사진',
+      description: '창틀 하부의 페인트 들뜸이나 모서리 실금, 얼룩 부위를 가까이에서 촬영해 주시면 필요한 보수 여부를 상담받으실 수 있습니다.',
+    },
+    {
+      num: '03',
+      title: '수납장 및 시설물 배치 상태',
+      description: '선반, 건조대, 실외기 등 베란다 벽면에 붙어 있는 시설물이 보이도록 사진을 남겨주시면 보양 작업 안내에 참고가 됩니다.',
+    },
+    {
+      num: '04',
+      title: '상담 희망 지역 및 시공 일정',
+      description: '노원구 내 대략적인 위치와 입주 전 공실 또는 거주 중 여부, 희망하시는 시공 일정을 말씀해 주세요.',
+    },
+  ],
+  processSteps: [
+    {
+      step: 'STEP 01',
+      title: '베란다 현장 확인 및 보양',
+      description: '창호 유리, 샷시 프레임, 바닥 타일 등 비도장 구역을 커버링 테이프로 꼼꼼히 보양하여 도료 오염을 방지합니다.',
+    },
+    {
+      step: 'STEP 02',
+      title: '창호 주변 바탕면 정리',
+      description: '창가 들뜬 페인트를 긁어내고, 미세 균열 부위를 메우며 표면 오염을 정리하는 기초 밑작업을 진행합니다.',
+    },
+    {
+      step: 'STEP 03',
+      title: '베란다 탄성코트 고른 도포',
+      description: '전용 도장 장비를 활용하여 베란다 벽면과 천장에 적절한 두께와 질감으로 도료를 균일하게 도포합니다.',
+    },
+    {
+      step: 'STEP 04',
+      title: '보양재 철거 및 환기 안내',
+      description: '보양 테이프를 조심스럽게 제거한 뒤 마감 상태를 육안으로 확인하고 베란다 창호 환기 및 관리 요령을 안내합니다.',
+    },
+  ],
+  faqs: [
+    {
+      question: '베란다 벽면의 기존 페인트가 들뜬 경우 바로 시공할 수 있나요?',
+      answer: '기존 페인트가 들뜬 상태 위에 그대로 도포하면 접착이 약해져 하자가 발생할 수 있습니다. 현장 상태를 확인하여 들뜬 도막을 긁어내고 바탕면을 정돈한 후 도포를 진행해야 하므로, 상담 시 벽면 상태 사진을 확인하는 것이 좋습니다.',
+    },
+    {
+      question: '창호 주변에 습기나 얼룩이 있으면 무엇을 먼저 확인해야 하나요?',
+      answer: '창가 실리콘 코킹의 노후화로 인한 빗물 유입인지, 단순 실내외 온도차에 따른 결로수 흔적인지 구분이 필요합니다. 누수가 의심되는 경우 방수 점검이 선행되어야 하며, 건조된 상태에서 도장 작업이 가능합니다.',
+    },
+    {
+      question: '베란다에 짐이나 시설물이 있어도 작업할 수 있나요?',
+      answer: '베란다 내 짐과 물품은 원활한 도포 작업을 위해 작업 구역 밖으로 이동해 주셔야 합니다. 이동이 어려운 붙박이 시설물이나 실외기 등은 현장 상태와 배치를 확인한 후 보양 작업 가능 여부를 상담해 드립니다.',
+    },
+    {
+      question: '베란다 탄성코트 시공으로 결로나 누수를 완전히 해결할 수 있나요?',
+      answer: '탄성코트는 베란다 벽면 마감을 위한 기능성 도장재입니다. 외벽 균열로 인한 누수나 환기 부재로 인한 심한 결로를 완전히 차단하는 것은 아니므로, 결로를 줄이기 위한 일상적인 창호 환기 관리가 반드시 필요합니다.',
+    },
+    {
+      question: '베란다 탄성코트 상담 전에 어떤 정보를 준비하면 좋은가요?',
+      answer: '베란다 창호 전경 사진과 창틀 하부 등 문제 부위의 근접 사진, 그리고 작업 공간 내 시설물 상태를 준비하시면 전화 상담 시 필요한 작업 범위와 절차를 더욱 명확히 안내받으실 수 있습니다.',
     },
   ],
 };
@@ -201,7 +331,28 @@ export const SEO_PAGES: SeoPageConfig[] = [];
 for (const service of SERVICES) {
   for (const region of REGIONS) {
     const isNowonElastic = service.id === 'elastic-coating' && region.id === 'nowon';
+    const isNowonBalconyElastic = service.id === 'balcony-elastic-coating' && region.id === 'nowon';
     
+    let content: SeoPageContent | undefined = undefined;
+    let metaTitle = `${region.name} ${service.name} | 베란다·세탁실 - 올케어탄성`;
+    let metaDescription = `${region.name} ${service.name} 시공 안내. 베란다 및 세탁실 벽면 상태를 먼저 확인하고 작업 범위를 안내합니다.`;
+    let h1 = `${region.name} ${service.name} 시공 안내`;
+    let heroCopy = `${region.name} 지역의 베란다와 세탁실 벽면 상태를 확인하고 필요한 작업 범위를 안내합니다.`;
+
+    if (isNowonElastic) {
+      content = NOWON_ELASTIC_CONTENT;
+      metaTitle = '노원구 탄성코트 시공 안내 | 베란다·세탁실 - 올케어탄성';
+      metaDescription = '노원구 탄성코트 시공을 고려하고 계신가요? 베란다·세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위와 상담 준비 사항을 안내합니다.';
+      h1 = '노원구 탄성코트 시공 안내';
+      heroCopy = '노원구 아파트·주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위를 정직하게 안내합니다.';
+    } else if (isNowonBalconyElastic) {
+      content = NOWON_BALCONY_ELASTIC_CONTENT;
+      metaTitle = '노원구 베란다탄성코트 시공 안내 | 올케어탄성';
+      metaDescription = '노원구 베란다탄성코트 시공을 알아보고 계신가요? 베란다 벽면의 도막 들뜸, 얼룩과 균열 등 확인 사항과 시공 상담 준비 방법을 안내합니다.';
+      h1 = '노원구 베란다탄성코트 시공 안내';
+      heroCopy = '노원구 베란다 공간의 창호 주변 도막 들뜸, 균열, 얼룩 흔적을 확인하고 필요한 시공 준비 사항을 정직하게 안내합니다.';
+    }
+
     SEO_PAGES.push({
       id: `${service.id}_${region.id}`,
       regionId: region.id,
@@ -209,28 +360,23 @@ for (const service of SERVICES) {
       serviceSlug: service.slug,
       districtSlug: region.slug,
       urlPath: `/seo/${service.slug}/${region.slug}.html`,
-      isPublished: false, // STEP 3-C 최종 검증 완료 후 전 조합 비공개(false) 원복
-      contentStatus: isNowonElastic ? 'ready' : 'draft',
-      metaTitle: isNowonElastic
-        ? '노원구 탄성코트 시공 안내 | 베란다·세탁실 - 올케어탄성'
-        : `${region.name} ${service.name} | 베란다·세탁실 - 올케어탄성`,
-      metaDescription: isNowonElastic
-        ? '노원구 탄성코트 시공을 고려하고 계신가요? 베란다·세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위와 상담 준비 사항을 안내합니다.'
-        : `${region.name} ${service.name} 시공 안내. 베란다 및 세탁실 벽면 상태를 먼저 확인하고 작업 범위를 안내합니다.`,
-      h1: isNowonElastic
-        ? '노원구 탄성코트 시공 안내'
-        : `${region.name} ${service.name} 시공 안내`,
-      heroCopy: isNowonElastic
-        ? '노원구 아파트·주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위를 정직하게 안내합니다.'
-        : `${region.name} 지역의 베란다와 세탁실 벽면 상태를 확인하고 필요한 작업 범위를 안내합니다.`,
-      serviceScopeNotice: '올케어탄성은 서울 노원구를 포함하여 서울 전역 주거 공간을 대상으로 방문 시공 상담을 제공합니다.',
-      content: isNowonElastic ? NOWON_ELASTIC_CONTENT : undefined,
+      isPublished: false, // STEP 3-D 듀얼 파일럿 검증 완료 후 전 조합 비공개(false) 안전 원복
+      contentStatus: (isNowonElastic || isNowonBalconyElastic) ? 'ready' : 'draft',
+      metaTitle,
+      metaDescription,
+      h1,
+      heroCopy,
+      serviceScopeNotice: `올케어탄성은 서울 ${region.name}를 포함하여 서울 전역 주거 공간을 대상으로 방문 시공 상담을 제공합니다.`,
+      content,
     });
   }
 }
 
+// 공개 상태 안전 장치: isPublished가 true이면서 동시에 contentStatus가 'ready' 또는 'published'인 페이지만 정적 빌드 허용
 export function getPublishedSeoPages(): SeoPageConfig[] {
-  return SEO_PAGES.filter((page) => page.isPublished);
+  return SEO_PAGES.filter(
+    (page) => page.isPublished && (page.contentStatus === 'ready' || page.contentStatus === 'published')
+  );
 }
 
 export function getSeoPage(serviceSlug: string, districtSlug: string): SeoPageConfig | undefined {
