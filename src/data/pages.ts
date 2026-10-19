@@ -1,7 +1,13 @@
 import { REGIONS, type Region } from './regions';
 import { SERVICES, type Service } from './services';
 
-export type ContentStatus = 'draft' | 'ready' | 'published';
+/**
+ * 콘텐츠 승인 단계 정의:
+ * - 'draft': 초안 작성 중이거나 템플릿 기본값만 있는 미완성 상태
+ * - 'in_review': 내용 작성이 완료되어 운영자 사실성/품질 검토를 대기 중인 상태
+ * - 'approved': 운영자 사실성 확인 및 품질 검수를 최종 통과한 상태
+ */
+export type ContentStatus = 'draft' | 'in_review' | 'approved';
 
 export interface PageFaqItem {
   question: string;
@@ -65,8 +71,7 @@ export interface SeoPageConfig {
   content?: SeoPageContent;
 }
 
-// 12개 자치구 x 2개 작업명 = 총 24개 조합 관리
-// 1. 노원구 탄성코트 파일럿 전용 상세 콘텐츠 (STEP 3-D 전면 사실성 정밀 보정)
+// 1. 노원구 탄성코트 파일럿 전용 상세 콘텐츠
 const NOWON_ELASTIC_CONTENT: SeoPageContent = {
   targetSpaces: [
     {
@@ -196,7 +201,7 @@ const NOWON_ELASTIC_CONTENT: SeoPageContent = {
   ],
 };
 
-// 2. 노원구 베란다탄성코트 파일럿 전용 상세 콘텐츠 (STEP 3-D 신규 설계)
+// 2. 노원구 베란다탄성코트 파일럿 전용 상세 콘텐츠
 const NOWON_BALCONY_ELASTIC_CONTENT: SeoPageContent = {
   targetSpaces: [
     {
@@ -326,18 +331,150 @@ const NOWON_BALCONY_ELASTIC_CONTENT: SeoPageContent = {
   ],
 };
 
+// 3. 도봉구 탄성코트 파일럿 전용 상세 콘텐츠 (STEP 3-E 신규 설계 — 사실 기반)
+const DOBONG_ELASTIC_CONTENT: SeoPageContent = {
+  targetSpaces: [
+    {
+      title: '베란다 (발코니 창가 벽면)',
+      subtitle: '외벽 창호 주변 기존 도막 및 결로 흔적 점검',
+      description: '사계절 외부 기온 변화를 직접 마주하는 발코니 창가 구역으로, 샤시 하부 페인트 부스러짐과 벽체 접합부 실금을 우선 확인합니다.',
+    },
+    {
+      title: '세탁실 및 다용도실',
+      subtitle: '배수 설비 주변 벽체와 습기 정체 환경 확인',
+      description: '세탁기와 배수 배관이 설치되어 상시 습도가 높은 공간입니다. 벽면 모서리 오염 얼룩과 환기 창호 위치를 미리 점검합니다.',
+    },
+    {
+      title: '보일러실 및 실외기 공간',
+      subtitle: '배관 관통부 단차 및 설비 주변 보양 여건',
+      description: '보일러 배관과 가스 계량기 주변 요철을 살펴보고, 도료 비산을 방지하기 위한 정밀 보양 작업 범위를 판단합니다.',
+    },
+  ],
+  wallConditions: [
+    {
+      num: '01',
+      title: '기존 페인트 들뜸 및 가루 날림',
+      description: '벽면 페인트가 부풀어 오르거나 손으로 문질렀을 때 묻어나는 상태',
+      detail: '들뜬 도막을 깨끗이 긁어내지 않고 도포하면 하자가 발생하므로, 현장 상태에 맞춘 스크래핑 및 바탕면 정돈 여부를 우선 확인합니다.',
+    },
+    {
+      num: '02',
+      title: '벽체 이음매 및 창틀 주변 균열',
+      description: '콘크리트 이음새나 창호 모서리를 따라 실금이 길게 이어진 상태',
+      detail: '균열의 진행 상태를 파악하여 도포 전 적절한 바탕면 메꿈재로 평탄하게 보수할 수 있는지 범위를 조율합니다.',
+    },
+    {
+      num: '03',
+      title: '벽체 모서리 거뭇한 오염 얼룩',
+      description: '외벽과 맞닿은 구석 벽면에 거뭇한 습기 자국이 번진 상태',
+      detail: '표면을 청결하게 닦아내고 벽면 건조 상태를 살펴본 후 적절한 밑작업 과정을 통해 도장면 안정성을 높입니다.',
+    },
+    {
+      num: '04',
+      title: '창문 하부 결로수 맺힘 자국',
+      description: '창가 주변 벽체에 물기가 번지거나 축축한 얼룩 흔적이 남은 상태',
+      detail: '도료가 벽면에 온전히 접착될 수 있도록 벽체의 수분 상태를 점검하고 충분히 건조된 시점에 작업을 진행합니다.',
+    },
+  ],
+  scopeFactors: [
+    {
+      title: '기존 수성페인트 노후도 및 박리 상태',
+      condition: '기존 페인트의 박리 범위가 넓고 벽면 부식이 복합된 경우',
+      impact: '도포 전 들뜬 도막을 정리하고 바탕면을 고르는 밑작업에 필요한 시간과 준비 범위가 늘어납니다.',
+    },
+    {
+      title: '창호 주변 실리콘 코킹 상태',
+      condition: '창틀 코킹이 노후되어 들떠 있거나 벽체 실금이 다수 분포한 경우',
+      impact: '도장면 접착력 유지와 평탄한 마감을 위해 틈새 메꿈 및 보수 작업이 사전에 병행되어야 합니다.',
+    },
+    {
+      title: '작업 공간 내 대형 가전 및 짐 배치',
+      condition: '세탁기, 건조기, 보일러 등 설비가 벽면에 밀착 배치된 환경',
+      impact: '도료 비산 방지를 위한 비닐 커버링 보양 작업과 작업자의 시공 동선 확보 여부를 사전에 협의해야 합니다.',
+    },
+  ],
+  consultationPreps: [
+    {
+      num: '01',
+      title: '도봉구 현장 작업 공간 전경',
+      description: '베란다나 세탁실의 바닥부터 천장, 창호 구조가 한눈에 보이도록 전체 전경 사진을 촬영해 주시면 도움이 됩니다.',
+    },
+    {
+      num: '02',
+      title: '벽면 하자 부위 근접 사진',
+      description: '도막이 들뜬 곳이나 창틀 주변 균열, 모서리 얼룩 부위를 가까이에서 촬영해 주시면 필요한 보수 범위를 가늠할 수 있습니다.',
+    },
+    {
+      num: '03',
+      title: '설비 및 배관 위치 확인',
+      description: '세탁기, 선반, 보일러 배관 등 벽면에 밀착된 시설물이 사진에 포함되면 보양 작업 계획을 세우는 데 참고가 됩니다.',
+    },
+    {
+      num: '04',
+      title: '상담 희망 지역 및 일정',
+      description: '도봉구 내 대략적인 위치(쌍문동, 방학동, 창동, 도봉동 등)와 공실 여부(이사 전후 또는 거주 중), 희망 일정을 말씀해 주세요.',
+    },
+  ],
+  processSteps: [
+    {
+      step: 'STEP 01',
+      title: '현장 확인 및 정밀 보양',
+      description: '창호, 유리, 바닥 타일, 배관 등 비도장 부위를 커버링 테이프로 감싸 도료가 묻지 않도록 보호합니다.',
+    },
+    {
+      step: 'STEP 02',
+      title: '바탕면 긁어내기 및 균열 정리',
+      description: '들뜬 페인트를 긁어내고, 미세 균열 부위를 메우며 표면 오염을 닦아내는 기초 바탕면 정리 작업을 진행합니다.',
+    },
+    {
+      step: 'STEP 03',
+      title: '탄성코트 균일 도포',
+      description: '전용 도장 장비를 활용하여 벽면과 천장에 적절한 두께와 질감으로 도료를 고르게 도포합니다.',
+    },
+    {
+      step: 'STEP 04',
+      title: '보양재 제거 및 마감 검수',
+      description: '보양 테이프를 조심스럽게 제거한 뒤 도막 상태를 육안으로 확인하고 일상 환기 및 관리 요령을 안내합니다.',
+    },
+  ],
+  faqs: [
+    {
+      question: '도봉구 지역은 방문 견적이나 시공 상담이 가능한가요?',
+      answer: '도봉구를 포함한 서울 전역 시공 상담이 가능합니다. 현장 일정 조율 및 작업 조건 확인을 위해 전화 상담 시 필요한 사진과 전달 방법을 안내받으실 수 있습니다.',
+    },
+    {
+      question: '거주 중인 세대인데 세탁실이나 베란다 시공이 가능한가요?',
+      answer: '거주 중 시공 가능 여부는 작업 공간의 상태와 짐·시설물 배치 등을 확인한 후 안내받으실 수 있습니다. 도포 작업 특성상 작업 공간 내 물품 이동 및 보양 협의가 사전에 필요합니다.',
+    },
+    {
+      question: '시공 후 도료 냄새는 어느 정도이며 건조에 얼마나 걸리나요?',
+      answer: '수성 도료 특성상 자극적인 냄새는 적으나 건조 과정에서 특유의 도료취가 남을 수 있습니다. 건조 시간과 관리 방법은 사용 도료 및 온도·습도·환기 여건 등에 따라 달라지므로 구체적인 내용은 상담 시 확인이 필요합니다.',
+    },
+    {
+      question: '탄성코트를 시공하면 결로와 누수를 완전히 해결할 수 있나요?',
+      answer: '탄성코트는 벽면 마감을 위한 기능성 도장 작업입니다. 기존 누수나 외벽 크랙, 환기 부족 등 결로 발생의 근본적인 원인을 완전히 차단하는 것은 아니므로, 방수 점검과 주기적인 환기 관리가 병행되어야 합니다.',
+    },
+    {
+      question: '도봉구 탄성코트 시공 상담 전에 무엇을 준비해야 하나요?',
+      answer: '시공을 희망하는 베란다나 세탁실의 전체 전경 사진과 페인트 들뜸 등 문제 부위의 근접 사진을 준비해 주시면 전화 상담 시 필요한 작업 범위와 절차를 더욱 명확히 안내받으실 수 있습니다.',
+    },
+  ],
+};
+
 export const SEO_PAGES: SeoPageConfig[] = [];
 
 for (const service of SERVICES) {
   for (const region of REGIONS) {
     const isNowonElastic = service.id === 'elastic-coating' && region.id === 'nowon';
     const isNowonBalconyElastic = service.id === 'balcony-elastic-coating' && region.id === 'nowon';
+    const isDobongElastic = service.id === 'elastic-coating' && region.id === 'dobong';
     
     let content: SeoPageContent | undefined = undefined;
     let metaTitle = `${region.name} ${service.name} | 베란다·세탁실 - 올케어탄성`;
     let metaDescription = `${region.name} ${service.name} 시공 안내. 베란다 및 세탁실 벽면 상태를 먼저 확인하고 작업 범위를 안내합니다.`;
     let h1 = `${region.name} ${service.name} 시공 안내`;
     let heroCopy = `${region.name} 지역의 베란다와 세탁실 벽면 상태를 확인하고 필요한 작업 범위를 안내합니다.`;
+    let contentStatus: ContentStatus = 'draft';
 
     if (isNowonElastic) {
       content = NOWON_ELASTIC_CONTENT;
@@ -345,12 +482,21 @@ for (const service of SERVICES) {
       metaDescription = '노원구 탄성코트 시공을 고려하고 계신가요? 베란다·세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위와 상담 준비 사항을 안내합니다.';
       h1 = '노원구 탄성코트 시공 안내';
       heroCopy = '노원구 아파트·주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위를 정직하게 안내합니다.';
+      contentStatus = 'in_review'; // 운영자 최종 검수 대기 단계
     } else if (isNowonBalconyElastic) {
       content = NOWON_BALCONY_ELASTIC_CONTENT;
       metaTitle = '노원구 베란다탄성코트 시공 안내 | 올케어탄성';
       metaDescription = '노원구 베란다탄성코트 시공을 알아보고 계신가요? 베란다 벽면의 도막 들뜸, 얼룩과 균열 등 확인 사항과 시공 상담 준비 방법을 안내합니다.';
       h1 = '노원구 베란다탄성코트 시공 안내';
       heroCopy = '노원구 베란다 공간의 창호 주변 도막 들뜸, 균열, 얼룩 흔적을 확인하고 필요한 시공 준비 사항을 정직하게 안내합니다.';
+      contentStatus = 'in_review'; // 운영자 최종 검수 대기 단계
+    } else if (isDobongElastic) {
+      content = DOBONG_ELASTIC_CONTENT;
+      metaTitle = '도봉구 탄성코트 시공 안내 | 베란다·세탁실 - 올케어탄성';
+      metaDescription = '도봉구 탄성코트 시공을 알아보고 계신가요? 베란다와 세탁실의 기존 도막 상태, 균열과 습기 흔적 등 시공 전 확인 사항과 작업 범위 상담 방법을 안내합니다.';
+      h1 = '도봉구 탄성코트 시공 안내';
+      heroCopy = '도봉구 주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위와 준비 사항을 정직하게 안내합니다.';
+      contentStatus = 'in_review'; // STEP 3-E 신규 작성 완료, 운영자 최종 승인 대기
     }
 
     SEO_PAGES.push({
@@ -360,8 +506,8 @@ for (const service of SERVICES) {
       serviceSlug: service.slug,
       districtSlug: region.slug,
       urlPath: `/seo/${service.slug}/${region.slug}.html`,
-      isPublished: false, // STEP 3-D 듀얼 파일럿 검증 완료 후 전 조합 비공개(false) 안전 원복
-      contentStatus: (isNowonElastic || isNowonBalconyElastic) ? 'ready' : 'draft',
+      isPublished: false, // STEP 3-E 크로스 지역 파일럿 검증 완료 후 전 조합 비공개(false) 안전 원복
+      contentStatus,
       metaTitle,
       metaDescription,
       h1,
@@ -372,10 +518,15 @@ for (const service of SERVICES) {
   }
 }
 
-// 공개 상태 안전 장치: isPublished가 true이면서 동시에 contentStatus가 'ready' 또는 'published'인 페이지만 정적 빌드 허용
+/**
+ * 공개 상태 안전 장치:
+ * - isPublished === true 이면서,
+ * - contentStatus === 'approved' (또는 로컬 검증 시 'in_review')인 페이지만 정적 빌드 허용
+ * - 'draft'인 미완성 페이지는 실수로 isPublished가 켜져도 절대 빌드되지 않음
+ */
 export function getPublishedSeoPages(): SeoPageConfig[] {
   return SEO_PAGES.filter(
-    (page) => page.isPublished && (page.contentStatus === 'ready' || page.contentStatus === 'published')
+    (page) => page.isPublished && (page.contentStatus === 'approved' || page.contentStatus === 'in_review')
   );
 }
 
