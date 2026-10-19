@@ -1,24 +1,28 @@
 ---
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
+import { getSiteUrl, getCanonicalUrl } from '../utils/seo';
 import '../styles/globals.css';
 
 interface Props {
   title?: string;
   description?: string;
   path?: string;
+  jsonLd?: (Record<string, any> | null | undefined)[];
 }
 
 const {
   title = '서울 탄성코트 시공 안내 | 올케어탄성',
   description = '서울권 베란다와 세탁실의 탄성코트 시공을 안내합니다. 기존 도막, 균열, 습기 흔적 등 벽면 상태와 필요한 작업 범위를 확인하고 상담받을 수 있습니다.',
   path = '',
+  jsonLd = [],
 } = Astro.props;
 
-// 운영 도메인은 현재 미정 상태이므로 SITE_URL 환경 변수가 명시적으로 제공된 경우에만 canonical을 생성합니다.
-// 기존 allcaretan.co.kr 또는 임의의 가상 도메인을 canonical로 지정하지 않습니다.
-const siteUrl = import.meta.env.SITE_URL || '';
-const canonicalUrl = siteUrl && path ? `${siteUrl.replace(/\/$/, '')}${path}` : null;
+// 운영 도메인은 신규 독립 도메인 환경변수(SITE_URL) 또는 Astro.site에서만 가져옵니다.
+// 미설정 시 가짜 도메인이나 canonical을 생성하지 않습니다.
+const siteUrl = getSiteUrl(Astro.site);
+const canonicalUrl = getCanonicalUrl(path, siteUrl);
+const validJsonLd = jsonLd.filter((item): item is Record<string, any> => !!item);
 ---
 
 <!doctype html>
@@ -28,10 +32,34 @@ const canonicalUrl = siteUrl && path ? `${siteUrl.replace(/\/$/, '')}${path}` : 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Canonical URL (도메인 설정 시에만 유효 출력) -->
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <!-- Open Graph 메타데이터 -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:site_name" content="올케어탄성" />
+    <meta property="og:locale" content="ko_KR" />
+    {siteUrl && (
+      <meta property="og:image" content={`${siteUrl}/images/allcare/official-allcare-logo.png`} />
+    )}
+
+    <!-- Twitter Card 메타데이터 -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {siteUrl && (
+      <meta name="twitter:image" content={`${siteUrl}/images/allcare/official-allcare-logo.png`} />
+    )}
+
+    <!-- JSON-LD 구조화 데이터 -->
+    {validJsonLd.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+
     <link rel="icon" type="image/png" href="/images/allcare/allcare-signature.png" />
   </head>
   <body class="min-h-screen flex flex-col bg-[#F5F3EE] text-[#3E443B] antialiased">

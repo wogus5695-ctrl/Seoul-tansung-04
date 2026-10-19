@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/common/PlaceholderImage.astro';
 import { REGIONS } from '../data/regions';
 import { SEO_PAGES, isPagePublished } from '../data/pages';
+import { getSiteUrl, getCanonicalUrl, buildWebSiteJsonLd, buildWebPageJsonLd } from '../utils/seo';
 
 // 실제 시공 사진 보유 여부 플래그 (현재 미확보 상태이므로 false)
 // 향후 실제 현장 사진 등록 시 true로 전환하면 2열 Before & After 비교 레이아웃이 자동 활성화됩니다.
@@ -23,12 +24,23 @@ const regionStatusList = REGIONS.map((region) => {
     })),
   };
 });
+
+const pageTitle = "서울 탄성코트 시공 안내 | 올케어탄성";
+const pageDescription = "서울권 베란다와 세탁실의 탄성코트 시공을 안내합니다. 기존 도막, 균열, 습기 흔적 등 벽면 상태와 필요한 작업 범위를 확인하고 상담받을 수 있습니다.";
+const siteUrl = getSiteUrl(Astro.site);
+const canonicalUrl = getCanonicalUrl('/', siteUrl);
+
+const jsonLd = siteUrl ? [
+  buildWebSiteJsonLd(siteUrl),
+  buildWebPageJsonLd(pageTitle, pageDescription, canonicalUrl),
+] : [];
 ---
 
 <BaseLayout
-  title="서울 탄성코트 시공 안내 | 올케어탄성"
-  description="서울권 베란다와 세탁실의 탄성코트 시공을 안내합니다. 기존 도막, 균열, 습기 흔적 등 벽면 상태와 필요한 작업 범위를 확인하고 상담받을 수 있습니다."
+  title={pageTitle}
+  description={pageDescription}
   path="/"
+  jsonLd={jsonLd}
 >
   <!-- 02. HERO SECTION -->
   <section class="w-full py-10 sm:py-16 lg:py-20 border-b border-[#E7D9C1]/60">

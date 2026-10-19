@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, isPagePublished, type SeoPageConfig } from '../../../data/pages';
+import { getSiteUrl, getCanonicalUrl, buildWebPageJsonLd, buildBreadcrumbJsonLd } from '../../../utils/seo';
 
 export async function getStaticPaths() {
   // isPublished === true && contentStatus === 'approved'인 페이지만 정적 경로 생성
@@ -29,12 +30,27 @@ const content = page.content;
 const relatedPublishedPages = SEO_PAGES.filter(
   (p) => isPagePublished(p) && p.id !== page.id
 );
+
+const siteUrl = getSiteUrl(Astro.site);
+const canonicalUrl = getCanonicalUrl(page.urlPath, siteUrl);
+
+const breadcrumbItems = siteUrl ? [
+  { name: '홈', url: `${siteUrl}/` },
+  { name: '서울권 시공 안내', url: `${siteUrl}/#regions` },
+  { name: `${region?.name ?? ''} ${service?.name ?? ''}`, url: canonicalUrl || '' },
+] : [];
+
+const jsonLd = siteUrl ? [
+  buildWebPageJsonLd(page.metaTitle, page.metaDescription, canonicalUrl),
+  buildBreadcrumbJsonLd(breadcrumbItems),
+] : [];
 ---
 
 <BaseLayout
   title={page.metaTitle}
   description={page.metaDescription}
   path={page.urlPath}
+  jsonLd={jsonLd}
 >
   <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 sm:space-y-16 text-left">
     <!-- 02. Breadcrumb (네비게이션 경로) -->
