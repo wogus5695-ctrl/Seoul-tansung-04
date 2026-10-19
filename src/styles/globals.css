@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-main: var(--bg-main);
-  --color-bg-surface: var(--bg-surface);
-  --color-cta: var(--color-cta);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-border-beige: var(--border-beige);
-  --color-emphasis: var(--color-emphasis);
+  --color-brand-bg: #F5F3EE;
+  --color-brand-surface: #FAF8F5;
+  --color-brand-cta: #4F5844;
+  --color-brand-primary: #3E443B;
+  --color-brand-secondary: #5C5549;
+  --color-brand-border: #E7D9C1;
+  --color-brand-dark: #2D322A;
   --font-sans: -apple-system, BlinkMacSystemFont, "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 
@@ -21,10 +21,23 @@
   --color-emphasis: #2D322A;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
   font-family: var(--font-sans);
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+/* Custom styling for details summary arrow toggle */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }
