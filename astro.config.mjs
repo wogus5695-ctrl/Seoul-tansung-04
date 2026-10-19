@@ -3,8 +3,26 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 import sitemap from '@astrojs/sitemap';
+import { validateProductionSiteUrl } from './src/utils/seo.ts';
 
-const siteUrl = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/$/, '') : undefined;
+const isPreview = process.env.VERCEL_ENV === 'preview' || process.env.ENVIRONMENT === 'preview';
+const isProduction =
+  process.env.VERCEL_ENV === 'production' ||
+  process.env.DEPLOY_TARGET === 'production' ||
+  process.env.PRODUCTION_BUILD === 'true';
+
+const rawSiteUrl = process.env.SITE_URL ? process.env.SITE_URL.trim() : undefined;
+
+// Production 배포 게이트: 운영 배포 모드에서는 유효한 운영 도메인이 반드시 검증되어야 합니다.
+if (isProduction) {
+  const validation = validateProductionSiteUrl(rawSiteUrl);
+  if (!validation.valid) {
+    throw new Error(`[PRODUCTION BUILD GATE ERROR] ${validation.error}`);
+  }
+}
+
+// Preview 환경에서는 사이트맵 및 운영 canonical 생성을 차단하여 색인 신호 유출을 원천 방지합니다.
+const siteUrl = (!isPreview && rawSiteUrl) ? rawSiteUrl.replace(/\/$/, '') : undefined;
 
 // https://astro.build/config
 export default defineConfig({

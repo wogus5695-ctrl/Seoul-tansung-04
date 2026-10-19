@@ -1,9 +1,10 @@
 import type { APIRoute } from 'astro';
+import { isPreviewEnvironment } from '../utils/seo.ts';
 
 export const GET: APIRoute = ({ site }) => {
   // siteUrl 결정: Astro config의 site 또는 환경변수 SITE_URL (끝의 슬래시 제거)
   const siteUrl = site ? site.toString().replace(/\/$/, '') : (process.env.SITE_URL ? process.env.SITE_URL.replace(/\/$/, '') : '');
-  const isPreview = process.env.VERCEL_ENV === 'preview' || process.env.ENVIRONMENT === 'preview';
+  const isPreview = isPreviewEnvironment();
 
   let body = '';
 

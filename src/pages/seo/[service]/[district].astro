@@ -36,7 +36,6 @@ const canonicalUrl = getCanonicalUrl(page.urlPath, siteUrl);
 
 const breadcrumbItems = siteUrl ? [
   { name: '홈', url: `${siteUrl}/` },
-  { name: '서울권 시공 안내', url: `${siteUrl}/#regions` },
   { name: `${region?.name ?? ''} ${service?.name ?? ''}`, url: canonicalUrl || '' },
 ] : [];
 

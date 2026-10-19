@@ -1,7 +1,7 @@
 ---
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
-import { getSiteUrl, getCanonicalUrl } from '../utils/seo';
+import { getSiteUrl, getCanonicalUrl, isPreviewEnvironment } from '../utils/seo';
 import '../styles/globals.css';
 
 interface Props {
@@ -18,11 +18,13 @@ const {
   jsonLd = [],
 } = Astro.props;
 
+const isPreview = isPreviewEnvironment();
+
 // 운영 도메인은 신규 독립 도메인 환경변수(SITE_URL) 또는 Astro.site에서만 가져옵니다.
-// 미설정 시 가짜 도메인이나 canonical을 생성하지 않습니다.
-const siteUrl = getSiteUrl(Astro.site);
-const canonicalUrl = getCanonicalUrl(path, siteUrl);
-const validJsonLd = jsonLd.filter((item): item is Record<string, any> => !!item);
+// Preview 환경에서는 운영 Canonical 및 색인 신호 유출을 원천 차단합니다.
+const siteUrl = isPreview ? '' : getSiteUrl(Astro.site);
+const canonicalUrl = isPreview ? null : getCanonicalUrl(path, siteUrl);
+const validJsonLd = isPreview ? [] : jsonLd.filter((item): item is Record<string, any> => !!item);
 ---
 
 <!doctype html>
@@ -33,7 +35,10 @@ const validJsonLd = jsonLd.filter((item): item is Record<string, any> => !!item)
     <title>{title}</title>
     <meta name="description" content={description} />
 
-    <!-- Canonical URL (도메인 설정 시에만 유효 출력) -->
+    <!-- 미리보기(Preview) 환경 검색엔진 색인 방지 -->
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Canonical URL (도메인 설정 및 정식 배포 시에만 유효 출력) -->
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
     <!-- Open Graph 메타데이터 -->
