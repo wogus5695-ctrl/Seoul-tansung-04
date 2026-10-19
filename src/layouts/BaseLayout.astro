@@ -1,0 +1,44 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import '../styles/globals.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+}
+
+const {
+  title = '올케어탄성 | 서울 탄성코트 전문 시공',
+  description = '서울권 베란다 및 세탁실 탄성코트 전문 시공 안내. 벽면 상태 점검부터 맞춤 시공 범위까지 안내합니다.',
+  path = '',
+} = Astro.props;
+
+// 운영 도메인은 현재 미정 상태이므로 SITE_URL 환경 변수가 명시적으로 제공된 경우에만 canonical을 생성합니다.
+// 기존 allcaretan.co.kr 또는 임의의 가상 도메인을 canonical로 지정하지 않습니다.
+const siteUrl = import.meta.env.SITE_URL || '';
+const canonicalUrl = siteUrl && path ? `${siteUrl.replace(/\/$/, '')}${path}` : null;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="/images/allcare/allcare-signature.png" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-[#F5F3EE] text-[#3E443B]">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

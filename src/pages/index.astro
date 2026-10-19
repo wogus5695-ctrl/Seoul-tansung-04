@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderImage from '../components/common/PlaceholderImage.astro';
+---
+
+<BaseLayout
+  title="서울 탄성코트 전문 시공, 올케어탄성"
+  description="들뜨고 오래된 베란다와 세탁실, 깔끔하고 관리하기 편한 공간으로 만들어보세요! 서울권 탄성코트 시공 안내."
+  path="/"
+>
+  <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-12">
+    <!-- 프로젝트 기반 골격 안내 섹션 -->
+    <section class="space-y-6 text-center max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E7D9C1]/50 text-xs font-semibold text-[#5C5549] tracking-wider uppercase">
+        <span>ALLCARE SEO SITE FOUNDATION</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-[#3E443B] tracking-tight">
+        서울 탄성코트 전문 시공, 올케어탄성
+      </h1>
+      <p class="text-base text-[#5C5549] leading-relaxed">
+        들뜨고 오래된 베란다와 세탁실, 깔끔하고 관리하기 편한 공간으로 만들어보세요!
+      </p>
+      <div class="pt-2 flex flex-wrap justify-center gap-4">
+        <a
+          href="tel:01084926900"
+          class="px-6 py-3 rounded-md bg-[#4F5844] text-[#F5F3EE] font-semibold text-sm hover:bg-[#3E443B] transition-colors shadow-sm inline-flex items-center gap-2"
+        >
+          <span>전화 상담하기 (010-8492-6900)</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 중립적 현장사진 플레이스홀더 영역 검증 -->
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold text-[#3E443B]">시공 현장 안내 준비 영역</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <PlaceholderImage
+          label="시공 전 현장사진 등록 예정"
+          subLabel="사용자가 제공할 실제 현장 시공 전 사진이 등록될 예정입니다."
+        />
+        <PlaceholderImage
+          label="시공 후 현장사진 등록 예정"
+          subLabel="사용자가 제공할 실제 현장 시공 후 사진이 등록될 예정입니다."
+        />
+      </div>
+    </section>
+  </div>
+</BaseLayout>

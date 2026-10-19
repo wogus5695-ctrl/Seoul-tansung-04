@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaceholderImage from '../../../components/common/PlaceholderImage.astro';
+import { getPublishedSeoPages, getRegionById, getServiceById, type SeoPageConfig } from '../../../data/pages';
+
+export async function getStaticPaths() {
+  // isPublished === true인 페이지만 정적 경로 생성
+  const publishedPages = getPublishedSeoPages();
+  return publishedPages.map((page) => ({
+    params: {
+      service: page.serviceSlug,
+      district: page.districtSlug,
+    },
+    props: {
+      page,
+    },
+  }));
+}
+
+interface Props {
+  page: SeoPageConfig;
+}
+
+const { page } = Astro.props;
+const region = getRegionById(page.regionId);
+const service = getServiceById(page.serviceId);
+---
+
+<BaseLayout
+  title={page.metaTitle}
+  description={page.metaDescription}
+  path={page.urlPath}
+>
+  <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <!-- 경로 안내 (Breadcrumb) -->
+    <nav aria-label="breadcrumb" class="text-xs text-[#5C5549] flex items-center gap-2">
+      <a href="/" class="hover:underline">홈</a>
+      <span>/</span>
+      <span>{service?.name || '탄성코트'}</span>
+      <span>/</span>
+      <span class="font-semibold text-[#3E443B]">{region?.displayName || '서울'}</span>
+    </nav>
+
+    <!-- 지역 히어로 -->
+    <header class="space-y-4">
+      <span class="inline-block text-xs font-semibold uppercase tracking-wider text-[#5C5549] bg-[#E7D9C1]/50 px-2.5 py-1 rounded-full">
+        서울권 전문 시공 안내
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-bold text-[#3E443B]">
+        {region?.displayName} <span class="text-[#4F5844]">{service?.name}</span> 전문 시공 안내
+      </h1>
+      <p class="text-sm text-[#5C5549] leading-relaxed max-w-2xl">
+        베란다와 세탁실의 도막 들뜸, 결로, 곰팡이 흔적을 확인하고 필요한 작업 범위를 정직하게 안내합니다.
+      </p>
+      <div class="pt-2">
+        <a
+          href="tel:01084926900"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#4F5844] text-[#F5F3EE] font-semibold text-xs sm:text-sm hover:bg-[#3E443B] transition-colors"
+        >
+          <span>전화 상담 문의 (010-8492-6900)</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- 현장사진 플레이스홀더 영역 -->
+    <section class="space-y-4">
+      <h2 class="text-base font-semibold text-[#3E443B]">현장 작업 안내 준비</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <PlaceholderImage
+          label="시공 전 현장 사진 등록 예정"
+          subLabel="현장 사진 수급 후 실제 시공 전 상태 이미지가 등록됩니다."
+        />
+        <PlaceholderImage
+          label="시공 후 현장 사진 등록 예정"
+          subLabel="현장 사진 수급 후 실제 시공 후 마감 이미지가 등록됩니다."
+        />
+      </div>
+    </section>
+  </div>
+</BaseLayout>
