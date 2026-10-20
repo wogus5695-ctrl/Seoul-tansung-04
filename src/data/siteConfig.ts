@@ -6,6 +6,7 @@ export const SITE_CONTACT = {
   brandEn: 'ALLCARE',
   phone: '010-8492-6900',
   telHref: 'tel:01084926900',
+  kakaoChannelUrl: 'https://pf.kakao.com/_UjxcFX',
   serviceScope: '서울특별시 전역 (서울권)',
 } as const;
 
