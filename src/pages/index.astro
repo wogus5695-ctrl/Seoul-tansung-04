@@ -5,6 +5,7 @@ import SectionHeader from '../components/common/SectionHeader.astro';
 import BeforeAfterGallery from '../components/common/BeforeAfterGallery.astro';
 import WallCheckSection from '../components/common/WallCheckSection.astro';
 import PreConsultationGuide from '../components/common/PreConsultationGuide.astro';
+import ProcessTimeline from '../components/common/ProcessTimeline.astro';
 import FaqAccordion from '../components/common/FaqAccordion.astro';
 import ConsultationBanner from '../components/common/ConsultationBanner.astro';
 import { REGIONS } from '../data/regions';
@@ -110,73 +111,8 @@ const jsonLd = siteUrl ? [
   <!-- 05. 상담 전 안내 (상담 전 확인 6개 항목 + 실제 현장사진 적용) -->
   <PreConsultationGuide />
 
-  <!-- 06. 시공 과정 (PC/MO 반응형 타임라인 및 간결한 흐름) -->
-  <section id="process" class="w-full py-12 sm:py-16 bg-[#FAF8F5] border-b border-[#E7D9C1]">
-    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      <SectionHeader
-        label="WORK PROCESS"
-        title="시공 과정"
-        description="현장 상태 점검부터 보양, 뿜칠, 마감 확인까지의 일반적인 작업 흐름입니다."
-      />
-
-      <!-- 5단계 반응형 프로세스 흐름 -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-3.5">
-        <div class="p-4 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold text-[#4F5844] bg-[#4F5844]/10 px-2 py-0.5 rounded">
-            STEP 01
-          </span>
-          <h3 class="text-sm font-bold text-[#3E443B]">상태 확인</h3>
-          <p class="text-xs text-[#5C5549] leading-relaxed">
-            도막 들뜸, 오염 부위, 균열 크기 및 환기 여건 점검
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold text-[#4F5844] bg-[#4F5844]/10 px-2 py-0.5 rounded">
-            STEP 02
-          </span>
-          <h3 class="text-sm font-bold text-[#3E443B]">작업 범위 안내</h3>
-          <p class="text-xs text-[#5C5549] leading-relaxed">
-            벽면 상태에 맞춘 스크래핑 및 퍼티 보수 범위 안내
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold text-[#4F5844] bg-[#4F5844]/10 px-2 py-0.5 rounded">
-            STEP 03
-          </span>
-          <h3 class="text-sm font-bold text-[#3E443B]">보양 및 준비</h3>
-          <p class="text-xs text-[#5C5549] leading-relaxed">
-            창호·바닥 마스킹 보양 후 부실 도막 정리 및 퍼티 보강
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold text-[#4F5844] bg-[#4F5844]/10 px-2 py-0.5 rounded">
-            STEP 04
-          </span>
-          <h3 class="text-sm font-bold text-[#3E443B]">탄성코트 도포</h3>
-          <p class="text-xs text-[#5C5549] leading-relaxed">
-            도막 두께와 작업 환경을 고려한 탄성코트 뿜칠 도포
-          </p>
-        </div>
-
-        <div class="p-4 rounded-xl bg-[#F5F3EE] border border-[#E7D9C1] space-y-1.5 text-left">
-          <span class="text-[10px] font-mono font-bold text-[#4F5844] bg-[#4F5844]/10 px-2 py-0.5 rounded">
-            STEP 05
-          </span>
-          <h3 class="text-sm font-bold text-[#3E443B]">마감 확인 &amp; 관리</h3>
-          <p class="text-xs text-[#5C5549] leading-relaxed">
-            보양재 철거 후 도막 상태 검수 및 환기 양생 요령 안내
-          </p>
-        </div>
-      </div>
-
-      <p class="text-[11px] text-[#5C5549]/70 text-left">
-        ※ 실제 소요 시간과 작업 범위는 현장 면적 및 기존 벽면 상태에 따라 달라질 수 있습니다.
-      </p>
-    </div>
-  </section>
+  <!-- 06. 시공 과정 (타임라인형 UI/문구 개편) -->
+  <ProcessTimeline keyword="탄성코트" />
 
   <!-- 07. 서울 지역별 시공 안내 (반복 배지 제거 & 간결한 12개 자치구 목록) -->
   <section id="regions" class="w-full py-12 sm:py-16 bg-[#F5F3EE] border-b border-[#E7D9C1]">
