@@ -1,0 +1,148 @@
+---
+interface WallCheckItem {
+  num: string;
+  title: string;
+  description: string;
+  detail?: string;
+}
+
+interface Props {
+  keyword?: string;
+  items?: WallCheckItem[];
+  variant?: 'full' | 'card';
+  class?: string;
+}
+
+const DEFAULT_ITEMS: WallCheckItem[] = [
+  {
+    num: '01',
+    title: '도막 들뜸',
+    description: '기존의 페인트나 탄성코트가 부풀고 바스라지는 상태',
+    detail: '기존 도막의 접착 상태를 확인하고 필요한 바탕면 정리 범위를 판단합니다.',
+  },
+  {
+    num: '02',
+    title: '벽면 균열',
+    description: '벽면에 큰 균열이 있거나, 홈이 파여있는 상태',
+    detail: '균열 깊이와 범위를 확인한 뒤 뿜칠 전 퍼티 보강 작업 여부를 결정합니다.',
+  },
+  {
+    num: '03',
+    title: '오염·곰팡이',
+    description: '전반적으로 곰팡이가 다량 분포되어 있는 상태',
+    detail: '단순 표면 오염인지 벽면 내부 습기인지 확인 후 세척 및 전처리 방식을 정합니다.',
+  },
+  {
+    num: '04',
+    title: '습기·결로',
+    description: '벽면에 습기의 흔적이 남아 있거나, 수분이 자주 맺히는 상태',
+    detail: '현재 벽면 건조 상태와 계절별 환기 여건을 고려해 시공 시점을 협의합니다.',
+  },
+];
+
+const {
+  keyword = '탄성코트',
+  items = DEFAULT_ITEMS,
+  variant = 'full',
+  class: className = '',
+} = Astro.props;
+
+const isCard = variant === 'card';
+---
+
+<section
+  id="wall-check"
+  class:list={[
+    isCard
+      ? 'rounded-2xl bg-[#2D322A] text-[#F5F3EE] p-5 sm:p-7 lg:p-8 border border-[#3E443B] shadow-xs'
+      : 'w-full py-12 sm:py-16 bg-[#2D322A] text-[#F5F3EE] border-b border-[#3E443B]',
+    className,
+  ]}
+>
+  <div class={isCard ? 'w-full' : 'w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'}>
+    {/* PC: 좌측 이미지(5열) + 우측 콘텐츠(7열) / MO: 상단 이미지 + 하단 콘텐츠 순차 배치 */}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-8 xl:gap-10 items-stretch">
+      
+      {/* 1. 대표 현장 이미지 (PC: 좌측 / MO: 상단) */}
+      <div class="lg:col-span-5 flex flex-col justify-start">
+        <div class="relative w-full rounded-xl sm:rounded-2xl overflow-hidden border border-[#E7D9C1]/20 bg-[#3E443B]/60 shadow-xs aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[440px]">
+          <picture class="block w-full h-full">
+            <source srcset="/images/sections/wall-condition-check.webp" type="image/webp" />
+            <img
+              src="/images/sections/wall-condition-check.jpg"
+              alt="벽면 도막 들뜸 및 균열 상태 실제 점검 예시"
+              class="w-full h-full object-cover object-center select-none"
+              loading="lazy"
+              decoding="async"
+              draggable="false"
+            />
+          </picture>
+
+          {/* 사진 하단 보조 캡션 배지 */}
+          <div class="absolute bottom-3 left-3 right-3 sm:bottom-3.5 sm:left-3.5 sm:right-3.5 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-[#2D322A]/85 backdrop-blur-xs border border-[#FAF8F5]/15 text-[11px] sm:text-xs text-[#E7D9C1] select-none">
+            <p class="font-semibold text-[#FAF8F5]">실제 점검 벽면 상태 예시</p>
+            <p class="text-[10px] sm:text-[11px] text-[#E7D9C1]/75 mt-0.5 leading-snug">도막 들뜸, 균열 및 바탕면 오염 흔적</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. 텍스트 / 카드 4개 / 안내 유의사항 (PC: 우측 / MO: 하단) */}
+      <div class="lg:col-span-7 flex flex-col justify-between space-y-5 sm:space-y-6">
+        
+        {/* 헤더: 영문 라벨 제거, 공감형 제목 및 설명 */}
+        <div class="space-y-2 sm:space-y-2.5 text-left">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[#F5F3EE]">
+            다음과 같은 상황이라면, 필요합니다!
+          </h2>
+          <div class="text-xs sm:text-sm text-[#E7D9C1]/90 leading-relaxed space-y-1">
+            <p>
+              벽면의 상태가 다음과 같다면 <strong class="text-[#FAF8F5] font-semibold underline decoration-[#A3B18A] decoration-2 underline-offset-4">{keyword}</strong> 작업을 고려해보시는 것을 추천드립니다.
+            </p>
+            <p class="text-[#E7D9C1]/75">
+              벽면 상태를 미리 확인한 뒤 상담 시 함께 공유해주시면, 견적과 작업 방향을 보다 빠르게 안내해드릴 수 있습니다.
+            </p>
+          </div>
+        </div>
+
+        {/* 4개 카드 그리드 (PC 2x2 / MO 1열) */}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+          {items.map((item) => (
+            <div class="p-3.5 sm:p-4 rounded-xl bg-[#3E443B]/60 border border-[#E7D9C1]/20 flex flex-col justify-between hover:border-[#E7D9C1]/40 transition-colors">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono font-bold text-[#E7D9C1]">{item.num}</span>
+                  <h3 class="text-sm sm:text-base font-bold text-[#F5F3EE]">{item.title}</h3>
+                </div>
+                <p class="text-xs text-[#E7D9C1]/90 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+
+              {item.detail && (
+                <details class="mt-2.5 pt-2 text-xs text-[#E7D9C1]/80 border-t border-[#E7D9C1]/15 group/detail">
+                  <summary class="cursor-pointer text-[11px] font-semibold text-[#A3B18A] hover:underline flex items-center justify-between select-none">
+                    <span>상세 확인 내용</span>
+                    <span class="text-[9px] group-open/detail:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <p class="mt-1.5 leading-relaxed text-[#E7D9C1]/75 text-[11px]">
+                    {item.detail}
+                  </p>
+                </details>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* 안내 유의사항 박스 (동적키워드로 문두 시작) */}
+        <div class="p-3.5 sm:p-4 rounded-xl bg-[#3E443B]/90 border border-[#E7D9C1]/25 text-[11px] sm:text-xs text-[#E7D9C1]/90 leading-relaxed text-left">
+          <p>
+            <strong class="font-semibold text-[#F5F3EE]">※ {keyword} 작업 안내: </strong>
+            탄성코트는 벽면의 쾌적한 마감과 공간 관리에 도움을 주는 시공입니다. 건물 구조적 결함이나 외벽 균열로 인한 누수는 별도의 점검이 선행되어야 하므로, 벽면 상태부터 먼저 확인한 뒤 작업 방향을 안내해드립니다.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>

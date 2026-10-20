@@ -4,6 +4,7 @@ import SectionHeader from '../../../components/common/SectionHeader.astro';
 import FaqAccordion from '../../../components/common/FaqAccordion.astro';
 import ConsultationBanner from '../../../components/common/ConsultationBanner.astro';
 import HeroSection from '../../../components/common/HeroSection.astro';
+import WallCheckSection from '../../../components/common/WallCheckSection.astro';
 import { SITE_CONTACT } from '../../../data/siteConfig';
 import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, isPagePublished, type SeoPageConfig } from '../../../data/pages';
 import { getSiteUrl, getCanonicalUrl, buildWebPageJsonLd, buildBreadcrumbJsonLd } from '../../../utils/seo';
@@ -104,39 +105,11 @@ const jsonLd = siteUrl ? [
       </section>
     )}
 
-    <!-- 05. 시공 전 벽면 상태 확인 (Wall Conditions) -->
-    {content?.wallConditions && (
-      <section id="wall-check" class="space-y-6">
-        <SectionHeader
-          label="WALL CONDITION CHECK"
-          title="시공 전 벽면 상태 확인 가이드"
-          description="도포 작업 전 벽면의 기본 바탕 상태를 확인하여 필요한 보수 및 준비 범위를 결정합니다."
-        />
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {content.wallConditions.map((item) => (
-            <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7D9C1] space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-mono font-bold text-[#4F5844]">{item.num}</span>
-                <h3 class="text-sm sm:text-base font-bold text-[#3E443B]">{item.title}</h3>
-              </div>
-              <p class="text-xs text-[#5C5549] leading-relaxed">
-                {item.description}
-              </p>
-              <details class="pt-1.5 text-xs text-[#5C5549] border-t border-[#E7D9C1]/60 group/detail">
-                <summary class="cursor-pointer text-[11px] font-semibold text-[#4F5844] hover:underline flex items-center justify-between select-none">
-                  <span>작업 안내</span>
-                  <span class="text-[9px] group-open/detail:rotate-180 transition-transform">▼</span>
-                </summary>
-                <p class="mt-1.5 leading-relaxed text-[#5C5549]/80">
-                  {item.detail}
-                </p>
-              </details>
-            </div>
-          ))}
-        </div>
-      </section>
-    )}
+    <!-- 05. 시공 전 벽면 상태 확인 (공감형 카피 + 이미지 삽입형 레이아웃 개선) -->
+    <WallCheckSection
+      keyword={service?.name || '탄성코트'}
+      variant="card"
+    />
 
     <!-- 06. 작업 범위 확인 가이드 (Scope Factors) -->
     {content?.scopeFactors && (
