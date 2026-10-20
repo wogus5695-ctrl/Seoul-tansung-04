@@ -64,10 +64,13 @@ const {
   ]}
 >
   {/* ============================================================== */}
-  {/* [1] 모바일 전용 HERO (< lg) : 배경 이미지 + 상단 집중 소프트 그라데이션 */}
+  {/* [1] 모바일 전용 HERO (< lg) : 세로 중앙 정렬 + 중앙 소프트 오버레이 */}
   {/* ============================================================== */}
-  <div class="block lg:hidden relative w-full min-h-[630px] sm:min-h-[660px] flex flex-col justify-between overflow-hidden">
-    <!-- 배경 이미지: 실제 현장사진의 창호, 벽면, 천장 질감이 자연스럽게 노출되도록 배치 -->
+  <div
+    id="mobile-hero-container"
+    class="block lg:hidden relative w-full min-h-[640px] sm:min-h-[680px] flex flex-col justify-center items-start overflow-hidden px-5 sm:px-6 py-12 sm:py-16"
+  >
+    <!-- 배경 이미지: 실제 현장사진 (천장 조명, 질감, 창호, 벽면) -->
     <div class="absolute inset-0 z-0 select-none pointer-events-none">
       <img
         src={bgImage}
@@ -76,18 +79,21 @@ const {
         loading="eager"
         fetchpriority="high"
       />
-      <!-- 상단 40% 텍스트 영역 집중 오버레이 (0~40%: 텍스트 가독성 확보, 40~65%: 점진 감쇄, 65~100%: 원본 노출) -->
+      <!-- 중앙 텍스트 영역 가독성 보정 그라데이션 (상단 천장 질감 보존, 중앙 텍스트 대비 확보, 하단 창호/벽면 원본 노출) -->
       <div
-        class="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/95 via-[#FAF8F5]/85 via-40% to-transparent pointer-events-none"
+        class="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/40 via-[#FAF8F5]/88 via-48% to-transparent pointer-events-none"
         aria-hidden="true"
       ></div>
     </div>
 
-    <!-- 상단 텍스트 콘텐츠 (순서: Badge -> H1 -> 주요 설명 -> 보조 설명 -> 작은 앵커 링크) -->
-    <div class="relative z-10 w-full px-5 pt-8 sm:pt-10 pb-4 space-y-3.5 text-left">
+    <!-- 텍스트 콘텐츠 그룹 (수직 중앙 정렬, 좌측 텍스트 정렬 유지) -->
+    <div
+      id="mobile-hero-text"
+      class="relative z-10 w-full max-w-lg space-y-3.5 sm:space-y-4 text-left"
+    >
       <!-- Breadcrumb (상세페이지 전용) -->
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <nav aria-label="breadcrumb" class="mb-2 text-xs text-[#5C5549] flex items-center flex-wrap gap-1.5">
+        <nav aria-label="breadcrumb" class="mb-1 text-xs text-[#5C5549] flex items-center flex-wrap gap-1.5">
           {breadcrumbs.map((item, idx) => (
             <>
               {idx > 0 && <span class="text-[#5C5549]/50">/</span>}
@@ -146,13 +152,10 @@ const {
         </p>
       )}
     </div>
-
-    <!-- 하단 공간 여백: 65~100% 구간 실제 사진의 창호와 벽면 질감이 선명하게 드러나도록 확보 -->
-    <div class="relative z-10 h-48 sm:h-56 pointer-events-none" aria-hidden="true"></div>
   </div>
 
   {/* ============================================================== */}
-  {/* [2] PC 전용 HERO (>= lg) : 2열 구조 (좌측 텍스트 45% / 우측 대형 실사 55%) */}
+  {/* [2] PC 전용 HERO (>= lg) : 기존 디자인 100% 엄격 보존 (수정 금지) */}
   {/* ============================================================== */}
   <div class="hidden lg:block relative w-full max-w-7xl mx-auto px-8 lg:px-12 py-12 lg:py-16">
     <div class="grid grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center min-h-[520px] xl:min-h-[560px]">
