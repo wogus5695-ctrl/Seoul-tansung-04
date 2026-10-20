@@ -167,6 +167,40 @@ export function buildWebPageJsonLd(title: string, description: string, url: stri
 }
 
 /**
+ * Article 구조화 데이터 (정보성 가이드 게시글 전용)
+ * - 실제 존재하는 발행일/수정일만 선택적으로 반영
+ * - 가공의 저자 자격이나 평점, 리뷰 절대 삽입 금지
+ */
+export function buildArticleJsonLd(
+  headline: string,
+  description: string,
+  url: string | null,
+  publishedAt?: string | null,
+  updatedAt?: string | null,
+  imageUrl?: string
+) {
+  if (!url) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    url,
+    ...(publishedAt ? { datePublished: publishedAt } : {}),
+    ...(updatedAt ? { dateModified: updatedAt } : (publishedAt ? { dateModified: publishedAt } : {})),
+    ...(imageUrl ? { image: imageUrl } : {}),
+    author: {
+      '@type': 'Organization',
+      name: '올케어탄성',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: '올케어탄성',
+    },
+  };
+}
+
+/**
  * BreadcrumbList 구조화 데이터 (지역 상세페이지 전용)
  */
 export interface BreadcrumbItem {

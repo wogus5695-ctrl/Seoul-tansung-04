@@ -1,5 +1,5 @@
-import { REGIONS, type Region } from './regions';
-import { SERVICES, type Service } from './services';
+import { REGIONS, type Region } from './regions.ts';
+import { SERVICES, type Service } from './services.ts';
 
 /**
  * 콘텐츠 승인 단계 정의:

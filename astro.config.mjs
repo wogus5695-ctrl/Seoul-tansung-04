@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 import sitemap from '@astrojs/sitemap';
 import { validateProductionSiteUrl } from './src/utils/seo.ts';
+import { getPublishedGuides } from './src/data/guides.ts';
 
 const isPreview = process.env.VERCEL_ENV === 'preview' || process.env.ENVIRONMENT === 'preview';
 const isProduction =
@@ -34,6 +35,13 @@ export default defineConfig({
   integrations: siteUrl
     ? [
         sitemap({
+          filter(page) {
+            // 승인된 정보성 게시글이 0개일 때는 사이트맵에서 /guide 배제 (기존 4개 URL 유지)
+            if (page.includes('guide') && getPublishedGuides().length === 0) {
+              return false;
+            }
+            return true;
+          },
           serialize(item) {
             // 루트(/)가 아닌 정적 파일 경로는 build.format: 'file' 규격에 맞춰 .html을 유지/보장
             if (item.url !== `${siteUrl}/` && !item.url.endsWith('.html')) {

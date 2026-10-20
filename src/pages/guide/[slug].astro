@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ConsultationBanner from '../../components/common/ConsultationBanner.astro';
+import { getPublishedGuides, getRelatedSeoPageUrl, type GuidePost } from '../../data/guides.ts';
+import { getRegionById, getServiceById } from '../../data/pages.ts';
+import { SITE_CONTACT } from '../../data/siteConfig.ts';
+import { getSiteUrl, getCanonicalUrl, buildArticleJsonLd, buildBreadcrumbJsonLd } from '../../utils/seo.ts';
+
+export async function getStaticPaths() {
+  // 2중 공개 승인 게이트: isPublished === true && contentStatus === 'approved' 게시글만 정적 HTML 생성
+  const publishedGuides = getPublishedGuides();
+  return publishedGuides.map((guide) => ({
+    params: { slug: guide.slug },
+    props: { guide },
+  }));
+}
+
+interface Props {
+  guide: GuidePost;
+}
+
+const { guide } = Astro.props;
+
+const region = getRegionById(guide.relatedRegionId);
+const service = getServiceById(guide.relatedServiceId);
+const relatedSeoUrl = getRelatedSeoPageUrl(guide.relatedServiceId, guide.relatedRegionId);
+
+const siteUrl = getSiteUrl(Astro.site);
+const canonicalUrl = getCanonicalUrl(`/guide/${guide.slug}.html`, siteUrl);
+
+const pageTitle = `${guide.title} | 올케어탄성`;
+const pageDescription = guide.description;
+
+const breadcrumbItems = siteUrl ? [
+  { name: '홈', url: `${siteUrl}/` },
+  { name: '시공 정보', url: `${siteUrl}/guide.html` },
+  { name: guide.title, url: canonicalUrl || '' },
+] : [];
+
+const jsonLd = siteUrl ? [
+  buildArticleJsonLd(
+    guide.title,
+    guide.description,
+    canonicalUrl,
+    guide.publishedAt,
+    guide.updatedAt
+  ),
+  buildBreadcrumbJsonLd(breadcrumbItems),
+] : [];
+
+// 본문 문단 분리 (줄바꿈 기준 처리)
+const paragraphs = guide.body
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter((p) => p.length > 0);
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path={`/guide/${guide.slug}.html`}
+  jsonLd={jsonLd}
+>
+  <!-- 상단 네비게이션 및 아티클 헤더 -->
+  <article class="w-full">
+    <header class="w-full bg-[#FAF8F5] border-b border-[#E7D9C1]/60 py-10 sm:py-14">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+        <!-- Breadcrumbs -->
+        <nav aria-label="브레드크럼" class="flex items-center text-xs text-[#7A7265] mb-4 space-x-2">
+          <a href="/" class="hover:text-[#2C5E43] transition-colors">홈</a>
+          <span class="text-gray-400">/</span>
+          <a href="/guide.html" class="hover:text-[#2C5E43] transition-colors">시공 정보</a>
+          <span class="text-gray-400">/</span>
+          <span class="text-[#3E443B] font-medium truncate max-w-[200px] sm:max-w-none">{guide.title}</span>
+        </nav>
+
+        <!-- 카테고리 태그 및 메타 정보 -->
+        <div class="flex flex-wrap items-center gap-3 mb-3 text-xs">
+          <span class="px-2.5 py-1 rounded bg-[#2C5E43]/10 text-[#2C5E43] font-bold tracking-wide">
+            {service?.name ?? '탄성코트'} 정보 가이드
+          </span>
+          {region && (
+            <span class="px-2 py-0.5 rounded bg-white text-[#5C5549] border border-[#E7D9C1]/70 font-medium">
+              {region.name}
+            </span>
+          )}
+          {guide.publishedAt && (
+            <time datetime={guide.publishedAt} class="text-[#7A7265]">
+              발행일: {guide.publishedAt.split('T')[0]}
+            </time>
+          )}
+          {guide.updatedAt && guide.updatedAt !== guide.publishedAt && (
+            <time datetime={guide.updatedAt} class="text-[#7A7265]">
+              (수정일: {guide.updatedAt.split('T')[0]})
+            </time>
+          )}
+        </div>
+
+        <!-- 단 1개의 H1 태그 -->
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#3E443B] tracking-tight leading-snug">
+          {guide.title}
+        </h1>
+
+        <!-- 요약 설명 -->
+        <p class="mt-4 text-sm sm:text-base text-[#5C5549] leading-relaxed border-l-2 border-[#2C5E43] pl-4">
+          {guide.description}
+        </p>
+      </div>
+    </header>
+
+    <!-- 아티클 본문 콘텐츠 영역 -->
+    <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 text-left">
+      <div class="prose max-w-none text-[#3E443B] space-y-6 text-sm sm:text-base leading-relaxed break-words">
+        {paragraphs.map((p) => {
+          if (p.startsWith('### ')) {
+            return <h3 class="text-lg sm:text-xl font-bold text-[#3E443B] mt-8 mb-3">{p.replace('### ', '')}</h3>;
+          }
+          if (p.startsWith('## ')) {
+            return <h2 class="text-xl sm:text-2xl font-bold text-[#3E443B] mt-10 mb-4 pb-2 border-b border-[#FAF8F5]">{p.replace('## ', '')}</h2>;
+          }
+          if (p.startsWith('- ')) {
+            const items = p.split('\n').filter(Boolean);
+            return (
+              <ul class="list-disc pl-5 space-y-1.5 my-4 text-[#5C5549]">
+                {items.map((item) => (
+                  <li>{item.replace(/^-\s*/, '')}</li>
+                ))}
+              </ul>
+            );
+          }
+          return <p class="text-[#4A443C] leading-relaxed">{p}</p>;
+        })}
+      </div>
+
+      <!-- 관련 지역 SEO 페이지 연계 안내 카드 (공개 페이지인 경우에만 링크 활성화) -->
+      {relatedSeoUrl ? (
+        <aside class="mt-12 p-6 rounded-2xl bg-[#FAF8F5] border border-[#E7D9C1] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <span class="text-xs font-bold text-[#2C5E43] tracking-wide">지역 시공 상세 안내</span>
+            <p class="text-sm font-bold text-[#3E443B]">
+              {region?.name ?? ''} {service?.name ?? ''} 방문 시공 및 준비사항 안내
+            </p>
+            <p class="text-xs text-[#5C5549]">
+              해당 지역의 공간별 확인 사항과 전처리 작업 범위를 상세히 확인하실 수 있습니다.
+            </p>
+          </div>
+          <a
+            href={relatedSeoUrl}
+            class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-white border border-[#2C5E43] text-[#2C5E43] text-xs sm:text-sm font-semibold hover:bg-[#2C5E43] hover:text-white transition-colors shrink-0"
+          >
+            {region?.name ?? ''} 상세페이지 이동 &rarr;
+          </a>
+        </aside>
+      ) : (
+        <aside class="mt-12 p-6 rounded-2xl bg-[#FAF8F5] border border-[#E7D9C1] text-xs text-[#7A7265] leading-relaxed">
+          올케어탄성은 서울 전역 주거 공간을 대상으로 방문 시공 상담을 제공하고 있습니다. 상세한 현장 상담은 대표 번호를 통해 안내받으실 수 있습니다.
+        </aside>
+      )}
+
+      <!-- 목록으로 돌아가기 버튼 -->
+      <div class="mt-10 pt-6 border-t border-gray-100 flex items-center justify-between text-xs sm:text-sm">
+        <a href="/guide.html" class="inline-flex items-center text-[#2C5E43] font-semibold hover:underline">
+          &larr; 시공 정보 목록으로 돌아가기
+        </a>
+        <a href={SITE_CONTACT.telHref} class="text-[#7A7265] hover:text-[#3E443B]">
+          전화 상담 문의: {SITE_CONTACT.phone}
+        </a>
+      </div>
+    </main>
+  </article>
+
+  <!-- 하단 공통 상담 배너 -->
+  <ConsultationBanner
+    variant="district"
+    keyword={guide.title}
+    title="우리 집 베란다 벽면, 상담이 필요하신가요?"
+    description="벽면 상태 사진(들뜸, 크랙, 곰팡이 부위)을 전송해 주시면 보다 정확한 시공 견적과 작업 가능 범위를 안내해 드립니다."
+  />
+</BaseLayout>
