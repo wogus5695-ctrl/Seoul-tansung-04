@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+/* S-Core Dream Webfont Definition (OTF 원본 포맷 직접 서빙, 에스코어 드림 라이선스 제3조 파일 무변형 원칙 준수) */
+@font-face {
+  font-family: 'S-Core Dream';
+  src: url('/fonts/score-dream/SCDream4.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'S-Core Dream';
+  src: url('/fonts/score-dream/SCDream5.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'S-Core Dream';
+  src: url('/fonts/score-dream/SCDream6.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'S-Core Dream';
+  src: url('/fonts/score-dream/SCDream7.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-brand-bg: #F5F3EE;
   --color-brand-surface: #FAF8F5;
@@ -8,7 +41,7 @@
   --color-brand-secondary: #5C5549;
   --color-brand-border: #E7D9C1;
   --color-brand-dark: #2D322A;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-sans: "S-Core Dream", -apple-system, BlinkMacSystemFont, "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 
 :root {
@@ -24,6 +57,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  font-family: var(--font-sans);
 }
 
 body {
@@ -32,6 +66,7 @@ body {
   font-family: var(--font-sans);
   word-break: keep-all;
   overflow-wrap: break-word;
+  font-weight: 400;
 }
 
 /* Custom styling for details summary arrow toggle */

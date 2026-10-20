@@ -71,6 +71,10 @@ const validJsonLd = isPreview ? [] : jsonLd.filter((item): item is Record<string
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- S-Core Dream 웹폰트 프리로드 (본문 400 & 메인 헤딩 700) -->
+    <link rel="preload" href="/fonts/score-dream/SCDream4.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="/fonts/score-dream/SCDream7.otf" as="font" type="font/otf" crossorigin />
   </head>
   <body class="min-h-screen flex flex-col bg-[#F5F3EE] text-[#3E443B] antialiased">
     <Header />
