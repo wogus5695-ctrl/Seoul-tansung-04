@@ -1,0 +1,406 @@
+---
+import { FIELDWORK_GALLERY_GROUPS, type FieldworkGroup } from '../../data/fieldworkGallery';
+
+interface Props {
+  groups?: FieldworkGroup[];
+  class?: string;
+}
+
+const {
+  groups = FIELDWORK_GALLERY_GROUPS,
+  class: className = '',
+} = Astro.props;
+
+const totalGroups = groups.length;
+---
+
+<div
+  class:list={['relative w-full max-w-5xl mx-auto fieldwork-gallery-root', className]}
+  data-gallery-root
+  data-total={totalGroups}
+>
+  <!-- 갤러리 슬라이드 컨테이너 -->
+  <div
+    class="relative w-full overflow-hidden"
+    data-gallery-viewport
+    aria-roledescription="carousel"
+    aria-label="시공 전후 현장사진 갤러리"
+  >
+    {groups.map((group, index) => {
+      const isFirst = index === 0;
+      return (
+        <div
+          class:list={[
+            'fieldwork-slide transition-opacity duration-250 ease-out w-full',
+            isFirst ? 'relative opacity-100 z-10' : 'absolute inset-0 opacity-0 pointer-events-none z-0',
+          ]}
+          data-slide-index={index}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`시공 사례 ${index + 1} / ${totalGroups}`}
+          aria-hidden={isFirst ? 'false' : 'true'}
+        >
+          {/* PC: 2열 좌우 배치 (BEFORE | AFTER) / MO: 1열 상하 배치 (BEFORE 위 / AFTER 아래) */}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5 w-full">
+            {/* 시공 전 (BEFORE) 카드 */}
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-[#EBE7DF] border border-[#E7D9C1] aspect-[4/3] shadow-xs">
+              <span class="absolute top-3 left-3 sm:top-3.5 sm:left-3.5 z-10 px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-wider bg-[#2D322A]/85 text-[#FAF8F5] backdrop-blur-xs border border-[#FAF8F5]/20 shadow-xs select-none">
+                BEFORE
+              </span>
+              <picture class="block w-full h-full">
+                {group.beforeImageWebp && (
+                  <source srcset={group.beforeImageWebp} type="image/webp" />
+                )}
+                <img
+                  src={group.beforeImage}
+                  alt={group.beforeAlt}
+                  class="w-full h-full object-cover select-none"
+                  style={group.beforeObjectPosition ? `object-position: ${group.beforeObjectPosition};` : undefined}
+                  loading={isFirst ? 'eager' : 'lazy'}
+                  decoding="async"
+                  draggable="false"
+                />
+              </picture>
+            </div>
+
+            {/* 시공 후 (AFTER) 카드 */}
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-[#EBE7DF] border border-[#E7D9C1] aspect-[4/3] shadow-xs">
+              <span class="absolute top-3 left-3 sm:top-3.5 sm:left-3.5 z-10 px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-wider bg-[#43523D]/90 text-[#FAF8F5] backdrop-blur-xs border border-[#FAF8F5]/20 shadow-xs select-none">
+                AFTER
+              </span>
+              <picture class="block w-full h-full">
+                {group.afterImageWebp && (
+                  <source srcset={group.afterImageWebp} type="image/webp" />
+                )}
+                <img
+                  src={group.afterImage}
+                  alt={group.afterAlt}
+                  class="w-full h-full object-cover select-none"
+                  style={group.afterObjectPosition ? `object-position: ${group.afterObjectPosition};` : undefined}
+                  loading={isFirst ? 'eager' : 'lazy'}
+                  decoding="async"
+                  draggable="false"
+                />
+              </picture>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- 하단 컨트롤 바 (이전 / 인디케이터 / 재생·정지 / 다음) -->
+  {totalGroups > 1 && (
+    <div class="mt-4 sm:mt-6 pb-2 sm:pb-0 flex items-center justify-center gap-2 sm:gap-3 select-none">
+      {/* 이전 그룹 버튼 */}
+      <button
+        type="button"
+        class="w-9 h-9 sm:w-10 sm:h-10 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full bg-[#FAF8F5] border border-[#E7D9C1] text-[#3E443B] hover:bg-[#EBE7DF] hover:border-[#3E443B]/40 active:scale-95 transition-all focus:outline-hidden focus:ring-2 focus:ring-[#A3B18A] cursor-pointer shadow-2xs"
+        data-action="prev"
+        aria-label="이전 시공 사례 보기"
+      >
+        <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+
+      {/* 페이지 번호 인디케이터 */}
+      <div class="px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#FAF8F5] border border-[#E7D9C1] text-xs font-semibold text-[#5C5549] shadow-2xs tracking-wider font-mono">
+        <span data-current-index>1</span>
+        <span class="text-[#E7D9C1] mx-1">/</span>
+        <span>{totalGroups}</span>
+      </div>
+
+      {/* 일시정지 / 재생 버튼 */}
+      <button
+        type="button"
+        class="w-9 h-9 sm:w-10 sm:h-10 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full bg-[#FAF8F5] border border-[#E7D9C1] text-[#3E443B] hover:bg-[#EBE7DF] hover:border-[#3E443B]/40 active:scale-95 transition-all focus:outline-hidden focus:ring-2 focus:ring-[#A3B18A] cursor-pointer shadow-2xs"
+        data-action="toggle-play"
+        aria-label="자동 넘김 일시정지"
+      >
+        {/* 일시정지 아이콘 */}
+        <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 block pause-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+        </svg>
+        {/* 재생 아이콘 */}
+        <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 hidden play-icon" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </button>
+
+      {/* 다음 그룹 버튼 */}
+      <button
+        type="button"
+        class="w-9 h-9 sm:w-10 sm:h-10 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full bg-[#FAF8F5] border border-[#E7D9C1] text-[#3E443B] hover:bg-[#EBE7DF] hover:border-[#3E443B]/40 active:scale-95 transition-all focus:outline-hidden focus:ring-2 focus:ring-[#A3B18A] cursor-pointer shadow-2xs"
+        data-action="next"
+        aria-label="다음 시공 사례 보기"
+      >
+        <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+    </div>
+  )}
+</div>
+
+<script>
+  /**
+   * 시공 전·후 현장사진 갤러리 클라이언트 인터랙션 스크립트
+   * 
+   * [운영자 확정 설정]
+   * - AUTOPLAY_INTERVAL_MS: 2000 (2초 자동 전환)
+   * - 그룹 단위 원자적(Atomic) 동시 전환
+   * - 애니메이션 시간: 250ms (200~300ms 이내)
+   * - 사용자 일시정지, 마우스 호버, 키보드 포커스, 탭 비활성화, reduced-motion, 화면 밖 일시정지 지원
+   * - 모바일 터치 스와이프 지원
+   */
+  const AUTOPLAY_INTERVAL_MS = 2000;
+
+  function initFieldworkGalleries() {
+    const galleries = document.querySelectorAll<HTMLElement>('[data-gallery-root]');
+
+    galleries.forEach((root) => {
+      // 중복 초기화 방지
+      if (root.dataset.initialized === 'true') return;
+      root.dataset.initialized = 'true';
+
+      const slides = Array.from(root.querySelectorAll<HTMLElement>('.fieldwork-slide'));
+      const total = slides.length;
+      if (total <= 1) return;
+
+      const currentIndexEl = root.querySelector<HTMLElement>('[data-current-index]');
+      const prevBtn = root.querySelector<HTMLButtonElement>('[data-action="prev"]');
+      const nextBtn = root.querySelector<HTMLButtonElement>('[data-action="next"]');
+      const togglePlayBtn = root.querySelector<HTMLButtonElement>('[data-action="toggle-play"]');
+      const pauseIcon = togglePlayBtn?.querySelector<HTMLElement>('.pause-icon');
+      const playIcon = togglePlayBtn?.querySelector<HTMLElement>('.play-icon');
+      const viewport = root.querySelector<HTMLElement>('[data-gallery-viewport]') || root;
+
+      let currentIndex = 0;
+      let timer: number | null = null;
+      let isUserPaused = false;
+      let isHovered = false;
+      let isFocused = false;
+      let isVisibleOnScreen = true;
+
+      // prefers-reduced-motion 체크
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        isUserPaused = true;
+        updatePlayStateUI();
+      }
+
+      function updatePlayStateUI() {
+        const isPlaying = !isUserPaused && !prefersReducedMotion;
+        if (togglePlayBtn) {
+          togglePlayBtn.setAttribute('aria-label', isPlaying ? '자동 넘김 일시정지' : '자동 넘김 시작');
+        }
+        if (pauseIcon && playIcon) {
+          if (isPlaying) {
+            pauseIcon.classList.remove('hidden');
+            pauseIcon.classList.add('block');
+            playIcon.classList.remove('block');
+            playIcon.classList.add('hidden');
+          } else {
+            pauseIcon.classList.remove('block');
+            pauseIcon.classList.add('hidden');
+            playIcon.classList.remove('hidden');
+            playIcon.classList.add('block');
+          }
+        }
+      }
+
+      function showSlide(newIndex: number) {
+        if (newIndex === currentIndex) return;
+
+        const outgoing = slides[currentIndex];
+        const incoming = slides[newIndex];
+
+        // 나가는 슬라이드
+        outgoing.classList.remove('relative', 'opacity-100', 'z-10');
+        outgoing.classList.add('absolute', 'inset-0', 'opacity-0', 'pointer-events-none', 'z-0');
+        outgoing.setAttribute('aria-hidden', 'true');
+
+        // 들어오는 슬라이드
+        incoming.classList.remove('absolute', 'inset-0', 'opacity-0', 'pointer-events-none', 'z-0');
+        incoming.classList.add('relative', 'opacity-100', 'z-10');
+        incoming.setAttribute('aria-hidden', 'false');
+
+        currentIndex = newIndex;
+
+        if (currentIndexEl) {
+          currentIndexEl.textContent = String(currentIndex + 1);
+        }
+      }
+
+      function goToNext() {
+        const nextIndex = (currentIndex + 1) % total;
+        showSlide(nextIndex);
+      }
+
+      function goToPrev() {
+        const prevIndex = (currentIndex - 1 + total) % total;
+        showSlide(prevIndex);
+      }
+
+      function shouldAutoplay(): boolean {
+        return (
+          !isUserPaused &&
+          !isHovered &&
+          !isFocused &&
+          isVisibleOnScreen &&
+          document.visibilityState === 'visible' &&
+          !prefersReducedMotion
+        );
+      }
+
+      function startTimer() {
+        stopTimer();
+        if (shouldAutoplay()) {
+          timer = window.setTimeout(() => {
+            goToNext();
+            startTimer();
+          }, AUTOPLAY_INTERVAL_MS);
+        }
+      }
+
+      function stopTimer() {
+        if (timer !== null) {
+          clearTimeout(timer);
+          timer = null;
+        }
+      }
+
+      function resetTimer() {
+        startTimer();
+      }
+
+      // 버튼 이벤트
+      nextBtn?.addEventListener('click', () => {
+        goToNext();
+        resetTimer();
+      });
+
+      prevBtn?.addEventListener('click', () => {
+        goToPrev();
+        resetTimer();
+      });
+
+      togglePlayBtn?.addEventListener('click', () => {
+        isUserPaused = !isUserPaused;
+        updatePlayStateUI();
+        if (isUserPaused) {
+          stopTimer();
+        } else {
+          startTimer();
+        }
+      });
+
+      // 마우스 Hover 이벤트
+      root.addEventListener('mouseenter', () => {
+        isHovered = true;
+        stopTimer();
+      });
+
+      root.addEventListener('mouseleave', () => {
+        isHovered = false;
+        resetTimer();
+      });
+
+      // 키보드 Focus 이벤트
+      root.addEventListener('focusin', () => {
+        isFocused = true;
+        stopTimer();
+      });
+
+      root.addEventListener('focusout', (e) => {
+        if (!root.contains(e.relatedTarget as Node)) {
+          isFocused = false;
+          resetTimer();
+        }
+      });
+
+      // 브라우저 탭 가시성 이벤트
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          resetTimer();
+        } else {
+          stopTimer();
+        }
+      });
+
+      // IntersectionObserver (화면 밖 자동 정지)
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              isVisibleOnScreen = entry.isIntersecting;
+              if (isVisibleOnScreen) {
+                resetTimer();
+              } else {
+                stopTimer();
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        observer.observe(root);
+      }
+
+      // 모바일 터치 스와이프 지원
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
+
+      viewport.addEventListener(
+        'touchstart',
+        (e: TouchEvent) => {
+          if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+          }
+        },
+        { passive: true }
+      );
+
+      viewport.addEventListener(
+        'touchend',
+        (e: TouchEvent) => {
+          if (e.changedTouches.length === 1) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+            const elapsed = Date.now() - touchStartTime;
+
+            // 수평 스와이프 판정 (최소 40px 이동, 수평 이동 거리가 수직 이동 거리보다 크고, 600ms 이내)
+            if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) && elapsed < 600) {
+              if (diffX < 0) {
+                // 왼쪽으로 스와이프 -> 다음 슬라이드
+                goToNext();
+                resetTimer();
+              } else {
+                // 오른쪽으로 스와이프 -> 이전 슬라이드
+                goToPrev();
+                resetTimer();
+              }
+            }
+          }
+        },
+        { passive: true }
+      );
+
+      // 시작 시 타이머 구동
+      startTimer();
+    });
+  }
+
+  // DOMContentLoaded 및 Astro 페이지 전환 시 초기화
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFieldworkGalleries);
+  } else {
+    initFieldworkGalleries();
+  }
+  document.addEventListener('astro:page-load', initFieldworkGalleries);
+</script>
