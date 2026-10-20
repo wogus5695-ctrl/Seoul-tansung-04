@@ -63,110 +63,31 @@ const {
     className,
   ]}
 >
-  {/* ============================================================== */}
-  {/* [1] 모바일 전용 HERO (< lg) : 세로 중앙 정렬 + 중앙 소프트 오버레이 */}
-  {/* ============================================================== */}
-  <div
-    id="mobile-hero-container"
-    class="block lg:hidden relative w-full min-h-[640px] sm:min-h-[680px] flex flex-col justify-center items-start overflow-hidden px-5 sm:px-6 py-12 sm:py-16"
-  >
-    <!-- 배경 이미지: 실제 현장사진 (천장 조명, 질감, 창호, 벽면) -->
-    <div class="absolute inset-0 z-0 select-none pointer-events-none">
-      <img
-        src={bgImage}
-        alt={bgAlt}
-        class="w-full h-full object-cover object-[center_30%] scale-100"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <!-- 중앙 텍스트 영역 가독성 보정 그라데이션 (상단 천장 질감 보존, 중앙 텍스트 대비 확보, 하단 창호/벽면 원본 노출) -->
-      <div
-        class="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/40 via-[#FAF8F5]/88 via-48% to-transparent pointer-events-none"
-        aria-hidden="true"
-      ></div>
-    </div>
-
-    <!-- 텍스트 콘텐츠 그룹 (수직 중앙 정렬, 좌측 텍스트 정렬 유지) -->
+  <!-- [모바일 전용 배경 레이어 (< lg)] : 풀블리드 현장사진 + 가독성 보정 그라데이션 오버레이 -->
+  <div class="block lg:hidden absolute inset-0 z-0 select-none pointer-events-none" aria-hidden="true">
+    <img
+      src={bgImage}
+      alt={bgAlt}
+      class="w-full h-full object-cover object-[center_30%] scale-100"
+      loading="eager"
+      fetchpriority="high"
+    />
     <div
-      id="mobile-hero-text"
-      class="relative z-10 w-full max-w-lg space-y-3.5 sm:space-y-4 text-left"
-    >
-      <!-- Breadcrumb (상세페이지 전용) -->
-      {breadcrumbs && breadcrumbs.length > 0 && (
-        <nav aria-label="breadcrumb" class="mb-1 text-xs text-[#5C5549] flex items-center flex-wrap gap-1.5">
-          {breadcrumbs.map((item, idx) => (
-            <>
-              {idx > 0 && <span class="text-[#5C5549]/50">/</span>}
-              {item.url ? (
-                <a href={item.url} class="hover:underline hover:text-[#3E443B] transition-colors">
-                  {item.name}
-                </a>
-              ) : (
-                <span class="font-semibold text-[#3E443B]">{item.name}</span>
-              )}
-            </>
-          ))}
-        </nav>
-      )}
-
-      <!-- 1. 영문 Badge -->
-      <div>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E7D9C1]/80 text-[11px] font-semibold text-[#5C5549] tracking-wider uppercase border border-[#E7D9C1]">
-          {badge}
-        </span>
-      </div>
-
-      <!-- 2. 단일 H1 메인 타이틀 -->
-      <h1 class="text-2xl sm:text-3xl font-bold text-[#3E443B] tracking-tight leading-snug">
-        {h1}
-      </h1>
-
-      <!-- 3. 주요 설명 (font-weight 완화, 자연스러운 행간) -->
-      <p class="text-sm sm:text-base text-[#3E443B] font-normal leading-relaxed">
-        {description}
-      </p>
-
-      <!-- 4. 보조 설명 (Regular 수준, 가독성 확보) -->
-      {subDescription && (
-        <p class="text-xs sm:text-sm text-[#5C5549] font-normal leading-relaxed">
-          {subDescription}
-        </p>
-      )}
-
-      <!-- 5. 모바일 전용 작은 앵커 링크 (벽면 상태 확인 ↓, 터치 영역 44px 이상 확보) -->
-      {mobileAnchorCta && (
-        <div class="pt-1">
-          <a
-            href={mobileAnchorCta.href}
-            class="inline-flex items-center gap-1 min-h-[44px] py-2 text-xs font-medium text-[#4F5844] hover:text-[#3E443B] underline underline-offset-4 decoration-[#E7D9C1] hover:decoration-[#4F5844] transition-colors active:scale-95"
-            aria-label={mobileAnchorCta.ariaLabel || mobileAnchorCta.text}
-          >
-            <span>{mobileAnchorCta.text}</span>
-          </a>
-        </div>
-      )}
-
-      {note && (
-        <p class="text-[11px] text-[#5C5549]/90 pt-0.5 leading-normal">
-          {note}
-        </p>
-      )}
-    </div>
+      class="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/40 via-[#FAF8F5]/88 via-48% to-transparent pointer-events-none"
+    ></div>
   </div>
 
-  {/* ============================================================== */}
-  {/* [2] PC 전용 HERO (>= lg) : 기존 디자인 100% 엄격 보존 (수정 금지) */}
-  {/* ============================================================== */}
-  <div class="hidden lg:block relative w-full max-w-7xl mx-auto px-8 lg:px-12 py-12 lg:py-16">
-    <div class="grid grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center min-h-[520px] xl:min-h-[560px]">
-      <!-- 좌측 텍스트 컬럼 (수직 균형 정렬) -->
-      <div class="col-span-6 xl:col-span-5 space-y-4 xl:space-y-5 text-left flex flex-col justify-center">
+  <!-- [통합 반응형 HERO 컨테이너] : 모바일 세로 중앙 정렬 & 데스크톱 12컬럼 사이드-바이-사이드 그리드 -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 xl:px-12 py-12 sm:py-16 min-h-[640px] sm:min-h-[680px] lg:min-h-0 flex flex-col justify-center lg:block">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center min-h-0 lg:min-h-[520px] xl:min-h-[560px]">
+      <!-- 좌측 텍스트 컬럼 (DOM 상 단일 H1 선언) -->
+      <div class="w-full max-w-lg lg:max-w-none lg:col-span-6 xl:col-span-5 space-y-3.5 sm:space-y-4 lg:space-y-4 xl:space-y-5 text-left flex flex-col justify-center">
         <!-- Breadcrumb (상세페이지 전용) -->
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <nav aria-label="breadcrumb" class="text-xs text-[#5C5549] flex items-center flex-wrap gap-2">
+          <nav aria-label="breadcrumb" class="mb-1 lg:mb-0 text-xs text-[#5C5549] flex items-center flex-wrap gap-1.5 lg:gap-2">
             {breadcrumbs.map((item, idx) => (
               <>
-                {idx > 0 && <span class="text-[#5C5549]/60">/</span>}
+                {idx > 0 && <span class="text-[#5C5549]/50 lg:text-[#5C5549]/60">/</span>}
                 {item.url ? (
                   <a href={item.url} class="hover:underline hover:text-[#3E443B] transition-colors">
                     {item.name}
@@ -181,31 +102,43 @@ const {
 
         <!-- 1. 영문 Badge -->
         <div>
-          <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E7D9C1]/70 text-xs font-semibold text-[#5C5549] tracking-wider uppercase border border-[#E7D9C1]">
+          <span class="inline-flex items-center gap-1.5 lg:gap-2 px-3 lg:px-3.5 py-1 rounded-full bg-[#E7D9C1]/80 lg:bg-[#E7D9C1]/70 text-[11px] lg:text-xs font-semibold text-[#5C5549] tracking-wider uppercase border border-[#E7D9C1]">
             {badge}
           </span>
         </div>
 
-        <!-- 2. 단일 H1 메인 타이틀 -->
-        <h1 class="text-3xl xl:text-4xl font-bold text-[#3E443B] tracking-tight leading-[1.25]">
+        <!-- 2. 단일 H1 메인 타이틀 (의미상/DOM상 정확히 1개 존재) -->
+        <h1 class="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-bold text-[#3E443B] tracking-tight leading-snug lg:leading-[1.25]">
           {h1}
         </h1>
 
-        <!-- 3. 주요 설명 (font-weight 완화: Regular/Normal) -->
-        <p class="text-base xl:text-lg text-[#3E443B] font-normal leading-relaxed">
+        <!-- 3. 주요 설명 -->
+        <p class="text-sm sm:text-base lg:text-base xl:text-lg text-[#3E443B] font-normal leading-relaxed">
           {description}
         </p>
 
-        <!-- 4. 보조 설명 (Regular 수준, 자연스러운 행간) -->
+        <!-- 4. 보조 설명 -->
         {subDescription && (
-          <p class="text-xs xl:text-sm text-[#5C5549] font-normal leading-relaxed">
+          <p class="text-xs sm:text-sm xl:text-sm text-[#5C5549] font-normal leading-relaxed">
             {subDescription}
           </p>
         )}
 
-        <!-- 5. PC CTA 버튼 영역 (가로 배치 side-by-side, 크기/간격 조절) -->
-        <div class="pt-2 flex flex-row items-center gap-3 flex-wrap">
-          <!-- 1차 CTA: 전화 상담하기 -->
+        <!-- 5-A. 모바일 전용 앵커 링크 (< lg) -->
+        {mobileAnchorCta && (
+          <div class="pt-1 block lg:hidden">
+            <a
+              href={mobileAnchorCta.href}
+              class="inline-flex items-center gap-1 min-h-[44px] py-2 text-xs font-medium text-[#4F5844] hover:text-[#3E443B] underline underline-offset-4 decoration-[#E7D9C1] hover:decoration-[#4F5844] transition-colors active:scale-95"
+              aria-label={mobileAnchorCta.ariaLabel || mobileAnchorCta.text}
+            >
+              <span>{mobileAnchorCta.text}</span>
+            </a>
+          </div>
+        )}
+
+        <!-- 5-B. PC 전용 CTA 버튼 (>= lg) -->
+        <div class="pt-2 hidden lg:flex flex-row items-center gap-3 flex-wrap">
           <a
             href={primaryCta.href}
             class="px-5 py-3 xl:px-6 xl:py-3.5 rounded-md bg-[#4F5844] text-[#F5F3EE] font-semibold text-xs xl:text-sm hover:bg-[#3E443B] transition-colors shadow-sm inline-flex items-center justify-center gap-2 active:scale-95 shrink-0"
@@ -217,7 +150,6 @@ const {
             <span>{primaryCta.text}</span>
           </a>
 
-          <!-- 2차 CTA: 시공 전·후 안내 보기 (선택) -->
           {secondaryCta && (
             <a
               href={secondaryCta.href}
@@ -230,15 +162,14 @@ const {
         </div>
 
         {note && (
-          <p class="text-xs text-[#5C5549]/80 pt-1 leading-normal">
+          <p class="text-[11px] lg:text-xs text-[#5C5549]/90 lg:text-[#5C5549]/80 pt-0.5 lg:pt-1 leading-normal">
             {note}
           </p>
         )}
       </div>
 
-      <!-- 우측 대형 실사 이미지 영역 (약 55% : 12컬럼 중 6~7컬럼) -->
-      <!-- 불필요한 테두리/오버레이 제거, 원본 색감과 공간감(창호, 벽면, 천장) 100% 보존 -->
-      <div class="col-span-6 xl:col-span-7 h-[480px] xl:h-[540px] w-full rounded-2xl overflow-hidden shadow-xs relative select-none">
+      <!-- 우측 대형 실사 이미지 영역 (>= lg) -->
+      <div class="hidden lg:block col-span-6 xl:col-span-7 h-[480px] xl:h-[540px] w-full rounded-2xl overflow-hidden shadow-xs relative select-none">
         <img
           src={bgImage}
           alt={bgAlt}

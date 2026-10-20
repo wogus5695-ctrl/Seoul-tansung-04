@@ -56,20 +56,22 @@ console.log('================================================================\n'
 
 try {
   // -------------------------------------------------------------
-  // TEST 1: Default State (All 24 unpublished, Domain unset)
+  // TEST 1: Default State (3 Approved Pilots, 21 Unpublished, Domain unset)
   // -------------------------------------------------------------
-  console.log('[TEST 1] Verifying local default state (Unpublished, Domain unset)...');
+  console.log('[TEST 1] Verifying local default state (3 Pilots Published, 21 Unpublished, Domain unset)...');
   runBuild();
   assert.ok(fs.existsSync('dist/index.html'), 'dist/index.html must exist');
   assert.ok(fs.existsSync('dist/robots.txt'), 'dist/robots.txt must exist');
-  assert.equal(fs.existsSync('dist/seo'), false, 'dist/seo must NOT exist');
+  assert.ok(fs.existsSync('dist/seo'), 'dist/seo must exist for 3 pilots');
+  assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-nowon-gu.html'), 'Nowon elastic exists');
+  assert.equal(fs.existsSync('dist/seo/elastic-coating/seoul-gangbuk-gu.html'), false, 'Unpublished page must NOT exist');
   assert.equal(fs.existsSync('dist/sitemap-index.xml'), false, 'sitemap must NOT exist');
   const t1Robots = fs.readFileSync('dist/robots.txt', 'utf-8');
   assert.match(t1Robots, /Disallow: \//, 'Robots must disallow when domain unset');
   const t1Index = fs.readFileSync('dist/index.html', 'utf-8');
   assert.equal(t1Index.includes('rel="canonical"'), false, 'No fake canonical when domain unset');
   assert.equal(t1Index.includes('noindex'), false, 'No noindex on standard local dev');
-  console.log('  -> TEST 1 PASSED: Local build clean, safe robots.txt generated.\n');
+  console.log('  -> TEST 1 PASSED: Local build clean, 3 pilots built, 21 unpublished isolated, safe robots.txt generated.\n');
 
   // -------------------------------------------------------------
   // TEST 2: Preview Mode with SITE_URL unset (Section D Case B)
@@ -153,9 +155,9 @@ try {
   // TEST 9: P0 Safety Gate (in_review + isPublished=true)
   // -------------------------------------------------------------
   console.log('[TEST 9] Verifying P0 Safety Gate: in_review + isPublished=true...');
-  let test9Source = originalPagesSource.replace(
-    'isPublished: false, // STEP 3-F 최종 비공개 원복 (24개 전체 false)',
-    'isPublished: isNowonElastic || isNowonBalconyElastic || isDobongElastic,'
+  let test9Source = originalPagesSource.replaceAll(
+    "contentStatus = 'approved';",
+    "contentStatus = 'in_review';"
   );
   fs.writeFileSync(PAGES_PATH, test9Source, 'utf-8');
   runBuild();
@@ -167,16 +169,7 @@ try {
   // -------------------------------------------------------------
   console.log('[TEST 10] Verifying Production Build with Valid Domain & 3 Approved Pilots...');
   const VALID_DOMAIN = 'https://allcare-seoul.co.kr';
-  let test10Source = originalPagesSource
-    .replace(
-      'isPublished: false, // STEP 3-F 최종 비공개 원복 (24개 전체 false)',
-      'isPublished: isNowonElastic || isNowonBalconyElastic || isDobongElastic,'
-    )
-    .replace(
-      'contentStatus,',
-      "contentStatus: (isNowonElastic || isNowonBalconyElastic || isDobongElastic) ? 'approved' : 'draft',"
-    );
-  fs.writeFileSync(PAGES_PATH, test10Source, 'utf-8');
+  fs.writeFileSync(PAGES_PATH, originalPagesSource, 'utf-8');
   runBuild({ VERCEL_ENV: 'production', SITE_URL: VALID_DOMAIN });
 
   // 1. Check generated HTML files
@@ -233,9 +226,10 @@ try {
 } finally {
   // Always restore original file
   fs.writeFileSync(PAGES_PATH, originalPagesSource, 'utf-8');
-  console.log('\n[TEARDOWN] src/data/pages.ts restored to original state (isPublished: false).');
-  runBuild();
-  console.log('[TEARDOWN] Clean build completed. Verifying dist/seo absence...');
-  assert.equal(fs.existsSync('dist/seo'), false, 'dist/seo must be absent after teardown');
-  console.log('[TEARDOWN] Verified dist/seo is absent (False).');
+  console.log('\n[TEARDOWN] src/data/pages.ts restored to release state (3 pilots approved).');
+  runBuild({ SITE_URL: 'https://www.seoulallcaretan.com' });
+  console.log('[TEARDOWN] Clean build completed. Verifying 3 pilots generated...');
+  assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-nowon-gu.html'), 'Nowon elastic exists');
+  assert.equal(fs.existsSync('dist/seo/elastic-coating/seoul-gangbuk-gu.html'), false, '21 pages absent');
+  console.log('[TEARDOWN] Verified 3 pilots active, 21 unpublished isolated.');
 }

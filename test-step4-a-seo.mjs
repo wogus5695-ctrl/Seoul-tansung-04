@@ -142,11 +142,11 @@ describe('STEP 4-A: Build Output & HTML Static Analysis Tests', () => {
     assert.match(html, /<meta name="description" content="[^"]*서울 탄성코트 시공이 필요하신가요\?/);
   });
 
-  test('2. Valid H1 tags on index.html', () => {
+  test('2. Exactly one H1 tag on index.html', () => {
     const html = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8');
     const h1Matches = html.match(/<h1[^>]*>[\s\S]*?<\/h1>/gi);
     assert.ok(h1Matches, 'H1 tag must exist');
-    assert.equal(h1Matches.length <= 2, true, 'At most 2 responsive H1 tags permitted');
+    assert.equal(h1Matches.length, 1, 'Exactly one H1 tag permitted');
   });
 
   test('3. OpenGraph basic metadata present on index.html', () => {
@@ -171,9 +171,11 @@ describe('STEP 4-A: Build Output & HTML Static Analysis Tests', () => {
     assert.match(robots, /User-agent:\s*\*/i);
   });
 
-  test('6. No unpublished /seo pages exist in default build state', () => {
-    const seoDir = path.join(distDir, 'seo');
-    // When isPublished is false for all pages, dist/seo must NOT exist
-    assert.equal(fs.existsSync(seoDir), false, 'dist/seo must NOT exist when pages are unpublished');
+  test('6. Exactly 3 approved pilot pages exist and 21 unpublished pages are absent in dist/seo', () => {
+    assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-nowon-gu.html')));
+    assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-dobong-gu.html')));
+    assert.ok(fs.existsSync(path.join(distDir, 'seo', 'balcony-elastic-coating', 'seoul-nowon-gu.html')));
+    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-gangbuk-gu.html')), false);
+    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-seongbuk-gu.html')), false);
   });
 });
