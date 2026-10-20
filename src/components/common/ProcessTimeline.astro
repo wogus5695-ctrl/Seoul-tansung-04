@@ -1,26 +1,37 @@
 ---
-interface TimelineStep {
-  step: string;
+export interface TimelineStep {
+  step?: string;
   title: string;
+  description?: string;
 }
 
-interface Props {
+export interface Props {
   keyword?: string;
+  title?: string;
+  description?: string;
+  steps?: TimelineStep[];
   class?: string;
 }
 
 const {
   keyword = '탄성코트',
+  title = '상담부터 작업까지',
+  description,
+  steps,
   class: className = '',
 } = Astro.props;
 
-const STEPS: TimelineStep[] = [
+const DEFAULT_STEPS: TimelineStep[] = [
   { step: '01', title: '상담 접수' },
   { step: '02', title: '현장 상태 확인' },
   { step: '03', title: '작업 범위 안내' },
   { step: '04', title: '보양 및 시공' },
   { step: '05', title: '마감 확인 및 안내' },
 ];
+
+const activeSteps = steps && steps.length > 0 ? steps : DEFAULT_STEPS;
+const isFourSteps = activeSteps.length === 4;
+const gridColsClass = isFourSteps ? 'grid-cols-4' : 'grid-cols-5';
 ---
 
 <section
@@ -32,10 +43,16 @@ const STEPS: TimelineStep[] = [
     {/* 헤더: 영문 라벨 제거, 신규 제목 및 동적키워드 1회 반영 설명문 */}
     <div class="space-y-2 sm:space-y-2.5 text-left max-w-2xl">
       <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[#3E443B]">
-        상담부터 작업까지
+        {title}
       </h2>
       <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-        현장 상태와 위치를 공유해주시면 <strong class="font-semibold text-[#2D322A]">{keyword}</strong> 상담부터 견적, 작업 일정 안내까지 보다 빠르게 도와드릴 수 있습니다.
+        {description ? (
+          description
+        ) : (
+          <>
+            현장 상태와 위치를 공유해주시면 <strong class="font-semibold text-[#2D322A]">{keyword}</strong> 상담부터 견적, 작업 일정 안내까지 보다 빠르게 도와드릴 수 있습니다.
+          </>
+        )}
       </p>
     </div>
 
@@ -44,24 +61,34 @@ const STEPS: TimelineStep[] = [
       
       {/* 1. PC 가로형 타임라인 (sm 이상) */}
       <div class="hidden sm:block relative pt-2 pb-4">
-        {/* 가로 연결선 (첫 번째 원형 중심 10% ~ 마지막 원형 중심 90%) */}
+        {/* 가로 연결선 (첫 번째 원형 중심 ~ 마지막 원형 중심) */}
         <div
-          class="absolute top-7 left-[10%] right-[10%] h-[2px] bg-[#E7D9C1]"
+          class:list={[
+            'absolute top-7 h-[2px] bg-[#E7D9C1]',
+            isFourSteps ? 'left-[12.5%] right-[12.5%]' : 'left-[10%] right-[10%]'
+          ]}
           aria-hidden="true"
         />
 
-        <div class="grid grid-cols-5 gap-3 lg:gap-4 relative z-10">
-          {STEPS.map((item) => (
+        <div class:list={['grid gap-3 lg:gap-4 relative z-10', gridColsClass]}>
+          {activeSteps.map((item, idx) => (
             <div class="flex flex-col items-center text-center group">
               {/* 원형 숫자 뱃지 */}
               <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-mono font-bold text-xs lg:text-sm flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 group-hover:border-[#2D322A] group-hover:text-[#2D322A] select-none">
-                {item.step}
+                {item.step ?? String(idx + 1).padStart(2, '0')}
               </div>
 
               {/* 단계 제목 */}
               <span class="mt-3 text-xs sm:text-sm lg:text-[15px] font-bold text-[#3E443B] tracking-tight leading-snug">
                 {item.title}
               </span>
+
+              {/* 단계별 보조 설명문 (제공 시 표시) */}
+              {item.description && (
+                <p class="mt-1 text-xs text-[#5C5549] leading-relaxed hidden sm:block">
+                  {item.description}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -75,17 +102,24 @@ const STEPS: TimelineStep[] = [
           aria-hidden="true"
         />
 
-        {STEPS.map((item) => (
-          <div class="relative flex items-center min-h-[38px] group">
+        {activeSteps.map((item, idx) => (
+          <div class:list={['relative flex group', item.description ? 'items-start min-h-[44px]' : 'items-center min-h-[38px]']}>
             {/* 세로선 상에 정렬된 원형 숫자 뱃지 */}
-            <div class="absolute -left-12 w-9 h-9 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-mono font-bold text-xs flex items-center justify-center shadow-2xs select-none">
-              {item.step}
+            <div class:list={['absolute -left-12 w-9 h-9 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-mono font-bold text-xs flex items-center justify-center shadow-2xs select-none', item.description ? 'top-0' : '']}>
+              {item.step ?? String(idx + 1).padStart(2, '0')}
             </div>
 
-            {/* 단계 제목 */}
-            <span class="text-sm font-bold text-[#3E443B] tracking-tight pl-1">
-              {item.title}
-            </span>
+            {/* 단계 제목 및 설명 */}
+            <div class="pl-1 space-y-0.5 text-left">
+              <span class="text-sm font-bold text-[#3E443B] tracking-tight block">
+                {item.title}
+              </span>
+              {item.description && (
+                <p class="text-xs text-[#5C5549] leading-relaxed">
+                  {item.description}
+                </p>
+              )}
+            </div>
           </div>
         ))}
       </div>
