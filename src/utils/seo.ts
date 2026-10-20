@@ -131,14 +131,16 @@ export function getCanonicalUrl(path: string, siteUrl: string): string | null {
  * WebSite 구조화 데이터 (메인페이지 전용)
  * - 도메인 설정 시에만 유효한 절대 URL로 생성
  */
-export function buildWebSiteJsonLd(siteUrl: string) {
+export function buildWebSiteJsonLd(siteUrl: string, imageUrl?: string) {
   if (!siteUrl) return null;
+  const image = imageUrl ? (imageUrl.startsWith('http') ? imageUrl : `${siteUrl}${imageUrl}`) : undefined;
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: '올케어탄성',
     alternateName: 'ALLCARE',
     url: `${siteUrl}/`,
+    ...(image ? { image } : {}),
   };
 }
 
@@ -146,7 +148,7 @@ export function buildWebSiteJsonLd(siteUrl: string) {
  * WebPage 구조화 데이터
  * - 확인되지 않은 가상 주소, 리뷰, 영업시간 절대 삽입 금지
  */
-export function buildWebPageJsonLd(title: string, description: string, url: string | null) {
+export function buildWebPageJsonLd(title: string, description: string, url: string | null, imageUrl?: string) {
   if (!url) return null;
   return {
     '@context': 'https://schema.org',
@@ -154,6 +156,13 @@ export function buildWebPageJsonLd(title: string, description: string, url: stri
     name: title,
     description: description,
     url,
+    ...(imageUrl ? {
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: imageUrl,
+      },
+      image: imageUrl,
+    } : {}),
   };
 }
 

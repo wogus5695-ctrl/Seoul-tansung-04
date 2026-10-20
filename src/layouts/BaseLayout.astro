@@ -2,6 +2,7 @@
 import Header from '../components/common/Header.astro';
 import Footer from '../components/common/Footer.astro';
 import { getSiteUrl, getCanonicalUrl, isPreviewEnvironment } from '../utils/seo';
+import { SITE_IMAGES } from '../data/siteConfig';
 import '../styles/globals.css';
 
 interface Props {
@@ -9,6 +10,10 @@ interface Props {
   description?: string;
   path?: string;
   jsonLd?: (Record<string, any> | null | undefined)[];
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 const {
@@ -16,6 +21,10 @@ const {
   description = '서울권 베란다와 세탁실의 탄성코트 시공을 안내합니다. 기존 도막, 균열, 습기 흔적 등 벽면 상태와 필요한 작업 범위를 확인하고 상담받을 수 있습니다.',
   path = '',
   jsonLd = [],
+  image = SITE_IMAGES.ogMainThumb,
+  imageAlt = SITE_IMAGES.ogMainThumbAlt,
+  imageWidth = SITE_IMAGES.ogWidth,
+  imageHeight = SITE_IMAGES.ogHeight,
 } = Astro.props;
 
 const isPreview = isPreviewEnvironment();
@@ -25,6 +34,7 @@ const isPreview = isPreviewEnvironment();
 const siteUrl = isPreview ? '' : getSiteUrl(Astro.site);
 const canonicalUrl = isPreview ? null : getCanonicalUrl(path, siteUrl);
 const validJsonLd = isPreview ? [] : jsonLd.filter((item): item is Record<string, any> => !!item);
+const ogImageUrl = siteUrl ? `${siteUrl}${image}` : '';
 ---
 
 <!doctype html>
@@ -49,15 +59,25 @@ const validJsonLd = isPreview ? [] : jsonLd.filter((item): item is Record<string
     <meta property="og:site_name" content="올케어탄성" />
     <meta property="og:locale" content="ko_KR" />
     {siteUrl && (
-      <meta property="og:image" content={`${siteUrl}/images/allcare/official-allcare-logo.png`} />
+      <>
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:secure_url" content={ogImageUrl} />
+        <meta property="og:image:width" content={String(imageWidth)} />
+        <meta property="og:image:height" content={String(imageHeight)} />
+        <meta property="og:image:alt" content={imageAlt} />
+        <meta property="og:image:type" content="image/jpeg" />
+      </>
     )}
 
     <!-- Twitter Card 메타데이터 -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {siteUrl && (
-      <meta name="twitter:image" content={`${siteUrl}/images/allcare/official-allcare-logo.png`} />
+      <>
+        <meta name="twitter:image" content={ogImageUrl} />
+        <meta name="twitter:image:alt" content={imageAlt} />
+      </>
     )}
 
     <!-- JSON-LD 구조화 데이터 -->

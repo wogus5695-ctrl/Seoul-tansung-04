@@ -19,4 +19,8 @@ export const SITE_IMAGES = {
   defaultHeroAlt: '올케어탄성 실제 시공 현장 베란다 벽면 및 천장 마감',
   officialLogo: '/images/allcare/official-allcare-logo.png',
   signatureLogo: '/images/allcare/allcare-signature.png',
+  ogMainThumb: '/images/allcare/og-main-thumb.jpg',
+  ogMainThumbAlt: '서울 탄성코트 시공이 완료된 베란다 벽면 현장 모습',
+  ogWidth: 1200,
+  ogHeight: 630,
 } as const;

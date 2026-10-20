@@ -57,10 +57,11 @@ const pageTitle = "서울 탄성코트 시공 안내 | 올케어탄성";
 const pageDescription = "서울권 베란다와 세탁실의 탄성코트 시공을 안내합니다. 기존 도막, 균열, 습기 흔적 등 벽면 상태와 필요한 작업 범위를 확인하고 상담받을 수 있습니다.";
 const siteUrl = getSiteUrl(Astro.site);
 const canonicalUrl = getCanonicalUrl('/', siteUrl);
+const ogImageUrl = siteUrl ? `${siteUrl}/images/allcare/og-main-thumb.jpg` : undefined;
 
 const jsonLd = siteUrl ? [
-  buildWebSiteJsonLd(siteUrl),
-  buildWebPageJsonLd(pageTitle, pageDescription, canonicalUrl),
+  buildWebSiteJsonLd(siteUrl, ogImageUrl),
+  buildWebPageJsonLd(pageTitle, pageDescription, canonicalUrl, ogImageUrl),
 ] : [];
 ---
 
