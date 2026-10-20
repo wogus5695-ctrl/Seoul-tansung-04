@@ -45,6 +45,9 @@ const ogImageUrl = siteUrl ? `${siteUrl}${image}` : '';
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <!-- 네이버 서치어드바이저 사이트 소유권 확인 -->
+    <meta name="naver-site-verification" content="c8b03fb7ea8831b1c0dd07c2ea2d2ebce9cc525a" />
+
     <!-- 미리보기(Preview) 환경 검색엔진 색인 방지 -->
     {isPreview && <meta name="robots" content="noindex, nofollow" />}
 
