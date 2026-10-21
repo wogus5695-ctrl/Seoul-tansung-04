@@ -26,7 +26,7 @@ test('STEP RSS-3A: First Real Guide Content Draft & Keyword Reservation', async 
   const post = GUIDES[0];
 
   await t.test('1. First real guide post is registered in GUIDES array and published in RSS-4', () => {
-    assert.equal(GUIDES.length, 1, 'GUIDES must contain exactly 1 post');
+    assert.ok(GUIDES.length >= 1, 'GUIDES contains real guide posts');
     assert.ok(post);
     assert.equal(post.postId, 'guide-nowon-wall-peeling-check');
     assert.equal(post.slug, 'nowon-balcony-wall-peeling-check');
@@ -63,9 +63,9 @@ test('STEP RSS-3A: First Real Guide Content Draft & Keyword Reservation', async 
     assert.equal(res.valid, true);
     assert.equal(res.errors.length, 0);
     assert.equal(res.stats.totalKeywords, 24);
+    assert.equal(res.stats.publishedCount, 3);
     assert.equal(res.stats.reservedCount, 0);
-    assert.equal(res.stats.availableCount, 23);
-    assert.equal(res.stats.publishedCount, 1);
+    assert.equal(res.stats.availableCount, 21);
   });
 
   await t.test('5. Reassigning the reserved keyword to another post is strictly BLOCKED', () => {
@@ -127,7 +127,7 @@ test('STEP RSS-3A: First Real Guide Content Draft & Keyword Reservation', async 
   await t.test('10. Publication gate verifies approved post is published and draft remains blocked', () => {
     assert.equal(isGuidePublished(post), true, 'approved post passes isGuidePublished');
     const publishedGuides = getPublishedGuides(GUIDES);
-    assert.equal(publishedGuides.length, 1, 'Published guides list has exactly 1 approved post');
+    assert.equal(publishedGuides.length, 3, 'Published guides list has exactly 3 approved posts');
 
     // Verify unapproved draft is still blocked
     const draftSample = { ...post, contentStatus: 'draft', isPublished: false };

@@ -85,6 +85,20 @@ export const KEYWORD_LEDGER: KeywordLedgerEntry[] = [
     assignedAt: '2026-10-20T09:12:00.000Z',
     historicalNote: 'RSS-3A: 첫 정보성 가이드 초안(들뜸 점검) 키워드 예약 (2026-10-20 18:12:00 KST) -> RSS-4: 정식 발행 (2026-10-20 23:15:00 KST)',
   },
+  {
+    keywordId: 'elastic-coating_dobong',
+    postId: 'guide-dobong-laundry-pipe-check',
+    status: 'PUBLISHED',
+    assignedAt: '2026-10-21T01:26:00.000Z',
+    historicalNote: 'STEP 4-H-6A: 도봉구 탄성코트 정보성 가이드 2호 초안 키워드 예약 (2026-10-21 10:26:00 KST) -> STEP 4-H-6B: 정식 발행 (2026-10-21 10:51:00 KST)',
+  },
+  {
+    keywordId: 'balcony-elastic-coating_nowon',
+    postId: 'guide-nowon-balcony-masking-checklist',
+    status: 'PUBLISHED',
+    assignedAt: '2026-10-21T01:26:00.000Z',
+    historicalNote: 'STEP 4-H-6A: 노원구 베란다탄성코트 정보성 가이드 3호 초안 키워드 예약 (2026-10-21 10:26:00 KST) -> STEP 4-H-6B: 정식 발행 (2026-10-21 10:51:00 KST)',
+  },
 ];
 
 /**

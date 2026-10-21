@@ -103,6 +103,44 @@ export const GUIDES: GuidePost[] = [
     relatedServiceId: 'elastic-coating',
     relatedRegionId: 'nowon',
   },
+  {
+    postId: 'guide-dobong-laundry-pipe-check',
+    slug: 'dobong-laundry-room-pipe-wall-check',
+    title: '도봉구 탄성코트 시공 전, 세탁실 배관 주변과 벽면 상태 점검법',
+    description: '도봉구 세탁실 탄성코트 시공 전 확인할 배관 결로와 누수 구분 요령, 기존 도막 상태 점검, 세탁기·건조기 배치에 따른 보양 및 사진 준비 방법을 안내합니다.',
+    body: `세탁실은 환기 여건이나 외벽 단열 상태, 그리고 세탁기 사용 환경에 따라 벽면에 습기가 머물거나 도막 손상이 나타날 수 있는 공간입니다. 도봉구 탄성코트 시공을 계획 중이시라면, 칠을 진행하기 전에 배관 관통 부위와 벽면 하부의 기존 페인트가 들떠 있거나 오염 자국이 생겨 있지 않은지 먼저 살펴보는 것이 좋습니다.
+
+배관 주변에 물방울이 맺혀 있다면 실내외 온도 차이에 의한 결로 현상인지, 혹은 배관 연결부의 누수 흔적인지 구분하여 원인을 점검할 필요가 있습니다. 또한 기존 페인트 표면이 부풀어 있거나 가루가 묻어나는 상태라면, 현장 도막 부착력에 맞춰 들뜬 부분을 긁어내고 바탕면을 정돈하는 밑작업 범위를 사전에 판단해야 합니다.
+
+세탁기나 건조기 등 가전이 벽체와 가깝게 배치된 환경에서는 작업자의 시공 동선 확보와 도료 비산 방지를 위한 보양 준비가 달라질 수 있습니다. 다만 사진만으로는 벽체 건조도나 미세 단차까지 전부 파악하기 어려우므로, 대략적인 가전 배치와 배관 주변 사진을 준비해 주시면 현장 여건에 맞춘 작업 절차를 보다 수월하게 조율하실 수 있습니다.`,
+    keywordId: 'elastic-coating_dobong',
+    contentType: 'guide',
+    contentStatus: 'approved',
+    isPublished: true,
+    publishedAt: '2026-10-21T01:51:00.000Z',
+    updatedAt: '2026-10-21T01:51:00.000Z',
+    relatedServiceId: 'elastic-coating',
+    relatedRegionId: 'dobong',
+  },
+  {
+    postId: 'guide-nowon-balcony-masking-checklist',
+    slug: 'nowon-balcony-storage-masking-checklist',
+    title: '노원구 베란다탄성코트 시공 전, 창고장과 시설물 보양 체크리스트',
+    description: '노원구 베란다 탄성코트 시공 전 창고장 내부 시공 여부 확인, 빨래건조대 및 실외기 설비 안전 보호 조치, 창호 주변 보양 점검 사항을 안내합니다.',
+    body: `베란다 공간은 세대 구조에 따라 창고장, 천장형 빨래건조대, 실외기실 등 다양한 설비나 시설물이 벽체 인접부에 설치되어 있을 수 있습니다. 노원구 베란다탄성코트 시공을 알아보고 계신다면, 도료 분무 작업 중 시설물 오염을 방지하고 작업자의 시공 동선이 충분히 확보될 수 있는지 현장 환경을 미리 확인하는 것이 좋습니다.
+
+베란다 붙박이 창고장 내부까지 시공 범위에 포함하는 세대라면, 벽체 전체에 도료를 고르게 도포할 수 있도록 선반 적재물 정리나 내부 작업 공간 확보 여부를 사전에 협의해야 합니다. 아울러 에어컨 실외기나 환기 설비가 설치되어 있다면 작업 중 가동 여부와 안전한 보호 조치 방안을 시공자와 미리 조율하여 설비 환기구나 기능에 무리가 가지 않도록 주의해야 합니다.
+
+창호 샷시 프레임과 타일 바닥 경계면은 실리콘 코킹의 노후 상태와 틈새 여건에 따라 테이핑 보양 및 밑작업 범위가 달라질 수 있습니다. 시설물이 벽면과 맞닿은 형태와 창호 주변 상태를 사진으로 남겨두시면 유선 상담 시 대략적인 보양 소요 범위와 작업 일정을 조율하는 데 유용한 참고 자료가 됩니다.`,
+    keywordId: 'balcony-elastic-coating_nowon',
+    contentType: 'guide',
+    contentStatus: 'approved',
+    isPublished: true,
+    publishedAt: '2026-10-21T01:51:00.000Z',
+    updatedAt: '2026-10-21T01:51:00.000Z',
+    relatedServiceId: 'balcony-elastic-coating',
+    relatedRegionId: 'nowon',
+  },
 ];
 
 /**
@@ -111,11 +149,16 @@ export const GUIDES: GuidePost[] = [
  * 조건:
  * 1. contentStatus === 'approved' (운영자 최종 사실성 및 품질 검수 통과)
  * 2. isPublished === true (공개 플래그 활성화)
+ * 3. 관련 지역 SEO 페이지가 실제로 정식 공개 승인된 상태(isPagePublished)여야 함
  * 
- * 두 조건을 동시에 만족해야만 향후 정적 HTML 빌드 및 RSS 피드 등록 대상이 됩니다.
+ * 세 조건을 동시에 만족해야만 향후 정적 HTML 빌드 및 RSS 피드 등록 대상이 됩니다.
  */
 export function isGuidePublished(guide: GuidePost): boolean {
-  return guide.isPublished === true && guide.contentStatus === 'approved';
+  if (guide.isPublished !== true || guide.contentStatus !== 'approved') {
+    return false;
+  }
+  const relatedPageUrl = getRelatedSeoPageUrl(guide.relatedServiceId, guide.relatedRegionId);
+  return relatedPageUrl !== null;
 }
 
 /**

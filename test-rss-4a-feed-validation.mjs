@@ -23,11 +23,11 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.ok(stats.size < 10 * 1024 * 1024, 'RSS file must be under 10MB');
   });
 
-  await t.test('2. RSS item 정확히 1개 존재', () => {
+  await t.test('2. RSS item 정확히 3개 존재', () => {
     const channel = parsed.rss?.channel;
     assert.ok(channel, 'Channel must exist');
     const items = Array.isArray(channel.item) ? channel.item : (channel.item ? [channel.item] : []);
-    assert.equal(items.length, 1, 'Exactly 1 item in RSS');
+    assert.equal(items.length, 3, 'Exactly 3 items in RSS');
   });
 
   await t.test('3. RSS XML 정상 파싱 및 기본 메타데이터 확인', () => {
@@ -70,11 +70,13 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.equal(content.includes('\n- '), false, 'Markdown - list bullet must NOT appear in HTML body');
   });
 
-  await t.test('9. 기존 HTML 페이지 총 6개 빌드 산출물 확인', () => {
+  await t.test('9. 기존 및 신규 HTML 페이지 총 8개 빌드 산출물 확인', () => {
     const expectedHtml = [
       'dist/index.html',
       'dist/guide.html',
       'dist/guide/nowon-balcony-wall-peeling-check.html',
+      'dist/guide/dobong-laundry-room-pipe-wall-check.html',
+      'dist/guide/nowon-balcony-storage-masking-checklist.html',
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
       'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
@@ -84,13 +86,15 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     }
   });
 
-  await t.test('10. Sitemap 공개 URL 총 6개 유지 및 비공개 URL 배제', () => {
+  await t.test('10. Sitemap 공개 URL 총 8개 유지 및 비공개 URL 배제', () => {
     assert.ok(fs.existsSync('dist/sitemap-0.xml'), 'sitemap-0.xml must exist');
     const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf-8');
     const locs = sitemap.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 6, 'Exactly 6 URLs in sitemap');
+    assert.equal(locs.length, 8, 'Exactly 8 URLs in sitemap');
     assert.ok(locs.some((l) => l.includes('/guide.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-wall-peeling-check.html')));
+    assert.ok(locs.some((l) => l.includes('/guide/dobong-laundry-room-pipe-wall-check.html')));
+    assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-storage-masking-checklist.html')));
     assert.equal(sitemap.includes('gangbuk'), false, 'Unpublished page must NOT be in sitemap');
   });
 
@@ -106,7 +110,7 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.equal(guide.isPublished, true);
   });
 
-  await t.test('13. Keyword Registry 원장 무결성 (PUBLISHED 1건, 중복 0건)', () => {
+  await t.test('13. Keyword Registry 원장 무결성 (PUBLISHED 3건, 중복 0건)', () => {
     const ledger = KEYWORD_LEDGER.find((e) => e.keywordId === 'elastic-coating_nowon');
     assert.ok(ledger);
     assert.equal(ledger.status, 'PUBLISHED');
@@ -114,9 +118,10 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
 
     const validation = validateAllKeywordAllocations(GUIDES, KEYWORD_LEDGER);
     assert.equal(validation.valid, true);
-    assert.equal(validation.stats.publishedCount, 1);
+    assert.equal(validation.stats.publishedCount, 3);
     assert.equal(validation.stats.reservedCount, 0);
-    assert.equal(validation.stats.availableCount, 23);
+    assert.equal(validation.stats.availableCount, 21);
+    assert.equal(validation.stats.totalKeywords, 24);
   });
 
   await t.test('14. renderGuideBodyToHtml 단위 검증', () => {
