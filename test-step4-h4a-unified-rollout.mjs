@@ -66,9 +66,14 @@ test('STEP 4-H-4A: Regional Unified Template Rollout Test Suite', async (t) => {
   });
 
   await t.test('3. Dobong-gu Elastic Coating unique content preservation (Zero Omission)', () => {
-    // SEO Meta
-    assert.match(dobongHtml, /<title>도봉구 탄성코트 전문업체 \| 올케어탄성<\/title>/);
-    assert.match(dobongHtml, /<meta name="description" content="[^"]*도봉구 탄성코트 시공을 알아보고 계신가요\?/);
+    // SEO Meta (SERP-1: 네이버 검색 개선 반영)
+    assert.match(dobongHtml, /<title>도봉구 탄성코트 시공 \| 올케어탄성<\/title>/);
+    assert.match(dobongHtml, /<meta name="description" content="[^"]*도봉구 탄성코트 시공 전, 어떤 부분을 확인해야 할까요\?/);
+    assert.match(dobongHtml, /<meta property="og:title" content="도봉구 탄성코트 시공 \| 올케어탄성"/);
+    assert.match(dobongHtml, /<meta property="og:description" content="[^"]*도봉구 탄성코트 시공 전, 어떤 부분을 확인해야 할까요\?/);
+    assert.match(dobongHtml, /<meta property="og:image" content="https:\/\/www\.seoulallcaretan\.com\/images\/hero\/hero-bg-default\.jpg"/);
+    assert.match(dobongHtml, /<meta property="og:image:width" content="1024"/);
+    assert.match(dobongHtml, /<meta property="og:image:height" content="768"/);
 
     // Target Spaces (3 items)
     assert.match(dobongHtml, /베란다 \(발코니 창가 벽면\)/);
@@ -104,9 +109,14 @@ test('STEP 4-H-4A: Regional Unified Template Rollout Test Suite', async (t) => {
   });
 
   await t.test('4. Nowon-gu Balcony Elastic Coating unique content preservation (Zero Omission)', () => {
-    // SEO Meta
-    assert.match(nowonBalconyHtml, /<title>노원구 베란다탄성코트 전문업체 \| 올케어탄성<\/title>/);
-    assert.match(nowonBalconyHtml, /<meta name="description" content="[^"]*노원구 베란다탄성코트 시공을 알아보고 계신가요\?/);
+    // SEO Meta (SERP-1: 네이버 검색 개선 반영)
+    assert.match(nowonBalconyHtml, /<title>노원구 베란다탄성코트 시공 \| 올케어탄성<\/title>/);
+    assert.match(nowonBalconyHtml, /<meta name="description" content="[^"]*노원구 베란다탄성코트 시공, 창호 주변 밑작업이 궁금하신가요\?/);
+    assert.match(nowonBalconyHtml, /<meta property="og:title" content="노원구 베란다탄성코트 시공 \| 올케어탄성"/);
+    assert.match(nowonBalconyHtml, /<meta property="og:description" content="[^"]*노원구 베란다탄성코트 시공, 창호 주변 밑작업이 궁금하신가요\?/);
+    assert.match(nowonBalconyHtml, /<meta property="og:image" content="https:\/\/www\.seoulallcaretan\.com\/images\/hero\/hero-bg-default\.jpg"/);
+    assert.match(nowonBalconyHtml, /<meta property="og:image:width" content="1024"/);
+    assert.match(nowonBalconyHtml, /<meta property="og:image:height" content="768"/);
 
     // Target Spaces (3 items)
     assert.match(nowonBalconyHtml, /전면 베란다 \(거실·안방 창가\)/);

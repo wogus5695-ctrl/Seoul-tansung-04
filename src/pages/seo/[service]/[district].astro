@@ -60,6 +60,10 @@ const jsonLd = siteUrl ? [
   description={page.metaDescription}
   path={page.urlPath}
   jsonLd={jsonLd}
+  image={page.ogImage}
+  imageAlt={page.ogImageAlt}
+  imageWidth={page.ogImageWidth}
+  imageHeight={page.ogImageHeight}
 >
   {/* 01. Hero Section (공통 HeroSection 컴포넌트 적용) */}
   <HeroSection
