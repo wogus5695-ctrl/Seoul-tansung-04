@@ -40,15 +40,22 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(h1Text, '서울 탄성코트 시공지역 안내');
   });
 
-  test('3. Service Groups count exactly 2 and Published Links count exactly 5', () => {
+  test('3. Gu Groups count exactly 3 (H2) and Published Links count exactly 7', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
-    // Groups (H2)
+    // Groups (H2: Gu-centric hierarchy in STEP STRUCTURE-1)
     const h2Matches = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
-    assert.strictEqual(h2Matches.length, 2, 'Exactly 2 service group headings (H2)');
-    const groupNames = h2Matches.map((h2) => h2.replace(/<[^>]+>/g, '').trim());
-    assert.ok(groupNames.includes('탄성코트'), '탄성코트 group exists');
-    assert.ok(groupNames.includes('베란다탄성코트'), '베란다탄성코트 group exists');
+    assert.strictEqual(h2Matches.length, 3, 'Exactly 3 Gu group headings (H2: 노원구, 도봉구, 중랑구)');
+    const guNames = h2Matches.map((h2) => h2.replace(/<[^>]+>/g, '').trim());
+    assert.ok(guNames.includes('노원구'), '노원구 group exists');
+    assert.ok(guNames.includes('도봉구'), '도봉구 group exists');
+    assert.ok(guNames.includes('중랑구'), '중랑구 group exists');
+
+    // Service subgroups (H3)
+    const h3Matches = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/gi) || [];
+    const serviceNames = h3Matches.map((h3) => h3.replace(/<[^>]+>/g, '').trim());
+    assert.ok(serviceNames.includes('탄성코트'), '탄성코트 sub-group exists');
+    assert.ok(serviceNames.includes('베란다탄성코트'), '베란다탄성코트 sub-group exists');
 
     // Published SEO Links (3 Elastic Gu + 2 Elastic Dong + 2 Balcony Elastic Gu = 7)
     const expectedUrls = [
@@ -67,6 +74,9 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
     assert.strictEqual(regionalLinks.length, 7, 'Must contain EXACTLY 7 published regional links');
+
+    // STEP STRUCTURE-1 Clean Link Design: no "상세 안내 보기", no URL path text
+    assert.equal(html.includes('상세 안내 보기'), false, 'Clean Link Design must NOT have "상세 안내 보기" text');
   });
 
   test('4. Complete isolation of 19 unpublished regional SEO combinations', () => {

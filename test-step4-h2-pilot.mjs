@@ -59,36 +59,37 @@ test('STEP 4-H-2: Regional Layout Unification Pilot Suite', async (t) => {
     assert.ok(idx03 > idx02, '03. WallCheckSection must follow BeforeAfterGallery');
     assert.match(nowonHtml, /bg-\[#2D322A\]/, 'WallCheckSection must use full-width dark background');
 
-    // 04. DistrictPointsSection
-    const idx04 = nowonHtml.indexOf('id="district-points"');
-    assert.ok(idx04 > idx03, '04. DistrictPointsSection must follow WallCheckSection');
-    assert.match(nowonHtml, /노원구 탄성코트 시공 전 확인할 사항/, 'DistrictPointsSection title must be present');
-
-    // 05. PreConsultationGuide
-    const idx05 = nowonHtml.indexOf('id="spaces"');
-    assert.ok(idx05 > idx04, '05. PreConsultationGuide must follow DistrictPointsSection');
+    // 04. PreConsultationGuide
+    const idx04 = nowonHtml.indexOf('id="spaces"');
+    assert.ok(idx04 > idx03, '04. PreConsultationGuide must follow WallCheckSection');
     assert.match(nowonHtml, /상담 전, 아래 내용을 확인해 주세요!/, 'PreConsultationGuide title must be present');
 
-    // 06. ProcessTimeline
-    const idx06 = nowonHtml.indexOf('id="process"');
-    assert.ok(idx06 > idx05, '06. ProcessTimeline must follow PreConsultationGuide');
+    // 05. ProcessTimeline
+    const idx05 = nowonHtml.indexOf('id="process"');
+    assert.ok(idx05 > idx04, '05. ProcessTimeline must follow PreConsultationGuide');
     assert.match(nowonHtml, /탄성코트 시공 과정 안내/, 'ProcessTimeline title must be present');
 
-    // 07. FaqAccordion
-    const idx07 = nowonHtml.indexOf('id="faq"');
-    assert.ok(idx07 > idx06, '07. FaqAccordion must follow ProcessTimeline');
+    // 06. FaqAccordion
+    const idx06 = nowonHtml.indexOf('id="faq"');
+    assert.ok(idx06 > idx05, '06. FaqAccordion must follow ProcessTimeline');
     assert.match(nowonHtml, /노원구 시공 관련 자주 묻는 질문/, 'Faq title must be present');
 
-    // 08. Service scope notice & internal links
-    const idx08 = nowonHtml.indexOf('서비스 지역 및 관련 안내');
-    assert.ok(idx08 > idx07, '08. Internal links section must follow FaqAccordion');
+    // 07. Service scope notice & internal links
+    const idx07 = nowonHtml.indexOf('서비스 지역 및 관련 안내');
+    assert.ok(idx07 > idx06, '07. Internal links section must follow FaqAccordion');
 
-    // 09. ConsultationBanner (variant="main")
-    const idx09 = nowonHtml.indexOf('id="consultation"');
-    assert.ok(idx09 > idx08, '09. ConsultationBanner must follow internal links');
+    // 08. ConsultationBanner (variant="main")
+    const idx08 = nowonHtml.indexOf('id="consultation"');
+    assert.ok(idx08 > idx07, '08. ConsultationBanner must follow internal links');
     assert.match(nowonHtml, /노원구 탄성코트, 전문가에게 상담하세요!/, 'ConsultationBanner title must be present');
     assert.match(nowonHtml, /tel:01084926900/, 'Phone CTA must be present');
     assert.match(nowonHtml, /https:\/\/pf\.kakao\.com\/_UjxcFX/, 'Kakao CTA must be present');
+
+    // 09. DistrictPointsSection (STEP STRUCTURE-1: 전 지역 공통 하단 접이식 통일)
+    const idx09 = nowonHtml.indexOf('id="district-points"');
+    assert.ok(idx09 > idx08, '09. DistrictPointsSection must follow ConsultationBanner');
+    assert.match(nowonHtml, /노원구 탄성코트 시공 전 확인할 사항/, 'DistrictPointsSection title must be present');
+    assert.match(nowonHtml, /시공 전 작업 공간·견적 기준 자세히 보기/, 'Collapsible summary must be present');
   });
 
   await t.test('3. 100% Regional Content Preservation on Nowon Pilot (Zero Omission)', () => {

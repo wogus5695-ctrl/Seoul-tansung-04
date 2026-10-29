@@ -27,21 +27,22 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
     assert.equal(published.length, 7, 'Exactly 7 pages published (5 Gu + 2 Dong)');
   });
 
-  test('2. Astro component template contains conditional Gu vs Dong relocation logic', () => {
+  test('2. Astro component template renders unified collapsible section after ConsultationBanner', () => {
     const pageTemplate = fs.readFileSync('src/pages/seo/[service]/[district].astro', 'utf8');
     
-    // Position 04 is only rendered when regionLevel !== 'dong'
-    assert.ok(
-      pageTemplate.includes("page.regionLevel !== 'dong'") || pageTemplate.includes("page.regionLevel !== \"dong\""),
-      'Section 04 must be conditionally rendered only for non-dong pages'
+    // Position 04 legacy non-dong conditional branch is removed in STEP STRUCTURE-1
+    assert.equal(
+      pageTemplate.includes("page.regionLevel !== 'dong'"),
+      false,
+      'Section 04 legacy branch must be removed in STRUCTURE-1 unification'
     );
 
-    // Position 10 is rendered after ConsultationBanner when regionLevel === 'dong' with collapsible={true}
+    // Collapsible section is rendered unconditionally after ConsultationBanner
     const idxConsultation = pageTemplate.indexOf('<ConsultationBanner');
-    const idxDongCollapsible = pageTemplate.lastIndexOf("page.regionLevel === 'dong'");
+    const idxCollapsible = pageTemplate.lastIndexOf('<DistrictPointsSection');
     assert.ok(idxConsultation > 0, 'ConsultationBanner must exist');
-    assert.ok(idxDongCollapsible > idxConsultation, 'Dong collapsible section must come AFTER ConsultationBanner');
-    assert.ok(pageTemplate.includes('collapsible={true}'), 'Dong section must pass collapsible={true}');
+    assert.ok(idxCollapsible > idxConsultation, 'Collapsible section must come AFTER ConsultationBanner');
+    assert.ok(pageTemplate.includes('collapsible={true}'), 'Unified section must pass collapsible={true}');
   });
 
   test('3. DistrictPointsSection component supports collapsible details/summary UI', () => {
@@ -55,7 +56,7 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
     );
   });
 
-  test('4. Existing Published Gu pages retain original layout without accordion', () => {
+  test('4. All Published Gu pages adopt unified layout with bottom accordion (STEP STRUCTURE-1)', () => {
     const publishedGu = getPublishedSeoPages().filter((p) => p.regionLevel === 'gu');
     assert.equal(publishedGu.length, 5, 'Exactly 5 Gu pages published');
     for (const p of publishedGu) {
@@ -63,17 +64,17 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
       const htmlPath = path.join(DIST_DIR, 'seo', p.serviceSlug, `${p.districtSlug}.html`);
       if (fs.existsSync(htmlPath)) {
         const html = fs.readFileSync(htmlPath, 'utf8');
-        // Gu page must NOT have the collapsible summary text
+        // Gu page now adopts the unified collapsible summary text
         assert.equal(
           html.includes('시공 전 작업 공간·견적 기준 자세히 보기'),
-          false,
-          `Gu page ${p.id} must NOT have collapsible summary`
+          true,
+          `Gu page ${p.id} must adopt unified collapsible summary`
         );
-        // Gu page must have district-points BEFORE consultation
+        // Gu page has district-points AFTER consultation
         const idxDistrict = html.indexOf('id="district-points"');
         const idxConsult = html.indexOf('전문가에게 상담하세요!');
         assert.ok(idxDistrict > 0 && idxConsult > 0, 'Both sections must exist');
-        assert.ok(idxDistrict < idxConsult, 'On Gu pages, district-points must precede consultation');
+        assert.ok(idxDistrict > idxConsult, 'On Gu pages, district-points must follow consultation');
       }
     }
   });

@@ -106,17 +106,6 @@ const jsonLd = siteUrl ? [
     variant="full"
   />
 
-  {/* 04. 지역·작업별 시공 확인 포인트 (고유 콘텐츠: targetSpaces + scopeFactors - 구 단위 전용) */}
-  {page.regionLevel !== 'dong' && (
-    <DistrictPointsSection
-      keyword={`${region?.name ?? ''} ${service?.name ?? '탄성코트'}`}
-      regionName={region?.name}
-      title={`${region?.name ?? ''} ${service?.name ?? '탄성코트'} 시공 전 확인할 사항`}
-      targetSpaces={content?.targetSpaces}
-      scopeFactors={content?.scopeFactors}
-    />
-  )}
-
   {/* 05. 상담 전 안내 (메인 사진형 레이아웃 + 지역 고유 준비 항목 보존) */}
   {content?.consultationPreps && (
     <PreConsultationGuide
@@ -187,15 +176,13 @@ const jsonLd = siteUrl ? [
     description="실제 시공 공간과 벽면 상태를 사진으로 알려주시면 필요한 작업 범위와 일정을 보다 빠르게 안내받으실 수 있습니다."
   />
 
-  {/* 10. 동 단위 전용: 시공 전 확인사항 접이식 섹션 (하단 상담 CTA 아래 / Footer 바로 위) */}
-  {page.regionLevel === 'dong' && (
-    <DistrictPointsSection
-      keyword={`${region?.name ?? ''} ${service?.name ?? '탄성코트'}`}
-      regionName={region?.name}
-      title={`${region?.name ?? ''} ${service?.name ?? '탄성코트'} 시공 전 확인할 사항`}
-      targetSpaces={content?.targetSpaces}
-      scopeFactors={content?.scopeFactors}
-      collapsible={true}
-    />
-  )}
+  {/* 10. 시공 전 확인사항 접이식 섹션 (하단 상담 CTA 아래 / Footer 바로 위 - 전 지역 공통) */}
+  <DistrictPointsSection
+    keyword={`${region?.name ?? ''} ${service?.name ?? '탄성코트'}`}
+    regionName={region?.name}
+    title={`${region?.name ?? ''} ${service?.name ?? '탄성코트'} 시공 전 확인할 사항`}
+    targetSpaces={content?.targetSpaces}
+    scopeFactors={content?.scopeFactors}
+    collapsible={true}
+  />
 </BaseLayout>
