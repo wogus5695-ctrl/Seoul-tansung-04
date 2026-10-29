@@ -129,21 +129,19 @@ if (fs.existsSync(sitemapPath)) {
   const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(sitemapXml.includes('seoul-jungnang-gu.html'), 'Sitemap must contain Jungnang URL');
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 11, 'Sitemap must contain exactly 11 loc entries');
+  assert.equal(locCount, 12, 'Sitemap must contain exactly 12 loc entries');
 }
 console.log('   PASS: Jungnang URLs in XML sitemap verified.');
 
 // [Test 11] RSS and Ledger immutability
 console.log('11. Verifying RSS and Ledger immutability...');
-assert.equal(GUIDES.length, 3, 'GUIDES must remain exactly 3');
-assert.equal(KEYWORD_LEDGER.length, 3, 'KEYWORD_LEDGER must remain exactly 3');
-for (const g of GUIDES) {
-  assert.ok(!g.keywordId.includes('jungnang'), 'No guide assigned to Jungnang yet');
-}
-for (const l of KEYWORD_LEDGER) {
-  assert.ok(!l.keywordId.includes('jungnang'), 'No ledger entry for Jungnang yet');
-}
-assert.equal(isDistrictKeyword('elastic-coating_jungnang'), true, 'Jungnang is a district keyword (eligible for future RSS)');
+assert.equal(GUIDES.length, 4, 'GUIDES must remain exactly 4');
+assert.equal(KEYWORD_LEDGER.length, 4, 'KEYWORD_LEDGER must remain exactly 4');
+const jungnangGuide = GUIDES.find((g) => g.keywordId === 'elastic-coating_jungnang');
+assert.ok(jungnangGuide, 'Guide assigned to Jungnang elastic-coating');
+const jungnangLedger = KEYWORD_LEDGER.find((l) => l.keywordId === 'elastic-coating_jungnang');
+assert.ok(jungnangLedger, 'Ledger entry exists for Jungnang elastic-coating');
+assert.equal(isDistrictKeyword('elastic-coating_jungnang'), true, 'Jungnang is a district keyword');
 assert.equal(isDistrictKeyword('balcony-elastic-coating_jungnang'), true, 'Jungnang balcony is a district keyword');
 console.log('   PASS: RSS and Ledger immutability verified.');
 

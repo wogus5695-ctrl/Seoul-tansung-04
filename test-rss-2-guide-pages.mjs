@@ -85,7 +85,7 @@ test('STEP RSS-2: Guide Pages & RSS Foundation Test Suite', async (t) => {
   await t.test('1. 게시글 없음 상태 처리 (Empty guides list handling)', () => {
     const published = getPublishedGuides([]);
     assert.equal(published.length, 0, 'No published guides when empty');
-    assert.equal(getPublishedGuides(GUIDES).length, 3, '3 approved posts in GUIDES are published');
+    assert.equal(getPublishedGuides(GUIDES).length, 4, '4 approved posts in GUIDES are published');
   });
 
   await t.test('2. 승인된 게시글만 HTML 생성 (Dual Approval Gate)', () => {

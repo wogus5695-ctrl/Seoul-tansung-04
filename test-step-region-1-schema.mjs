@@ -186,7 +186,7 @@ if (fs.existsSync(sitemapFile)) {
     assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain dong slug: ${dong.slug}`);
   }
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 11, 'Sitemap must contain exactly 11 loc entries');
+  assert.equal(locCount, 12, 'Sitemap must contain exactly 12 loc entries');
 }
 console.log('   PASS: Zero dong URLs in XML sitemap validated.');
 
@@ -316,13 +316,14 @@ assert.ok(resolvedDong, 'getDongById must resolve dong entity');
 assert.equal(resolvedDong.id, dongPages[0].regionId);
 console.log('   PASS: Future dong routing readiness simulation succeeded.');
 
-// [Scenario 15] Keyword Ledger integrity & immutability: unchanged 3 entries, zero dong entries
+// [Scenario 15] Keyword Ledger integrity & immutability: exactly 4 entries, zero dong entries
 console.log('15. Verifying Keyword Ledger integrity & immutability...');
-assert.equal(KEYWORD_LEDGER.length, 3, 'KEYWORD_LEDGER must contain exactly 3 entries');
+assert.equal(KEYWORD_LEDGER.length, 4, 'KEYWORD_LEDGER must contain exactly 4 entries');
 const ledgerKwIds = KEYWORD_LEDGER.map((l) => l.keywordId);
 assert.ok(ledgerKwIds.includes('elastic-coating_nowon'));
 assert.ok(ledgerKwIds.includes('elastic-coating_dobong'));
 assert.ok(ledgerKwIds.includes('balcony-elastic-coating_nowon'));
+assert.ok(ledgerKwIds.includes('elastic-coating_jungnang'));
 for (const entry of KEYWORD_LEDGER) {
   assert.equal(isDistrictKeyword(entry.keywordId), true, 'All ledger entries must be district keywords');
 }

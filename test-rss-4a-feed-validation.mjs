@@ -23,11 +23,11 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.ok(stats.size < 10 * 1024 * 1024, 'RSS file must be under 10MB');
   });
 
-  await t.test('2. RSS item 정확히 3개 존재', () => {
+  await t.test('2. RSS item 정확히 4개 존재', () => {
     const channel = parsed.rss?.channel;
     assert.ok(channel, 'Channel must exist');
     const items = Array.isArray(channel.item) ? channel.item : (channel.item ? [channel.item] : []);
-    assert.equal(items.length, 3, 'Exactly 3 items in RSS');
+    assert.equal(items.length, 4, 'Exactly 4 items in RSS');
   });
 
   await t.test('3. RSS XML 정상 파싱 및 기본 메타데이터 확인', () => {
@@ -86,16 +86,17 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     }
   });
 
-  await t.test('10. Sitemap 공개 URL 총 11개 유지 및 비공개 URL 배제 (9 기존 + 2 중랑구)', () => {
+  await t.test('10. Sitemap 공개 URL 총 12개 유지 및 비공개 URL 배제 (11 기존 + 1 신규 가이드)', () => {
     assert.ok(fs.existsSync('dist/sitemap-0.xml'), 'sitemap-0.xml must exist');
     const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf-8');
     const locs = sitemap.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 11, 'Exactly 11 URLs in sitemap (9 existing + 2 Jungnang)');
+    assert.equal(locs.length, 12, 'Exactly 12 URLs in sitemap');
     assert.ok(locs.some((l) => l.includes('/sitemap-seoul.html')));
     assert.ok(locs.some((l) => l.includes('/guide.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-wall-peeling-check.html')));
     assert.ok(locs.some((l) => l.includes('/guide/dobong-laundry-room-pipe-wall-check.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-storage-masking-checklist.html')));
+    assert.ok(locs.some((l) => l.includes('/guide/jungnang-wall-drying-check.html')));
     assert.equal(sitemap.includes('gangbuk'), false, 'Unpublished page must NOT be in sitemap');
   });
 
@@ -111,7 +112,7 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.equal(guide.isPublished, true);
   });
 
-  await t.test('13. Keyword Registry 원장 무결성 (PUBLISHED 3건, 중복 0건)', () => {
+  await t.test('13. Keyword Registry 원장 무결성 (PUBLISHED 4건, 중복 0건)', () => {
     const ledger = KEYWORD_LEDGER.find((e) => e.keywordId === 'elastic-coating_nowon');
     assert.ok(ledger);
     assert.equal(ledger.status, 'PUBLISHED');
@@ -119,9 +120,9 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
 
     const validation = validateAllKeywordAllocations(GUIDES, KEYWORD_LEDGER);
     assert.equal(validation.valid, true);
-    assert.equal(validation.stats.publishedCount, 3);
+    assert.equal(validation.stats.publishedCount, 4);
     assert.equal(validation.stats.reservedCount, 0);
-    assert.equal(validation.stats.availableCount, 21);
+    assert.equal(validation.stats.availableCount, 20);
     assert.equal(validation.stats.totalKeywords, 24);
   });
 

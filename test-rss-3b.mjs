@@ -76,6 +76,6 @@ test('STEP RSS-3B: Factuality & Pre-Publish Audit Suite', async (t) => {
     assert.equal(post.publishedAt, '2026-10-20T14:15:00.000Z');
     assert.equal(post.updatedAt, '2026-10-20T14:15:00.000Z');
     assert.equal(isGuidePublished(post), true);
-    assert.equal(getPublishedGuides(GUIDES).length, 3);
+    assert.equal(getPublishedGuides(GUIDES).length, 4);
   });
 });

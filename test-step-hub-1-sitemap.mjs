@@ -102,33 +102,34 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(html.includes('noindex'), false, 'Hub must allow indexing in production mode');
   });
 
-  test('6. XML Sitemap count incremented to exactly 11 URLs', () => {
+  test('6. XML Sitemap count incremented to exactly 12 URLs', () => {
     const sitemapPath = path.join(DIST_DIR, 'sitemap-0.xml');
     assert.ok(fs.existsSync(sitemapPath), 'sitemap-0.xml must exist');
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 11, 'Sitemap must contain exactly 11 URLs (1 home + 4 guides + 5 regional SEO + 1 hub)');
+    assert.strictEqual(locMatches.length, 12, 'Sitemap must contain exactly 12 URLs (1 home + 5 guides + 5 regional SEO + 1 hub)');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');
 
-    // Ensure all 5 published regional pages and home and 4 guides are preserved
+    // Ensure all 5 published regional pages and home and 5 guides are preserved
     assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-nowon-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-dobong-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-jungnang-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/balcony-elastic-coating\/seoul-nowon-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/balcony-elastic-coating\/seoul-jungnang-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/guide\.html<\/loc>/);
+    assert.match(sitemapContent, /\/guide\/jungnang-wall-drying-check\.html<\/loc>/);
   });
 
-  test('7. RSS Feed item count remains strictly 3', () => {
+  test('7. RSS Feed item count incremented to exactly 4', () => {
     const rssPath = path.join(DIST_DIR, 'rss.xml');
     assert.ok(fs.existsSync(rssPath), 'rss.xml must exist');
 
     const rssContent = fs.readFileSync(rssPath, 'utf8');
     const itemMatches = rssContent.match(/<item>/g) || [];
-    assert.strictEqual(itemMatches.length, 3, 'RSS feed must maintain exactly 3 items');
+    assert.strictEqual(itemMatches.length, 4, 'RSS feed must maintain exactly 4 items');
   });
 
   test('8. Local Keyword Audit generated 24 records without duplicates', () => {

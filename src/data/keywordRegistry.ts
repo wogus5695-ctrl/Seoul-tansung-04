@@ -167,6 +167,13 @@ export const KEYWORD_LEDGER: KeywordLedgerEntry[] = [
     assignedAt: '2026-10-21T01:26:00.000Z',
     historicalNote: 'STEP 4-H-6A: 노원구 베란다탄성코트 정보성 가이드 3호 초안 키워드 예약 (2026-10-21 10:26:00 KST) -> STEP 4-H-6B: 정식 발행 (2026-10-21 10:51:00 KST)',
   },
+  {
+    keywordId: 'elastic-coating_jungnang',
+    postId: 'guide-jungnang-wall-drying-check',
+    status: 'PUBLISHED',
+    assignedAt: '2026-10-29T06:58:00.000Z',
+    historicalNote: 'STEP RSS-NORTH-2: 중랑구 탄성코트 정보성 가이드 1호 정식 발행 (2026-10-29 15:58:00 KST)',
+  },
 ];
 
 /**

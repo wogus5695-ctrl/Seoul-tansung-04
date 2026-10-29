@@ -63,9 +63,9 @@ test('STEP RSS-3A: First Real Guide Content Draft & Keyword Reservation', async 
     assert.equal(res.valid, true);
     assert.equal(res.errors.length, 0);
     assert.equal(res.stats.totalKeywords, 24);
-    assert.equal(res.stats.publishedCount, 3);
+    assert.equal(res.stats.publishedCount, 4);
     assert.equal(res.stats.reservedCount, 0);
-    assert.equal(res.stats.availableCount, 21);
+    assert.equal(res.stats.availableCount, 20);
   });
 
   await t.test('5. Reassigning the reserved keyword to another post is strictly BLOCKED', () => {
@@ -127,7 +127,7 @@ test('STEP RSS-3A: First Real Guide Content Draft & Keyword Reservation', async 
   await t.test('10. Publication gate verifies approved post is published and draft remains blocked', () => {
     assert.equal(isGuidePublished(post), true, 'approved post passes isGuidePublished');
     const publishedGuides = getPublishedGuides(GUIDES);
-    assert.equal(publishedGuides.length, 3, 'Published guides list has exactly 3 approved posts');
+    assert.equal(publishedGuides.length, 4, 'Published guides list has exactly 4 approved posts');
 
     // Verify unapproved draft is still blocked
     const draftSample = { ...post, contentStatus: 'draft', isPublished: false };

@@ -9,8 +9,8 @@ test('STEP 4-H-6A: Two Short Guide Drafts & Keyword Reservation Test Suite', asy
   const post2 = GUIDES.find((g) => g.postId === 'guide-dobong-laundry-pipe-check');
   const post3 = GUIDES.find((g) => g.postId === 'guide-nowon-balcony-masking-checklist');
 
-  await t.test('1. Total GUIDES count is exactly 3 (1 Published + 2 Drafts)', () => {
-    assert.equal(GUIDES.length, 3, 'GUIDES must contain exactly 3 posts');
+  await t.test('1. Total GUIDES count is exactly 4 published posts', () => {
+    assert.equal(GUIDES.length, 4, 'GUIDES must contain exactly 4 posts');
     assert.ok(post1, 'POST 01 must exist');
     assert.ok(post2, 'POST 02 must exist');
     assert.ok(post3, 'POST 03 must exist');
@@ -66,22 +66,23 @@ test('STEP 4-H-6A: Two Short Guide Drafts & Keyword Reservation Test Suite', asy
     assert.ok(paragraphs.length >= 3 && paragraphs.length <= 4, `Paragraphs count ${paragraphs.length} in 3~4`);
   });
 
-  await t.test('6. Keyword Registry Status: 3 PUBLISHED, 0 RESERVED, 21 AVAILABLE', () => {
+  await t.test('6. Keyword Registry Status: 4 PUBLISHED, 0 RESERVED, 20 AVAILABLE', () => {
     const val = validateAllKeywordAllocations(GUIDES, KEYWORD_LEDGER);
     assert.equal(val.valid, true);
     assert.equal(val.errors.length, 0);
     assert.equal(val.stats.totalKeywords, 24);
-    assert.equal(val.stats.publishedCount, 3);
+    assert.equal(val.stats.publishedCount, 4);
     assert.equal(val.stats.reservedCount, 0);
-    assert.equal(val.stats.availableCount, 21);
+    assert.equal(val.stats.availableCount, 20);
 
     assert.equal(getKeywordStatus('elastic-coating_nowon', GUIDES, KEYWORD_LEDGER), 'PUBLISHED');
     assert.equal(getKeywordStatus('elastic-coating_dobong', GUIDES, KEYWORD_LEDGER), 'PUBLISHED');
     assert.equal(getKeywordStatus('balcony-elastic-coating_nowon', GUIDES, KEYWORD_LEDGER), 'PUBLISHED');
+    assert.equal(getKeywordStatus('elastic-coating_jungnang', GUIDES, KEYWORD_LEDGER), 'PUBLISHED');
   });
 
   await t.test('7. KEYWORD_LEDGER Integrity and Reservation Timestamps', () => {
-    assert.equal(KEYWORD_LEDGER.length, 3);
+    assert.equal(KEYWORD_LEDGER.length, 4);
     const entry2 = KEYWORD_LEDGER.find((e) => e.keywordId === 'elastic-coating_dobong');
     assert.ok(entry2);
     assert.equal(entry2.status, 'PUBLISHED');
@@ -95,13 +96,13 @@ test('STEP 4-H-6A: Two Short Guide Drafts & Keyword Reservation Test Suite', asy
     assert.ok(new Date(entry3.assignedAt).getTime() > 0);
   });
 
-  await t.test('8. Strict Publication Gate: All 3 Guides are safely published', () => {
+  await t.test('8. Strict Publication Gate: All 4 Guides are safely published', () => {
     assert.equal(isGuidePublished(post1), true);
     assert.equal(isGuidePublished(post2), true);
     assert.equal(isGuidePublished(post3), true);
 
     const publishedList = getPublishedGuides(GUIDES);
-    assert.equal(publishedList.length, 3);
+    assert.equal(publishedList.length, 4);
   });
 
   await t.test('9. Regional SEO Link Integration: Both target pages are published and resolvable', () => {

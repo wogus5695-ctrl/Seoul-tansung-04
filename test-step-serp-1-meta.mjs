@@ -151,14 +151,15 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     assert.match(guideHtml, /<meta property="og:image:height" content="630"/);
   });
 
-  test('5. Site inventory: exactly 11 HTML pages, 3 RSS items, 11 Sitemap URLs, 19 unapproved pages absent', () => {
-    // 11 HTML pages (9 existing + 2 Jungnang)
+  test('5. Site inventory: exactly 12 HTML pages, 4 RSS items, 12 Sitemap URLs, 19 unapproved pages absent', () => {
+    // 12 HTML pages (11 existing + 1 new guide)
     const expectedHtmls = [
       'dist/index.html',
       'dist/guide.html',
       'dist/guide/nowon-balcony-wall-peeling-check.html',
       'dist/guide/dobong-laundry-room-pipe-wall-check.html',
       'dist/guide/nowon-balcony-storage-masking-checklist.html',
+      'dist/guide/jungnang-wall-drying-check.html',
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
       'dist/seo/elastic-coating/seoul-jungnang-gu.html',
@@ -198,14 +199,14 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     }
     assert.strictEqual(unapprovedCount, 19, 'Must have exactly 19 unapproved registered combinations');
 
-    // RSS Feed has exactly 3 items
+    // RSS Feed has exactly 4 items
     const rssXml = fs.readFileSync('dist/rss.xml', 'utf8');
     const items = rssXml.match(/<item>/g);
-    assert.strictEqual(items?.length, 3, 'RSS feed must have exactly 3 items');
+    assert.strictEqual(items?.length, 4, 'RSS feed must have exactly 4 items');
 
-    // Sitemap has exactly 11 locs (1 home + 4 guides + 5 regional SEO + 1 hub)
+    // Sitemap has exactly 12 locs (1 home + 5 guides + 5 regional SEO + 1 hub)
     const sitemap0 = fs.readFileSync('dist/sitemap-0.xml', 'utf8');
     const locs = sitemap0.match(/<loc>/g);
-    assert.strictEqual(locs?.length, 11, 'Sitemap must have exactly 11 url loc entries');
+    assert.strictEqual(locs?.length, 12, 'Sitemap must have exactly 12 url loc entries');
   });
 });
