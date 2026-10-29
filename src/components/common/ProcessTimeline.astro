@@ -22,16 +22,22 @@ const {
 } = Astro.props;
 
 const DEFAULT_STEPS: TimelineStep[] = [
-  { step: '01', title: '상담 접수' },
-  { step: '02', title: '현장 상태 확인' },
-  { step: '03', title: '작업 범위 안내' },
-  { step: '04', title: '보양 및 시공' },
-  { step: '05', title: '마감 확인 및 안내' },
+  { step: '1', title: '상담 접수' },
+  { step: '2', title: '현장 상태 확인' },
+  { step: '3', title: '작업 범위 안내' },
+  { step: '4', title: '보양 및 시공' },
+  { step: '5', title: '마감 확인 및 안내' },
 ];
 
 const activeSteps = steps && steps.length > 0 ? steps : DEFAULT_STEPS;
 const isFourSteps = activeSteps.length === 4;
 const gridColsClass = isFourSteps ? 'grid-cols-4' : 'grid-cols-5';
+
+function getStepNumber(item: TimelineStep, idx: number): string {
+  if (!item.step) return String(idx + 1);
+  const numOnly = item.step.replace(/[^0-9]/g, '').replace(/^0+/, '');
+  return numOnly || String(idx + 1);
+}
 ---
 
 <section
@@ -64,7 +70,7 @@ const gridColsClass = isFourSteps ? 'grid-cols-4' : 'grid-cols-5';
         {/* 가로 연결선 (첫 번째 원형 중심 ~ 마지막 원형 중심) */}
         <div
           class:list={[
-            'absolute top-7 h-[2px] bg-[#E7D9C1]',
+            'absolute top-[30px] lg:top-[32px] h-[2px] bg-[#E7D9C1]',
             isFourSteps ? 'left-[12.5%] right-[12.5%]' : 'left-[10%] right-[10%]'
           ]}
           aria-hidden="true"
@@ -73,9 +79,9 @@ const gridColsClass = isFourSteps ? 'grid-cols-4' : 'grid-cols-5';
         <div class:list={['grid gap-3 lg:gap-4 relative z-10', gridColsClass]}>
           {activeSteps.map((item, idx) => (
             <div class="flex flex-col items-center text-center group">
-              {/* 원형 숫자 뱃지 */}
-              <div class="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-mono font-bold text-xs lg:text-sm flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 group-hover:border-[#2D322A] group-hover:text-[#2D322A] select-none">
-                {item.step ?? String(idx + 1).padStart(2, '0')}
+              {/* 원형 숫자 뱃지: 숫자만 크게, 볼드, 중앙 정렬 */}
+              <div class="w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-bold text-base lg:text-lg flex items-center justify-center shadow-xs transition-transform group-hover:scale-105 group-hover:border-[#2D322A] group-hover:text-[#2D322A] select-none">
+                {getStepNumber(item, idx)}
               </div>
 
               {/* 단계 제목 */}
@@ -104,9 +110,9 @@ const gridColsClass = isFourSteps ? 'grid-cols-4' : 'grid-cols-5';
 
         {activeSteps.map((item, idx) => (
           <div class:list={['relative flex group', item.description ? 'items-start min-h-[44px]' : 'items-center min-h-[38px]']}>
-            {/* 세로선 상에 정렬된 원형 숫자 뱃지 */}
-            <div class:list={['absolute -left-12 w-9 h-9 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-mono font-bold text-xs flex items-center justify-center shadow-2xs select-none', item.description ? 'top-0' : '']}>
-              {item.step ?? String(idx + 1).padStart(2, '0')}
+            {/* 세로선 상에 정렬된 원형 숫자 뱃지: 숫자만 또렷하고 크게 중앙 정렬 */}
+            <div class:list={['absolute -left-12 w-9 h-9 rounded-full bg-[#FAF8F5] border-2 border-[#4F5844] text-[#4F5844] font-bold text-sm sm:text-base flex items-center justify-center shadow-2xs select-none', item.description ? 'top-0' : '']}>
+              {getStepNumber(item, idx)}
             </div>
 
             {/* 단계 제목 및 설명 */}

@@ -65,9 +65,8 @@ const jsonLd = siteUrl ? [
   imageWidth={page.ogImageWidth}
   imageHeight={page.ogImageHeight}
 >
-  {/* 01. Hero Section (공통 HeroSection 컴포넌트 적용) */}
+  {/* 01. Hero Section (공통 HeroSection 컴포넌트 적용 - breadcrumb 및 badge 제거) */}
   <HeroSection
-    badge={`ALLCARE SEOUL · ${region?.displayName ?? ''}`}
     h1={page.h1}
     description={page.heroCopy}
     primaryCta={{
@@ -81,11 +80,6 @@ const jsonLd = siteUrl ? [
       ariaLabel: "벽면 상태 확인 섹션으로 이동"
     }}
     note="※ 전화 상담 시 필요한 사진과 전달 방법을 안내받으실 수 있습니다."
-    breadcrumbs={[
-      { name: '홈', url: '/' },
-      { name: '서울권 시공 안내' },
-      { name: `${region?.name ?? ''} ${service?.name ?? ''}` },
-    ]}
   />
 
   {/* 02. 올케어 작업 현장 (실제 시공 전후 사진 자동 슬라이드 갤러리) */}
@@ -144,39 +138,66 @@ const jsonLd = siteUrl ? [
     </section>
   )}
 
-  {/* 08. 관련 지역 및 서비스 안내 (내부 링크 구조 - 공개 페이지 한정) */}
-  <section class="w-full py-10 sm:py-12 bg-[#F5F3EE] border-b border-[#E7D9C1]">
-    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 text-left">
-      <h2 class="text-base sm:text-lg font-bold text-[#3E443B]">서비스 지역 및 관련 안내</h2>
-      <div class="p-4 sm:p-5 rounded-xl bg-[#FAF8F5] border border-[#E7D9C1] space-y-3">
-        <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
-          {page.serviceScopeNotice}
-        </p>
-        <div class="flex flex-wrap items-center gap-3 pt-1 text-xs sm:text-sm">
-          <a href="/" class="font-semibold text-[#4F5844] hover:underline flex items-center gap-1">
-            <span>&larr; 서울 전체 시공 안내 (홈으로)</span>
-          </a>
-          {relatedPublishedPages.map((relPage) => (
-            <a
-              href={relPage.urlPath}
-              class="font-semibold text-[#4F5844] hover:underline"
-            >
-              {relPage.h1} &rarr;
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* 09. FINAL CONSULTATION CTA (전화 + 카카오톡 채널) */}
+  {/* 08. FINAL CONSULTATION CTA (전화 + 카카오톡 채널 - FAQ 직후 노출) */}
   <ConsultationBanner
     variant="main"
     title={`${region?.name ?? ''} ${service?.name ?? '탄성코트'}, 전문가에게 상담하세요!`}
     description="실제 시공 공간과 벽면 상태를 사진으로 알려주시면 필요한 작업 범위와 일정을 보다 빠르게 안내받으실 수 있습니다."
   />
 
-  {/* 10. 시공 전 확인사항 접이식 섹션 (하단 상담 CTA 아래 / Footer 바로 위 - 전 지역 공통) */}
+  {/* 09. 관련 지역 및 서비스 안내 (내부 링크 구조 - 기본 닫힘 접이식 아코디언) */}
+  <section class="w-full py-6 sm:py-8 bg-[#F5F3EE] border-b border-[#E7D9C1]">
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+      <details class="group rounded-xl border border-[#E7D9C1] bg-[#FAF8F5] overflow-hidden shadow-2xs">
+        <summary class="flex items-center justify-between p-4 sm:p-4.5 cursor-pointer list-none select-none hover:bg-[#F0ECE1] transition-colors focus:outline-none focus:ring-2 focus:ring-[#A3B18A] [&::-webkit-details-marker]:hidden">
+          <div class="flex items-center gap-2 sm:gap-2.5">
+            <svg class="w-4 h-4 text-[#4F5844] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+            </svg>
+            <h2 class="text-sm sm:text-base font-bold text-[#3E443B]">
+              서비스 지역 및 관련 안내
+            </h2>
+            <span class="text-xs text-[#5C5549]/70 hidden sm:inline">
+              (서비스 지역 및 관련 페이지 보기)
+            </span>
+          </div>
+          <span class="text-xs sm:text-sm text-[#4F5844] font-medium flex items-center gap-1.5 shrink-0">
+            <span class="text-xs text-[#5C5549] group-open:hidden">펼쳐보기</span>
+            <span class="text-xs text-[#5C5549] hidden group-open:inline">접기</span>
+            <svg
+              class="w-4 h-4 text-[#4F5844] transition-transform duration-200 group-open:rotate-180"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </span>
+        </summary>
+        <div class="p-4 sm:p-5 pt-3 border-t border-[#E7D9C1]/70 space-y-3 bg-[#FAF8F5]">
+          <p class="text-xs sm:text-sm text-[#5C5549] leading-relaxed">
+            {page.serviceScopeNotice}
+          </p>
+          <div class="flex flex-wrap items-center gap-3 pt-1 text-xs sm:text-sm">
+            <a href="/" class="font-semibold text-[#4F5844] hover:underline flex items-center gap-1">
+              <span>&larr; 서울 전체 시공 안내 (홈으로)</span>
+            </a>
+            {relatedPublishedPages.map((relPage) => (
+              <a
+                href={relPage.urlPath}
+                class="font-semibold text-[#4F5844] hover:underline"
+              >
+                {relPage.h1} &rarr;
+              </a>
+            ))}
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  {/* 10. 시공 전 확인사항 접이식 섹션 (하단 관련 안내 아래 / Footer 바로 위 - 전 지역 공통) */}
   <DistrictPointsSection
     keyword={`${region?.name ?? ''} ${service?.name ?? '탄성코트'}`}
     regionName={region?.name}

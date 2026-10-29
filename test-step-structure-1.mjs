@@ -38,9 +38,9 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
       assert.ok(idxSpaces > idxWall, `${page.id}: Spaces (PreConsultation) must follow Wall check`);
       assert.ok(idxProcess > idxSpaces, `${page.id}: Process must follow Spaces`);
       assert.ok(idxFaq > idxProcess, `${page.id}: Faq must follow Process`);
-      assert.ok(idxNotice > idxFaq, `${page.id}: Service notice must follow Faq`);
-      assert.ok(idxConsult > idxNotice, `${page.id}: Consultation banner must follow Notice`);
-      assert.ok(idxDistrict > idxConsult, `${page.id}: Collapsible DistrictPoints must follow Consultation banner`);
+      assert.ok(idxConsult > idxFaq, `${page.id}: Consultation banner must follow Faq`);
+      assert.ok(idxNotice > idxConsult, `${page.id}: Service notice must follow Consultation banner`);
+      assert.ok(idxDistrict > idxNotice, `${page.id}: Collapsible DistrictPoints must follow Service notice`);
 
       // Check collapsible accordion tags and summary
       assert.ok(html.includes('<details'), `${page.id}: Must render <details> tag`);

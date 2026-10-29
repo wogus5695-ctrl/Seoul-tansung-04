@@ -42,15 +42,15 @@ test('STEP 4-H-4A: Regional Unified Template Rollout Test Suite', async (t) => {
       assert.strictEqual(h1Count, 1, `${p.name} must have exactly 1 H1`);
       assert.match(p.html, new RegExp(`<h1[^>]*>${p.h1}</h1>`), `${p.name} H1 must match`);
 
-      // Order checks (STEP STRUCTURE-1: 전 지역 공통 레이아웃 통일)
-      const idxHero = p.html.indexOf('ALLCARE SEOUL');
+      // Order checks (STEP STRUCTURE-3A: 전 지역 공통 레이아웃 통일)
+      const idxHero = p.html.indexOf('<h1');
       const idxGallery = p.html.indexOf('id="before-after"');
       const idxWall = p.html.indexOf('id="wall-check"');
       const idxSpaces = p.html.indexOf('id="spaces"');
       const idxProcess = p.html.indexOf('id="process"');
       const idxFaq = p.html.indexOf('id="faq"');
-      const idxNotice = p.html.indexOf('서비스 지역 및 관련 안내');
       const idxConsult = p.html.indexOf('id="consultation"');
+      const idxNotice = p.html.indexOf('서비스 지역 및 관련 안내');
       const idxDistrict = p.html.indexOf('id="district-points"');
 
       assert.ok(idxHero > -1, `${p.name} Hero section missing`);
@@ -59,9 +59,9 @@ test('STEP 4-H-4A: Regional Unified Template Rollout Test Suite', async (t) => {
       assert.ok(idxSpaces > idxWall, `${p.name} PreConsultation must follow WallCheck`);
       assert.ok(idxProcess > idxSpaces, `${p.name} ProcessTimeline must follow PreConsultation`);
       assert.ok(idxFaq > idxProcess, `${p.name} Faq must follow ProcessTimeline`);
-      assert.ok(idxNotice > idxFaq, `${p.name} Notice must follow Faq`);
-      assert.ok(idxConsult > idxNotice, `${p.name} ConsultationBanner must follow Notice`);
-      assert.ok(idxDistrict > idxConsult, `${p.name} DistrictPoints must follow ConsultationBanner`);
+      assert.ok(idxConsult > idxFaq, `${p.name} ConsultationBanner must follow Faq`);
+      assert.ok(idxNotice > idxConsult, `${p.name} Notice must follow ConsultationBanner`);
+      assert.ok(idxDistrict > idxNotice, `${p.name} DistrictPoints must follow Notice`);
     }
   });
 

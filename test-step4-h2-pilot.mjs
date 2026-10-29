@@ -46,8 +46,8 @@ test('STEP 4-H-2: Regional Layout Unification Pilot Suite', async (t) => {
 
   await t.test('2. 9 Unified Layout Sections in Exact Order on Nowon Pilot', () => {
     // 01. HeroSection
-    const idx01 = nowonHtml.indexOf('ALLCARE SEOUL · 서울 노원구');
-    assert.ok(idx01 > -1, '01. Hero section badge must exist');
+    const idx01 = nowonHtml.indexOf('노원구 탄성코트 시공 안내');
+    assert.ok(idx01 > -1, '01. Hero section H1 must exist');
 
     // 02. BeforeAfterGallery
     const idx02 = nowonHtml.indexOf('id="before-after"');
@@ -74,20 +74,20 @@ test('STEP 4-H-2: Regional Layout Unification Pilot Suite', async (t) => {
     assert.ok(idx06 > idx05, '06. FaqAccordion must follow ProcessTimeline');
     assert.match(nowonHtml, /노원구 시공 관련 자주 묻는 질문/, 'Faq title must be present');
 
-    // 07. Service scope notice & internal links
-    const idx07 = nowonHtml.indexOf('서비스 지역 및 관련 안내');
-    assert.ok(idx07 > idx06, '07. Internal links section must follow FaqAccordion');
-
-    // 08. ConsultationBanner (variant="main")
-    const idx08 = nowonHtml.indexOf('id="consultation"');
-    assert.ok(idx08 > idx07, '08. ConsultationBanner must follow internal links');
+    // 07. ConsultationBanner (variant="main" - STRUCTURE-3A: FAQ 직후 노출)
+    const idx07 = nowonHtml.indexOf('id="consultation"');
+    assert.ok(idx07 > idx06, '07. ConsultationBanner must follow FaqAccordion');
     assert.match(nowonHtml, /노원구 탄성코트, 전문가에게 상담하세요!/, 'ConsultationBanner title must be present');
     assert.match(nowonHtml, /tel:01084926900/, 'Phone CTA must be present');
     assert.match(nowonHtml, /https:\/\/pf\.kakao\.com\/_UjxcFX/, 'Kakao CTA must be present');
 
+    // 08. Service scope notice & internal links (STRUCTURE-3A: 하단 접이식 아코디언)
+    const idx08 = nowonHtml.indexOf('서비스 지역 및 관련 안내');
+    assert.ok(idx08 > idx07, '08. Internal links section must follow ConsultationBanner');
+
     // 09. DistrictPointsSection (STEP STRUCTURE-1: 전 지역 공통 하단 접이식 통일)
     const idx09 = nowonHtml.indexOf('id="district-points"');
-    assert.ok(idx09 > idx08, '09. DistrictPointsSection must follow ConsultationBanner');
+    assert.ok(idx09 > idx08, '09. DistrictPointsSection must follow internal links');
     assert.match(nowonHtml, /노원구 탄성코트 시공 전 확인할 사항/, 'DistrictPointsSection title must be present');
     assert.match(nowonHtml, /시공 전 작업 공간·견적 기준 자세히 보기/, 'Collapsible summary must be present');
   });
