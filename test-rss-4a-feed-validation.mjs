@@ -86,11 +86,11 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     }
   });
 
-  await t.test('10. Sitemap 공개 URL 총 9개 유지 및 비공개 URL 배제 (8 기존 + 1 허브)', () => {
+  await t.test('10. Sitemap 공개 URL 총 11개 유지 및 비공개 URL 배제 (9 기존 + 2 중랑구)', () => {
     assert.ok(fs.existsSync('dist/sitemap-0.xml'), 'sitemap-0.xml must exist');
     const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf-8');
     const locs = sitemap.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 9, 'Exactly 9 URLs in sitemap (8 existing + 1 hub)');
+    assert.equal(locs.length, 11, 'Exactly 11 URLs in sitemap (9 existing + 2 Jungnang)');
     assert.ok(locs.some((l) => l.includes('/sitemap-seoul.html')));
     assert.ok(locs.some((l) => l.includes('/guide.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-wall-peeling-check.html')));

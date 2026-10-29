@@ -10,7 +10,7 @@ import PreConsultationGuide from '../../../components/common/PreConsultationGuid
 import ProcessTimeline from '../../../components/common/ProcessTimeline.astro';
 import DistrictPointsSection from '../../../components/common/DistrictPointsSection.astro';
 import { SITE_CONTACT } from '../../../data/siteConfig';
-import { getPublishedSeoPages, getRegionById, getServiceById, SEO_PAGES, isPagePublished, type SeoPageConfig } from '../../../data/pages';
+import { getPublishedSeoPages, getRegionById, getDongById, getServiceById, SEO_PAGES, isPagePublished, type SeoPageConfig } from '../../../data/pages';
 import { getSiteUrl, getCanonicalUrl, buildWebPageJsonLd, buildBreadcrumbJsonLd } from '../../../utils/seo';
 
 export async function getStaticPaths() {
@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const region = getRegionById(page.regionId);
+const region = page.regionLevel === 'dong' ? getDongById(page.regionId) : getRegionById(page.regionId);
 const service = getServiceById(page.serviceId);
 const content = page.content;
 

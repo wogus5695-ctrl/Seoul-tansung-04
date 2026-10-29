@@ -151,8 +151,8 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     assert.match(guideHtml, /<meta property="og:image:height" content="630"/);
   });
 
-  test('5. Site inventory: exactly 9 HTML pages, 3 RSS items, 9 Sitemap URLs, 21 unapproved pages absent', () => {
-    // 9 HTML pages (8 existing + 1 hub)
+  test('5. Site inventory: exactly 11 HTML pages, 3 RSS items, 11 Sitemap URLs, 19 unapproved pages absent', () => {
+    // 11 HTML pages (9 existing + 2 Jungnang)
     const expectedHtmls = [
       'dist/index.html',
       'dist/guide.html',
@@ -161,14 +161,16 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
       'dist/guide/nowon-balcony-storage-masking-checklist.html',
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
+      'dist/seo/elastic-coating/seoul-jungnang-gu.html',
       'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
       'dist/sitemap-seoul.html',
     ];
     for (const f of expectedHtmls) {
       assert.ok(fs.existsSync(f), `${f} must exist`);
     }
 
-    // 21 unapproved registered combinations must ALL be strictly absent
+    // 19 unapproved registered combinations must ALL be strictly absent
     const registeredRegions = [
       'seoul-nowon-gu', 'seoul-dobong-gu', 'seoul-gangbuk-gu', 'seoul-seongbuk-gu',
       'seoul-dongdaemun-gu', 'seoul-jungnang-gu', 'seoul-eunpyeong-gu', 'seoul-seodaemun-gu',
@@ -179,7 +181,9 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     const publishedSet = new Set([
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
-      'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html'
+      'dist/seo/elastic-coating/seoul-jungnang-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html'
     ]);
 
     let unapprovedCount = 0;
@@ -192,16 +196,16 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
         }
       }
     }
-    assert.strictEqual(unapprovedCount, 21, 'Must have exactly 21 unapproved registered combinations');
+    assert.strictEqual(unapprovedCount, 19, 'Must have exactly 19 unapproved registered combinations');
 
     // RSS Feed has exactly 3 items
     const rssXml = fs.readFileSync('dist/rss.xml', 'utf8');
     const items = rssXml.match(/<item>/g);
     assert.strictEqual(items?.length, 3, 'RSS feed must have exactly 3 items');
 
-    // Sitemap has exactly 9 locs (8 existing + 1 hub)
+    // Sitemap has exactly 11 locs (1 home + 4 guides + 5 regional SEO + 1 hub)
     const sitemap0 = fs.readFileSync('dist/sitemap-0.xml', 'utf8');
     const locs = sitemap0.match(/<loc>/g);
-    assert.strictEqual(locs?.length, 9, 'Sitemap must have exactly 9 url loc entries (8 existing + 1 hub)');
+    assert.strictEqual(locs?.length, 11, 'Sitemap must have exactly 11 url loc entries');
   });
 });

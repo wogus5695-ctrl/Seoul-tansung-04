@@ -1,4 +1,22 @@
-import { getAllDynamicKeywords, type DynamicKeyword } from '../data/keywordRegistry.ts';
+import {
+  getAllDynamicKeywords,
+  isDistrictKeyword,
+  isDongKeyword,
+  type DynamicKeyword,
+} from '../data/keywordRegistry.ts';
+
+/**
+ * RSS 가이드 포스트의 키워드 배정 자격 검증 (구 단위 전용 게이트)
+ * 
+ * [원칙]
+ * - RSS 발행은 오직 자치구(Gu) 단위 동적키워드만 허용됩니다.
+ * - 동(Dong) 단위 키워드를 Guide에 배정하려는 시도는 [RSS POLICY VIOLATION] 예외를 발생시키며 즉시 차단됩니다.
+ */
+export function assertDistrictRssKeyword(keywordId: string): void {
+  if (isDongKeyword(keywordId) || !isDistrictKeyword(keywordId)) {
+    throw new Error(`[RSS POLICY VIOLATION] 동 단위 키워드("${keywordId}")는 RSS 가이드 포스트에 배정할 수 없습니다. RSS 발행은 구 단위 키워드만 허용됩니다.`);
+  }
+}
 
 /**
  * 텍스트 정규화 유틸리티

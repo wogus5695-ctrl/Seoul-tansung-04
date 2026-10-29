@@ -40,7 +40,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(h1Text, '서울 탄성코트 시공지역 안내');
   });
 
-  test('3. Service Groups count exactly 2 and Published Links count exactly 3', () => {
+  test('3. Service Groups count exactly 2 and Published Links count exactly 5', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
     // Groups (H2)
@@ -50,11 +50,13 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.ok(groupNames.includes('탄성코트'), '탄성코트 group exists');
     assert.ok(groupNames.includes('베란다탄성코트'), '베란다탄성코트 group exists');
 
-    // Published SEO Links
+    // Published SEO Links (3 Elastic + 2 Balcony Elastic = 5)
     const expectedUrls = [
       '/seo/elastic-coating/seoul-nowon-gu.html',
       '/seo/elastic-coating/seoul-dobong-gu.html',
+      '/seo/elastic-coating/seoul-jungnang-gu.html',
       '/seo/balcony-elastic-coating/seoul-nowon-gu.html',
+      '/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
     ];
 
     for (const url of expectedUrls) {
@@ -62,10 +64,10 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     }
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.strictEqual(regionalLinks.length, 3, 'Must contain EXACTLY 3 published regional links');
+    assert.strictEqual(regionalLinks.length, 5, 'Must contain EXACTLY 5 published regional links');
   });
 
-  test('4. Complete isolation of 21 unpublished regional SEO combinations', () => {
+  test('4. Complete isolation of 19 unpublished regional SEO combinations', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
     const publishedPages = getPublishedSeoPages();
@@ -85,7 +87,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
       }
     }
 
-    assert.strictEqual(unpublishedCount, 21, 'Must verify all 21 unpublished combinations');
+    assert.strictEqual(unpublishedCount, 19, 'Must verify all 19 unpublished combinations');
   });
 
   test('5. Canonical and Robots integrity on Hub', () => {
@@ -100,21 +102,23 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(html.includes('noindex'), false, 'Hub must allow indexing in production mode');
   });
 
-  test('6. XML Sitemap count incremented from 8 to exactly 9 URLs', () => {
+  test('6. XML Sitemap count incremented to exactly 11 URLs', () => {
     const sitemapPath = path.join(DIST_DIR, 'sitemap-0.xml');
     assert.ok(fs.existsSync(sitemapPath), 'sitemap-0.xml must exist');
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 9, 'Sitemap must contain exactly 9 URLs (8 existing + 1 hub)');
+    assert.strictEqual(locMatches.length, 11, 'Sitemap must contain exactly 11 URLs (1 home + 4 guides + 5 regional SEO + 1 hub)');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');
 
-    // Ensure all 3 published pilots and home and 4 guides are preserved
+    // Ensure all 5 published regional pages and home and 4 guides are preserved
     assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-nowon-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-dobong-gu\.html<\/loc>/);
+    assert.match(sitemapContent, /\/seo\/elastic-coating\/seoul-jungnang-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/seo\/balcony-elastic-coating\/seoul-nowon-gu\.html<\/loc>/);
+    assert.match(sitemapContent, /\/seo\/balcony-elastic-coating\/seoul-jungnang-gu\.html<\/loc>/);
     assert.match(sitemapContent, /\/guide\.html<\/loc>/);
   });
 
@@ -137,7 +141,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const mdContent = fs.readFileSync(mdPath, 'utf8');
     const rows = mdContent.split('\n').filter((l) => l.startsWith('|') && !l.includes('Keyword ID') && !l.includes(':---'));
-    assert.strictEqual(rows.length, 24, 'Markdown report must have exactly 24 keyword rows');
+    assert.ok(rows.length === 24 || rows.length === 46, 'Markdown report must have 24 (Gu only) or 46 (Gu + Dong) keyword rows');
 
     // Check unique keywordIds
     const allKeywords = getAllDynamicKeywords(REGIONS, SERVICES);

@@ -1,5 +1,6 @@
 import { REGIONS, type Region } from './regions.ts';
 import { SERVICES, type Service } from './services.ts';
+import { DONGS, type Dong } from './dongs.ts';
 import type { GuidePost } from './guides.ts';
 
 /**
@@ -14,13 +15,15 @@ export type KeywordStatus = 'AVAILABLE' | 'RESERVED' | 'PUBLISHED';
  * 지역·서비스 동적키워드 데이터 인터페이스
  */
 export interface DynamicKeyword {
-  id: string; // e.g. 'elastic-coating_nowon'
+  id: string; // e.g. 'elastic-coating_nowon', 'elastic-coating_nowon-sanggye'
   regionId: string;
   serviceId: string;
-  regionName: string; // e.g. '노원구'
+  regionName: string; // e.g. '노원구', '상계동'
   serviceName: string; // e.g. '탄성코트'
-  keyword: string; // e.g. '노원구 탄성코트'
+  keyword: string; // e.g. '노원구 탄성코트', '상계동 탄성코트'
   targetUrlPath: string; // e.g. '/seo/elastic-coating/seoul-nowon-gu.html'
+  regionLevel: 'gu' | 'dong';
+  parentRegionId?: string; // 동 단위일 경우 상위 구 ID (e.g. 'nowon')
 }
 
 /**
@@ -35,11 +38,12 @@ export interface KeywordLedgerEntry {
 }
 
 /**
- * 24개 기존 지역·서비스 데이터 기반 동적키워드 자동 추출 함수
+ * 24개 기존 구 단위 지역·서비스 데이터 기반 동적키워드 자동 추출 함수
  * 
  * [확장성 원칙]
  * REGIONS 또는 SERVICES 배열에 신규 항목이 추가되더라도
  * 코드 수정 없이 전체 키워드 후보 목록을 자동으로 재계산합니다.
+ * (기존 24개 구 단위 회귀 테스트 및 RSS 배정 기준 100% 보존)
  */
 export function getAllDynamicKeywords(
   regions: Region[] = REGIONS,
@@ -56,10 +60,74 @@ export function getAllDynamicKeywords(
         serviceName: service.name,
         keyword: `${region.name} ${service.name}`,
         targetUrlPath: `/seo/${service.slug}/${region.slug}.html`,
+        regionLevel: 'gu',
       });
     }
   }
   return list;
+}
+
+/**
+ * 22개 신규 동 단위 법정동·서비스 데이터 기반 동적키워드 자동 추출 함수
+ * 
+ * [동 단위 키워드 정책]
+ * 1. keywordId: ${service.id}_${parentRegionId}-${dongId} (예: elastic-coating_nowon-sanggye)
+ * 2. keyword: 동명 + 작업명 (예: 상계동 탄성코트) - 구명 중복 배제
+ * 3. targetUrlPath: /seo/${service.slug}/${dong.slug}.html
+ */
+export function getAllDongDynamicKeywords(
+  dongs: Dong[] = DONGS,
+  services: Service[] = SERVICES
+): DynamicKeyword[] {
+  const list: DynamicKeyword[] = [];
+  for (const service of services) {
+    for (const dong of dongs) {
+      list.push({
+        id: `${service.id}_${dong.parentRegionId}-${dong.id}`,
+        regionId: dong.id,
+        serviceId: service.id,
+        regionName: dong.name,
+        serviceName: service.name,
+        keyword: `${dong.name} ${service.name}`,
+        targetUrlPath: `/seo/${service.slug}/${dong.slug}.html`,
+        regionLevel: 'dong',
+        parentRegionId: dong.parentRegionId,
+      });
+    }
+  }
+  return list;
+}
+
+/**
+ * 구 단위 24개 + 동 단위 22개 전체 46개 동적키워드 통합 조회 함수
+ */
+export function getAllCombinedDynamicKeywords(
+  regions: Region[] = REGIONS,
+  dongs: Dong[] = DONGS,
+  services: Service[] = SERVICES
+): DynamicKeyword[] {
+  return [
+    ...getAllDynamicKeywords(regions, services),
+    ...getAllDongDynamicKeywords(dongs, services),
+  ];
+}
+
+/**
+ * 구 단위 키워드 여부 판정 함수 (RSS 발행 제한용)
+ * 
+ * RSS 게시글은 오직 구 단위 키워드만 허용되며, 동 단위 키워드는 RSS 발행이 원천 차단됩니다.
+ */
+export function isDistrictKeyword(keywordId: string): boolean {
+  const districtKeywords = getAllDynamicKeywords();
+  return districtKeywords.some((k) => k.id === keywordId);
+}
+
+/**
+ * 동 단위 키워드 여부 판정 함수
+ */
+export function isDongKeyword(keywordId: string): boolean {
+  const dongKeywords = getAllDongDynamicKeywords();
+  return dongKeywords.some((k) => k.id === keywordId);
 }
 
 /**
@@ -160,7 +228,8 @@ export interface KeywordAllocationValidationResult {
 export function validateAllKeywordAllocations(
   guides: GuidePost[],
   ledger: KeywordLedgerEntry[] = KEYWORD_LEDGER,
-  dynamicKeywords: DynamicKeyword[] = getAllDynamicKeywords()
+  dynamicKeywords: DynamicKeyword[] = getAllDynamicKeywords(),
+  throwOnError: boolean = false
 ): KeywordAllocationValidationResult {
   const errors: string[] = [];
   const validKeywordIds = new Set(dynamicKeywords.map((k) => k.id));
@@ -168,7 +237,10 @@ export function validateAllKeywordAllocations(
   // 1. 원장(LEDGER) 내 keywordId 무결성 검사
   const seenLedgerKeywords = new Map<string, string>(); // keywordId -> postId
   for (const entry of ledger) {
-    if (!validKeywordIds.has(entry.keywordId)) {
+    // RSS 구 단위 정책 검증 (동 단위 키워드 배정 금지)
+    if (isDongKeyword(entry.keywordId)) {
+      errors.push(`[RSS POLICY VIOLATION] 동 단위 키워드("${entry.keywordId}")는 RSS 발행 원장에 등록할 수 없습니다. RSS 발행은 구 단위 키워드만 허용됩니다.`);
+    } else if (!validKeywordIds.has(entry.keywordId)) {
       errors.push(`[원장 무결성 오류] 등록되지 않은 유효하지 않은 keywordId("${entry.keywordId}")가 원장에 존재합니다.`);
     }
     if (seenLedgerKeywords.has(entry.keywordId)) {
@@ -181,6 +253,12 @@ export function validateAllKeywordAllocations(
   // 2. 활성 게시글(guides) 배정 검사
   const seenGuideKeywords = new Map<string, string>(); // keywordId -> postId
   for (const post of guides) {
+    // 2-0. RSS 구 단위 전용 정책 검증 (동 단위 키워드 배정 원천 차단)
+    if (isDongKeyword(post.keywordId)) {
+      errors.push(`[RSS POLICY VIOLATION] 동 단위 키워드("${post.keywordId}")는 RSS 가이드 포스트에 배정할 수 없습니다. RSS 발행은 구 단위 키워드만 허용됩니다.`);
+      continue;
+    }
+
     // 2-1. 키워드 존재 여부
     if (!validKeywordIds.has(post.keywordId)) {
       errors.push(`[게시글 무결성 오류] 게시글 "${post.postId}"에 등록되지 않은 keywordId("${post.keywordId}")가 지정되었습니다.`);
@@ -220,6 +298,10 @@ export function validateAllKeywordAllocations(
     if (status === 'AVAILABLE') availableCount++;
     else if (status === 'RESERVED') reservedCount++;
     else if (status === 'PUBLISHED') publishedCount++;
+  }
+
+  if (throwOnError && errors.length > 0) {
+    throw new Error(errors.join('\n'));
   }
 
   return {
