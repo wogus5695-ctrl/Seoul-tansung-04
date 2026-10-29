@@ -75,7 +75,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     }
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.strictEqual(regionalLinks.length, 9, 'Must contain EXACTLY 9 published regional links');
+    assert.strictEqual(regionalLinks.length, 17, 'Must contain EXACTLY 17 published regional links');
 
     // STEP STRUCTURE-1 Clean Link Design: no "상세 안내 보기", no URL path text
     assert.equal(html.includes('상세 안내 보기'), false, 'Clean Link Design must NOT have "상세 안내 보기" text');
@@ -122,7 +122,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 16, 'Sitemap must contain exactly 16 URLs (1 home + 5 guides + 9 regional SEO + 1 hub)');
+    assert.strictEqual(locMatches.length, 24, 'Sitemap must contain exactly 24 URLs (1 home + 5 guides + 17 regional SEO + 1 hub)');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');

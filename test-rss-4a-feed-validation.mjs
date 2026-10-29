@@ -90,7 +90,7 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     assert.ok(fs.existsSync('dist/sitemap-0.xml'), 'sitemap-0.xml must exist');
     const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf-8');
     const locs = sitemap.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 16, 'Exactly 16 URLs in sitemap');
+    assert.equal(locs.length, 24, 'Exactly 24 URLs in sitemap');
     assert.ok(locs.some((l) => l.includes('/sitemap-seoul.html')));
     assert.ok(locs.some((l) => l.includes('/guide.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-wall-peeling-check.html')));

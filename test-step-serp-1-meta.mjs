@@ -204,9 +204,9 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     const items = rssXml.match(/<item>/g);
     assert.strictEqual(items?.length, 4, 'RSS feed must have exactly 4 items');
 
-    // Sitemap has exactly 16 locs (1 home + 5 guides + 9 regional SEO + 1 hub)
+    // Sitemap has exactly 24 locs (1 home + 5 guides + 17 regional SEO + 1 hub)
     const sitemap0 = fs.readFileSync('dist/sitemap-0.xml', 'utf8');
     const locs = sitemap0.match(/<loc>/g);
-    assert.strictEqual(locs?.length, 16, 'Sitemap must have exactly 16 url loc entries');
+    assert.strictEqual(locs?.length, 24, 'Sitemap must have exactly 24 url loc entries');
   });
 });

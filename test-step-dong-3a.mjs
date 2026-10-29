@@ -31,9 +31,9 @@ describe('STEP DONG-3A: Balcony Elastic Coating Dong Pilot Draft Suite', () => {
     assert.equal(isPagePublished(myeonmokBalcony), true, 'Myeonmok balcony isPagePublished must be true');
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 9, 'Exactly 9 pages published (5 Gu + 4 Dong)');
+    assert.equal(published.length, 17, 'Exactly 17 pages published (5 Gu + 12 Dong)');
     const unpublished = SEO_PAGES.filter((p) => !published.includes(p));
-    assert.equal(unpublished.length, 37, 'Exactly 37 pages unpublished (19 Gu + 18 Dong)');
+    assert.equal(unpublished.length, 29, 'Exactly 29 pages unpublished (19 Gu + 10 Dong)');
   });
 
   test('3. SEO metadata exact conformity (Title with AS보장, H1, Meta Description)', () => {

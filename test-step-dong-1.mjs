@@ -40,9 +40,9 @@ describe('STEP DONG-1: Sanggye & Myeonmok Dong SEO Pilot Content Suite', () => {
     }
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 9, 'Exactly 9 pages published (5 Gu + 4 Dong)');
+    assert.equal(published.length, 17, 'Exactly 17 pages published (5 Gu + 12 Dong)');
     const publishedDong = published.filter((p) => p.regionLevel === 'dong');
-    assert.equal(publishedDong.length, 4, 'Exactly 4 Dong pages published');
+    assert.equal(publishedDong.length, 12, 'Exactly 12 Dong pages published');
   });
 
   test('3. Content completeness validation (P0 gate)', () => {

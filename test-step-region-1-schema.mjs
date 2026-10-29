@@ -131,6 +131,14 @@ const approvedDongIds = [
   'elastic-coating_jungnang-myeonmok',
   'balcony-elastic-coating_nowon-sanggye',
   'balcony-elastic-coating_jungnang-myeonmok',
+  'elastic-coating_nowon-junggye',
+  'balcony-elastic-coating_nowon-junggye',
+  'elastic-coating_nowon-hagye',
+  'balcony-elastic-coating_nowon-hagye',
+  'elastic-coating_jungnang-sangbong',
+  'balcony-elastic-coating_jungnang-sangbong',
+  'elastic-coating_jungnang-junghwa',
+  'balcony-elastic-coating_jungnang-junghwa',
 ];
 for (const page of dongPages) {
   if (approvedDongIds.includes(page.id)) {
@@ -146,12 +154,12 @@ for (const page of dongPages) {
   }
   assert.ok(page.metaTitle.includes('| AS보장 | 올케어탄성'), `Dong page metaTitle must include AS보장`);
 }
-console.log('   PASS: 18 draft Dong pages isolated, 4 Dong pages approved.');
+console.log('   PASS: 10 draft Dong pages isolated, 12 Dong pages approved.');
 
 // [Scenario 8] Zero HTML generated for unapproved dong pages in dist/seo/
 console.log('8. Verifying published SEO pages and unapproved dong isolation...');
 const publishedSeoPages = getPublishedSeoPages();
-assert.equal(publishedSeoPages.length, 9, 'Exactly 9 pages must be published (5 Gu + 4 Dong)');
+assert.equal(publishedSeoPages.length, 17, 'Exactly 17 pages must be published (5 Gu + 12 Dong)');
 
 const distSeoDir = path.resolve('dist', 'seo');
 if (fs.existsSync(distSeoDir)) {
@@ -165,7 +173,7 @@ if (fs.existsSync(distSeoDir)) {
     }
   }
   collectHtml(distSeoDir);
-  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  const unapprovedDongs = DONGS.filter((d) => !['sanggye', 'myeonmok', 'junggye', 'hagye', 'sangbong', 'junghwa'].includes(d.id));
   for (const dong of unapprovedDongs) {
     const leaked = allHtmls.filter((f) => f === `${dong.slug}.html`);
     assert.equal(leaked.length, 0, `Dong HTML ${dong.slug}.html must not exist in dist/seo`);
@@ -178,14 +186,14 @@ console.log('9. Verifying zero unapproved dong links in HTML hub (dist/sitemap-s
 const hubFile = path.resolve('dist', 'sitemap-seoul.html');
 if (fs.existsSync(hubFile)) {
   const hubHtml = fs.readFileSync(hubFile, 'utf8');
-  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  const unapprovedDongs = DONGS.filter((d) => !['sanggye', 'myeonmok', 'junggye', 'hagye', 'sangbong', 'junghwa'].includes(d.id));
   for (const dong of unapprovedDongs) {
     assert.ok(!hubHtml.includes(dong.slug), `Hub must not contain unapproved dong slug: ${dong.slug}`);
     assert.ok(!hubHtml.includes(dong.name), `Hub must not contain unapproved dong name: ${dong.name}`);
   }
-  // Exactly 9 links to SEO pages (5 Gu + 4 Dong)
+  // Exactly 17 links to SEO pages (5 Gu + 12 Dong)
   const seoLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-  assert.equal(seoLinks.length, 9, 'Hub must contain exactly 9 SEO links');
+  assert.equal(seoLinks.length, 17, 'Hub must contain exactly 17 SEO links');
 }
 console.log('   PASS: Zero dong links in HTML hub validated.');
 
@@ -194,12 +202,12 @@ console.log('10. Verifying zero unapproved dong URLs in XML sitemap (dist/sitema
 const sitemapFile = path.resolve('dist', 'sitemap-0.xml');
 if (fs.existsSync(sitemapFile)) {
   const sitemapXml = fs.readFileSync(sitemapFile, 'utf8');
-  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  const unapprovedDongs = DONGS.filter((d) => !['sanggye', 'myeonmok', 'junggye', 'hagye', 'sangbong', 'junghwa'].includes(d.id));
   for (const dong of unapprovedDongs) {
     assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain unapproved dong slug: ${dong.slug}`);
   }
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 16, 'Sitemap must contain exactly 16 loc entries');
+  assert.equal(locCount, 24, 'Sitemap must contain exactly 24 loc entries');
 }
 console.log('   PASS: Zero dong URLs in XML sitemap validated.');
 
