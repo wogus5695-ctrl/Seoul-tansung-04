@@ -482,21 +482,21 @@ for (const service of SERVICES) {
 
     if (isNowonElastic) {
       content = NOWON_ELASTIC_CONTENT;
-      metaTitle = '노원구 탄성코트 시공 | 올케어탄성';
+      metaTitle = '노원구 탄성코트 시공 | AS보장 | 올케어탄성';
       metaDescription = '노원구 탄성코트 시공, 벽면 상태와 밑작업 과정이 궁금하신가요? 베란다·세탁실의 도막 들뜸과 균열을 살펴보고 보양, 바탕면 정리, 도포 및 마감 과정을 안내합니다.';
       h1 = '노원구 탄성코트 시공 안내';
       heroCopy = '노원구 아파트·주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위를 정직하게 안내합니다.';
       contentStatus = 'approved'; // STEP 4-G-3C 운영자 최종 공개 승인
     } else if (isNowonBalconyElastic) {
       content = NOWON_BALCONY_ELASTIC_CONTENT;
-      metaTitle = '노원구 베란다탄성코트 시공 | 올케어탄성';
+      metaTitle = '노원구 베란다탄성코트 시공 | AS보장 | 올케어탄성';
       metaDescription = '노원구 베란다탄성코트 시공, 창호 주변 밑작업이 궁금하신가요? 들뜬 도막과 균열, 시설물 보양 상태를 확인하고 바탕면 정리부터 도포·마감까지 작업 순서를 안내합니다.';
       h1 = '노원구 베란다탄성코트 시공 안내';
       heroCopy = '노원구 베란다 공간의 창호 주변 도막 들뜸, 균열, 얼룩 흔적을 확인하고 필요한 시공 준비 사항을 정직하게 안내합니다.';
       contentStatus = 'approved'; // STEP 4-G-3C 운영자 최종 공개 승인
     } else if (isDobongElastic) {
       content = DOBONG_ELASTIC_CONTENT;
-      metaTitle = '도봉구 탄성코트 시공 | 올케어탄성';
+      metaTitle = '도봉구 탄성코트 시공 | AS보장 | 올케어탄성';
       metaDescription = '도봉구 탄성코트 시공 전, 어떤 부분을 확인해야 할까요? 베란다·세탁실의 기존 도막과 창호·배관 주변 상태를 살펴보고 시설물 보양부터 바탕면 정리, 시공 과정을 안내합니다.';
       h1 = '도봉구 탄성코트 시공 안내';
       heroCopy = '도봉구 주거 공간 베란다와 세탁실의 도막 들뜸, 균열, 습기 흔적을 확인하고 필요한 작업 범위와 준비 사항을 정직하게 안내합니다.';

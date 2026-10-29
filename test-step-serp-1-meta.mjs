@@ -8,7 +8,7 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     {
       file: 'dist/seo/elastic-coating/seoul-nowon-gu.html',
       name: '노원구 탄성코트',
-      expectedTitle: '노원구 탄성코트 시공 | 올케어탄성',
+      expectedTitle: '노원구 탄성코트 시공 | AS보장 | 올케어탄성',
       expectedDesc: '노원구 탄성코트 시공, 벽면 상태와 밑작업 과정이 궁금하신가요? 베란다·세탁실의 도막 들뜸과 균열을 살펴보고 보양, 바탕면 정리, 도포 및 마감 과정을 안내합니다.',
       expectedH1: '노원구 탄성코트 시공 안내',
       expectedCanonical: 'https://www.seoulallcaretan.com/seo/elastic-coating/seoul-nowon-gu.html',
@@ -20,7 +20,7 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     {
       file: 'dist/seo/elastic-coating/seoul-dobong-gu.html',
       name: '도봉구 탄성코트',
-      expectedTitle: '도봉구 탄성코트 시공 | 올케어탄성',
+      expectedTitle: '도봉구 탄성코트 시공 | AS보장 | 올케어탄성',
       expectedDesc: '도봉구 탄성코트 시공 전, 어떤 부분을 확인해야 할까요? 베란다·세탁실의 기존 도막과 창호·배관 주변 상태를 살펴보고 시설물 보양부터 바탕면 정리, 시공 과정을 안내합니다.',
       expectedH1: '도봉구 탄성코트 시공 안내',
       expectedCanonical: 'https://www.seoulallcaretan.com/seo/elastic-coating/seoul-dobong-gu.html',
@@ -32,7 +32,7 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     {
       file: 'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
       name: '노원구 베란다탄성코트',
-      expectedTitle: '노원구 베란다탄성코트 시공 | 올케어탄성',
+      expectedTitle: '노원구 베란다탄성코트 시공 | AS보장 | 올케어탄성',
       expectedDesc: '노원구 베란다탄성코트 시공, 창호 주변 밑작업이 궁금하신가요? 들뜬 도막과 균열, 시설물 보양 상태를 확인하고 바탕면 정리부터 도포·마감까지 작업 순서를 안내합니다.',
       expectedH1: '노원구 베란다탄성코트 시공 안내',
       expectedCanonical: 'https://www.seoulallcaretan.com/seo/balcony-elastic-coating/seoul-nowon-gu.html',

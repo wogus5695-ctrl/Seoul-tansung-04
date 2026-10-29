@@ -27,10 +27,10 @@ test('STEP 4-H-2: Regional Layout Unification Pilot Suite', async (t) => {
     assert.strictEqual(h1Matches?.length, 1, 'Nowon pilot must have exactly 1 H1 tag');
     assert.match(h1Matches[0], /노원구 탄성코트 시공 안내/, 'H1 content must match exact page.h1');
 
-    // 2. Title & Meta Description (SERP-1: 네이버 검색 개선 반영)
-    assert.match(nowonHtml, /<title>노원구 탄성코트 시공 \| 올케어탄성<\/title>/, 'Title must match SERP-1 spec');
+    // 2. Title & Meta Description (STEP AS-1: AS보장 검색 제목 반영)
+    assert.match(nowonHtml, /<title>노원구 탄성코트 시공 \| AS보장 \| 올케어탄성<\/title>/, 'Title must match AS-1 spec');
     assert.match(nowonHtml, /<meta name="description" content="[^"]*노원구 탄성코트 시공, 벽면 상태와 밑작업 과정이 궁금하신가요\?/, 'Meta description must match SERP-1 spec');
-    assert.match(nowonHtml, /<meta property="og:title" content="노원구 탄성코트 시공 \| 올케어탄성"/, 'OG Title must match SERP-1 spec');
+    assert.match(nowonHtml, /<meta property="og:title" content="노원구 탄성코트 시공 \| AS보장 \| 올케어탄성"/, 'OG Title must match AS-1 spec');
     assert.match(nowonHtml, /<meta property="og:description" content="[^"]*노원구 탄성코트 시공, 벽면 상태와 밑작업 과정이 궁금하신가요\?/, 'OG Description must match SERP-1 spec');
     assert.match(nowonHtml, /<meta property="og:image" content="https:\/\/www\.seoulallcaretan\.com\/images\/hero\/hero-bg-default\.jpg"/, 'OG Image must link to hero image');
     assert.match(nowonHtml, /<meta property="og:image:width" content="1024"/, 'OG Image width must be 1024');
