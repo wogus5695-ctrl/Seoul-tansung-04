@@ -167,7 +167,7 @@ try {
   // -------------------------------------------------------------
   // TEST 10: Production Build with Valid Domain & 3 Approved Pilots
   // -------------------------------------------------------------
-  console.log('[TEST 10] Verifying Production Build with Valid Domain & 5 Approved Pages...');
+  console.log('[TEST 10] Verifying Production Build with Valid Domain & 7 Approved Pages...');
   const VALID_DOMAIN = 'https://allcare-seoul.co.kr';
   fs.writeFileSync(PAGES_PATH, originalPagesSource, 'utf-8');
   runBuild({ VERCEL_ENV: 'production', SITE_URL: VALID_DOMAIN });
@@ -180,6 +180,8 @@ try {
     'dist/seo/elastic-coating/seoul-dobong-gu.html',
     'dist/seo/elastic-coating/seoul-jungnang-gu.html',
     'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
+    'dist/seo/elastic-coating/seoul-sanggye-dong.html',
+    'dist/seo/elastic-coating/seoul-myeonmok-dong.html',
   ];
   for (const f of expectedFiles) {
     assert.ok(fs.existsSync(f), `${f} must exist in Production`);
@@ -195,6 +197,8 @@ try {
   assert.match(sitemap0, new RegExp(`${VALID_DOMAIN}/seo/elastic-coating/seoul-dobong-gu.html`), 'Pilot C .html in sitemap');
   assert.match(sitemap0, new RegExp(`${VALID_DOMAIN}/seo/elastic-coating/seoul-jungnang-gu.html`), 'Jungnang elastic .html in sitemap');
   assert.match(sitemap0, new RegExp(`${VALID_DOMAIN}/seo/balcony-elastic-coating/seoul-jungnang-gu.html`), 'Jungnang balcony .html in sitemap');
+  assert.match(sitemap0, new RegExp(`${VALID_DOMAIN}/seo/elastic-coating/seoul-sanggye-dong.html`), 'Sanggye .html in sitemap');
+  assert.match(sitemap0, new RegExp(`${VALID_DOMAIN}/seo/elastic-coating/seoul-myeonmok-dong.html`), 'Myeonmok .html in sitemap');
   assert.equal(sitemap0.includes('.html.html'), false, 'CRITICAL: No .html.html double extension in sitemap');
   assert.equal(sitemap0.includes('gangnam'), false, 'Unpublished page must NOT be in sitemap');
 
@@ -230,11 +234,13 @@ try {
 } finally {
   // Always restore original file
   fs.writeFileSync(PAGES_PATH, originalPagesSource, 'utf-8');
-  console.log('\n[TEARDOWN] src/data/pages.ts restored to release state (5 pages approved).');
+  console.log('\n[TEARDOWN] src/data/pages.ts restored to release state (7 pages approved).');
   runBuild({ SITE_URL: 'https://www.seoulallcaretan.com' });
-  console.log('[TEARDOWN] Clean build completed. Verifying 5 pages generated...');
+  console.log('[TEARDOWN] Clean build completed. Verifying 7 pages generated...');
   assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-nowon-gu.html'), 'Nowon elastic exists');
   assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-jungnang-gu.html'), 'Jungnang elastic exists');
+  assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-sanggye-dong.html'), 'Sanggye elastic exists');
+  assert.ok(fs.existsSync('dist/seo/elastic-coating/seoul-myeonmok-dong.html'), 'Myeonmok elastic exists');
   assert.equal(fs.existsSync('dist/seo/elastic-coating/seoul-gangbuk-gu.html'), false, '19 Gu pages absent');
-  console.log('[TEARDOWN] Verified 5 pages active, 19 Gu unpublished isolated.');
+  console.log('[TEARDOWN] Verified 7 pages active, 39 unpublished isolated.');
 }

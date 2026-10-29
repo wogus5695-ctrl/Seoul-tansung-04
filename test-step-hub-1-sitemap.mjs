@@ -50,11 +50,13 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.ok(groupNames.includes('탄성코트'), '탄성코트 group exists');
     assert.ok(groupNames.includes('베란다탄성코트'), '베란다탄성코트 group exists');
 
-    // Published SEO Links (3 Elastic + 2 Balcony Elastic = 5)
+    // Published SEO Links (3 Elastic Gu + 2 Elastic Dong + 2 Balcony Elastic Gu = 7)
     const expectedUrls = [
       '/seo/elastic-coating/seoul-nowon-gu.html',
       '/seo/elastic-coating/seoul-dobong-gu.html',
       '/seo/elastic-coating/seoul-jungnang-gu.html',
+      '/seo/elastic-coating/seoul-sanggye-dong.html',
+      '/seo/elastic-coating/seoul-myeonmok-dong.html',
       '/seo/balcony-elastic-coating/seoul-nowon-gu.html',
       '/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
     ];
@@ -64,7 +66,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     }
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.strictEqual(regionalLinks.length, 5, 'Must contain EXACTLY 5 published regional links');
+    assert.strictEqual(regionalLinks.length, 7, 'Must contain EXACTLY 7 published regional links');
   });
 
   test('4. Complete isolation of 19 unpublished regional SEO combinations', () => {
@@ -108,7 +110,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 12, 'Sitemap must contain exactly 12 URLs (1 home + 5 guides + 5 regional SEO + 1 hub)');
+    assert.strictEqual(locMatches.length, 14, 'Sitemap must contain exactly 14 URLs (1 home + 5 guides + 7 regional SEO + 1 hub)');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');

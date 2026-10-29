@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSiteUrl, getCanonicalUrl, buildWebPageJsonLd, buildBreadcrumbJsonLd } from '../utils/seo.ts';
 import { SERVICES } from '../data/services.ts';
-import { getPublishedSeoPages, getRegionById } from '../data/pages.ts';
+import { getPublishedSeoPages, getRegionById, getDongById } from '../data/pages.ts';
 
 const siteUrl = getSiteUrl(Astro.site);
 const canonicalUrl = getCanonicalUrl('/sitemap-seoul.html', siteUrl);
@@ -71,7 +71,7 @@ const serviceGroups = SERVICES.map((service) => {
 
           <ul class="divide-y divide-[#E7D9C1]/40 border border-[#E7D9C1] rounded-xl bg-white overflow-hidden shadow-xs">
             {pages.map((page) => {
-              const region = getRegionById(page.regionId);
+              const region = page.regionLevel === 'dong' ? getDongById(page.regionId) : getRegionById(page.regionId);
               const linkText = `${region?.name ?? ''} ${service.name}`;
               return (
                 <li>

@@ -122,26 +122,30 @@ assert.equal(combinedGu.length, 24, 'Combined Gu count must be 24');
 assert.equal(combinedDong.length, 22, 'Combined Dong count must be 22');
 console.log('   PASS: 46 Total combined keywords validated.');
 
-// [Scenario 7] All 22 Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
-console.log('7. Verifying all 22 Dong pages in SEO_PAGES are draft & unpublished...');
+// [Scenario 7] All 20 unapproved Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
+console.log('7. Verifying 20 draft Dong pages and 2 approved Dong pages in SEO_PAGES...');
 const dongPages = SEO_PAGES.filter((p) => p.regionLevel === 'dong');
 assert.equal(dongPages.length, 22, 'SEO_PAGES must have 22 dong pages');
 for (const page of dongPages) {
-  assert.equal(page.isPublished, false, `Dong page ${page.id} must have isPublished: false`);
-  assert.equal(page.contentStatus, 'draft', `Dong page ${page.id} must have contentStatus: draft`);
-  assert.equal(page.content, undefined, `Dong page ${page.id} must have undefined content`);
-  assert.equal(isPagePublished(page), false, `isPagePublished must return false for ${page.id}`);
+  if (page.id === 'elastic-coating_nowon-sanggye' || page.id === 'elastic-coating_jungnang-myeonmok') {
+    assert.equal(page.isPublished, true, `Pilot Dong page ${page.id} must be published`);
+    assert.equal(page.contentStatus, 'approved', `Pilot Dong page ${page.id} must be approved`);
+    assert.ok(page.content, `Pilot Dong page ${page.id} must have defined content`);
+    assert.equal(isPagePublished(page), true, `isPagePublished must return true for ${page.id}`);
+  } else {
+    assert.equal(page.isPublished, false, `Dong page ${page.id} must have isPublished: false`);
+    assert.equal(page.contentStatus, 'draft', `Dong page ${page.id} must have contentStatus: draft`);
+    assert.equal(page.content, undefined, `Dong page ${page.id} must have undefined content`);
+    assert.equal(isPagePublished(page), false, `isPagePublished must return false for ${page.id}`);
+  }
   assert.ok(page.metaTitle.includes('| AS보장 | 올케어탄성'), `Dong page metaTitle must include AS보장`);
 }
-console.log('   PASS: All 22 Dong pages strictly isolated as draft.');
+console.log('   PASS: 20 draft Dong pages isolated, 2 pilot Dong pages approved.');
 
-// [Scenario 8] Zero HTML generated for any dong page in dist/seo/
-console.log('8. Verifying zero HTML generated for dong pages in getPublishedSeoPages() and dist...');
+// [Scenario 8] Zero HTML generated for unapproved dong pages in dist/seo/
+console.log('8. Verifying published SEO pages and unapproved dong isolation...');
 const publishedSeoPages = getPublishedSeoPages();
-assert.equal(publishedSeoPages.length, 5, 'Exactly 5 Gu pages must be published (3 pilots + 2 Jungnang)');
-for (const page of publishedSeoPages) {
-  assert.equal(page.regionLevel, 'gu', 'Published page must be a Gu page');
-}
+assert.equal(publishedSeoPages.length, 7, 'Exactly 7 pages must be published (5 Gu + 2 Dong)');
 
 const distSeoDir = path.resolve('dist', 'seo');
 if (fs.existsSync(distSeoDir)) {
@@ -155,38 +159,41 @@ if (fs.existsSync(distSeoDir)) {
     }
   }
   collectHtml(distSeoDir);
-  for (const dong of DONGS) {
+  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  for (const dong of unapprovedDongs) {
     const leaked = allHtmls.filter((f) => f === `${dong.slug}.html`);
     assert.equal(leaked.length, 0, `Dong HTML ${dong.slug}.html must not exist in dist/seo`);
   }
 }
-console.log('   PASS: Zero Dong HTML leakage validated.');
+console.log('   PASS: Zero unapproved Dong HTML leakage validated.');
 
-// [Scenario 9] Zero dong links in HTML hub
-console.log('9. Verifying zero dong links in HTML hub (dist/sitemap-seoul.html)...');
+// [Scenario 9] Zero unapproved dong links in HTML hub
+console.log('9. Verifying zero unapproved dong links in HTML hub (dist/sitemap-seoul.html)...');
 const hubFile = path.resolve('dist', 'sitemap-seoul.html');
 if (fs.existsSync(hubFile)) {
   const hubHtml = fs.readFileSync(hubFile, 'utf8');
-  for (const dong of DONGS) {
-    assert.ok(!hubHtml.includes(dong.slug), `Hub must not contain dong slug: ${dong.slug}`);
-    assert.ok(!hubHtml.includes(dong.name), `Hub must not contain dong name: ${dong.name}`);
+  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  for (const dong of unapprovedDongs) {
+    assert.ok(!hubHtml.includes(dong.slug), `Hub must not contain unapproved dong slug: ${dong.slug}`);
+    assert.ok(!hubHtml.includes(dong.name), `Hub must not contain unapproved dong name: ${dong.name}`);
   }
-  // Exactly 5 links to SEO pages (3 pilots + 2 Jungnang)
+  // Exactly 7 links to SEO pages (5 Gu + 2 Dong)
   const seoLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-  assert.equal(seoLinks.length, 5, 'Hub must contain exactly 5 SEO links');
+  assert.equal(seoLinks.length, 7, 'Hub must contain exactly 7 SEO links');
 }
 console.log('   PASS: Zero dong links in HTML hub validated.');
 
-// [Scenario 10] Zero dong URLs in XML sitemap
-console.log('10. Verifying zero dong URLs in XML sitemap (dist/sitemap-0.xml)...');
+// [Scenario 10] Zero unapproved dong URLs in XML sitemap
+console.log('10. Verifying zero unapproved dong URLs in XML sitemap (dist/sitemap-0.xml)...');
 const sitemapFile = path.resolve('dist', 'sitemap-0.xml');
 if (fs.existsSync(sitemapFile)) {
   const sitemapXml = fs.readFileSync(sitemapFile, 'utf8');
-  for (const dong of DONGS) {
-    assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain dong slug: ${dong.slug}`);
+  const unapprovedDongs = DONGS.filter((d) => d.id !== 'sanggye' && d.id !== 'myeonmok');
+  for (const dong of unapprovedDongs) {
+    assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain unapproved dong slug: ${dong.slug}`);
   }
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 12, 'Sitemap must contain exactly 12 loc entries');
+  assert.equal(locCount, 14, 'Sitemap must contain exactly 14 loc entries');
 }
 console.log('   PASS: Zero dong URLs in XML sitemap validated.');
 
