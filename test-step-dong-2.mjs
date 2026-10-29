@@ -31,21 +31,21 @@ describe('STEP DONG-2: Dong SEO Pilot Production Release Suite', () => {
     assert.equal(isPagePublished(myeonmokPage), true, 'Myeonmok must pass isPagePublished');
   });
 
-  test('2. Total published count is exactly 7 (5 Gu + 2 Dong) and unapproved count is 39 (19 Gu + 20 Dong)', () => {
+  test('2. Total published count is exactly 9 (5 Gu + 4 Dong) and unapproved count is 37 (19 Gu + 18 Dong)', () => {
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 7, 'Exactly 7 published SEO pages');
+    assert.equal(published.length, 9, 'Exactly 9 published SEO pages');
 
     const publishedGu = published.filter((p) => p.regionLevel === 'gu');
     const publishedDong = published.filter((p) => p.regionLevel === 'dong');
     assert.equal(publishedGu.length, 5, '5 Gu pages published');
-    assert.equal(publishedDong.length, 2, '2 Dong pages published');
+    assert.equal(publishedDong.length, 4, '4 Dong pages published');
 
     const unpublished = SEO_PAGES.filter((p) => !isPagePublished(p));
-    assert.equal(unpublished.length, 39, 'Exactly 39 unpublished SEO pages (19 Gu + 20 Dong)');
+    assert.equal(unpublished.length, 37, 'Exactly 37 unpublished SEO pages (19 Gu + 18 Dong)');
     const unpublishedGu = unpublished.filter((p) => p.regionLevel === 'gu');
     const unpublishedDong = unpublished.filter((p) => p.regionLevel === 'dong');
     assert.equal(unpublishedGu.length, 19, '19 Gu pages unpublished');
-    assert.equal(unpublishedDong.length, 20, '20 Dong pages unpublished');
+    assert.equal(unpublishedDong.length, 18, '18 Dong pages unpublished');
   });
 
   test('3. P0 Completeness validation passes for both published Dong pages', () => {
@@ -132,13 +132,13 @@ describe('STEP DONG-2: Dong SEO Pilot Production Release Suite', () => {
     }
   });
 
-  test('9. HTML Hub (dist/sitemap-seoul.html) links count exactly 7', () => {
+  test('9. HTML Hub (dist/sitemap-seoul.html) links count exactly 9', () => {
     const hubPath = path.join(DIST_DIR, 'sitemap-seoul.html');
     assert.ok(fs.existsSync(hubPath));
     const hubHtml = fs.readFileSync(hubPath, 'utf8');
 
     const regionalLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.equal(regionalLinks.length, 7, 'Hub must contain exactly 7 SEO links');
+    assert.equal(regionalLinks.length, 9, 'Hub must contain exactly 9 SEO links');
 
     assert.ok(hubHtml.includes('seoul-sanggye-dong.html'));
     assert.ok(hubHtml.includes('seoul-myeonmok-dong.html'));
@@ -146,13 +146,13 @@ describe('STEP DONG-2: Dong SEO Pilot Production Release Suite', () => {
     assert.ok(hubHtml.includes('면목동 탄성코트'));
   });
 
-  test('10. XML Sitemap contains exactly 14 URLs', () => {
+  test('10. XML Sitemap contains exactly 16 URLs', () => {
     const sitemapPath = path.join(DIST_DIR, 'sitemap-0.xml');
     assert.ok(fs.existsSync(sitemapPath));
     const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
 
     const locs = sitemapXml.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 14, 'Sitemap must contain exactly 14 URLs');
+    assert.equal(locs.length, 16, 'Sitemap must contain exactly 16 URLs');
 
     assert.ok(sitemapXml.includes('/seo/elastic-coating/seoul-sanggye-dong.html'));
     assert.ok(sitemapXml.includes('/seo/elastic-coating/seoul-myeonmok-dong.html'));

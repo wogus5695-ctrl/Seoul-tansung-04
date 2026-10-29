@@ -122,15 +122,21 @@ assert.equal(combinedGu.length, 24, 'Combined Gu count must be 24');
 assert.equal(combinedDong.length, 22, 'Combined Dong count must be 22');
 console.log('   PASS: 46 Total combined keywords validated.');
 
-// [Scenario 7] All 20 unapproved Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
-console.log('7. Verifying 20 draft Dong pages and 2 approved Dong pages in SEO_PAGES...');
+// [Scenario 7] All 18 unapproved Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
+console.log('7. Verifying 18 draft Dong pages and 4 approved Dong pages in SEO_PAGES...');
 const dongPages = SEO_PAGES.filter((p) => p.regionLevel === 'dong');
 assert.equal(dongPages.length, 22, 'SEO_PAGES must have 22 dong pages');
+const approvedDongIds = [
+  'elastic-coating_nowon-sanggye',
+  'elastic-coating_jungnang-myeonmok',
+  'balcony-elastic-coating_nowon-sanggye',
+  'balcony-elastic-coating_jungnang-myeonmok',
+];
 for (const page of dongPages) {
-  if (page.id === 'elastic-coating_nowon-sanggye' || page.id === 'elastic-coating_jungnang-myeonmok') {
-    assert.equal(page.isPublished, true, `Pilot Dong page ${page.id} must be published`);
-    assert.equal(page.contentStatus, 'approved', `Pilot Dong page ${page.id} must be approved`);
-    assert.ok(page.content, `Pilot Dong page ${page.id} must have defined content`);
+  if (approvedDongIds.includes(page.id)) {
+    assert.equal(page.isPublished, true, `Approved Dong page ${page.id} must be published`);
+    assert.equal(page.contentStatus, 'approved', `Approved Dong page ${page.id} must be approved`);
+    assert.ok(page.content, `Approved Dong page ${page.id} must have defined content`);
     assert.equal(isPagePublished(page), true, `isPagePublished must return true for ${page.id}`);
   } else {
     assert.equal(page.isPublished, false, `Dong page ${page.id} must have isPublished: false`);
@@ -140,12 +146,12 @@ for (const page of dongPages) {
   }
   assert.ok(page.metaTitle.includes('| AS보장 | 올케어탄성'), `Dong page metaTitle must include AS보장`);
 }
-console.log('   PASS: 20 draft Dong pages isolated, 2 pilot Dong pages approved.');
+console.log('   PASS: 18 draft Dong pages isolated, 4 Dong pages approved.');
 
 // [Scenario 8] Zero HTML generated for unapproved dong pages in dist/seo/
 console.log('8. Verifying published SEO pages and unapproved dong isolation...');
 const publishedSeoPages = getPublishedSeoPages();
-assert.equal(publishedSeoPages.length, 7, 'Exactly 7 pages must be published (5 Gu + 2 Dong)');
+assert.equal(publishedSeoPages.length, 9, 'Exactly 9 pages must be published (5 Gu + 4 Dong)');
 
 const distSeoDir = path.resolve('dist', 'seo');
 if (fs.existsSync(distSeoDir)) {
@@ -177,9 +183,9 @@ if (fs.existsSync(hubFile)) {
     assert.ok(!hubHtml.includes(dong.slug), `Hub must not contain unapproved dong slug: ${dong.slug}`);
     assert.ok(!hubHtml.includes(dong.name), `Hub must not contain unapproved dong name: ${dong.name}`);
   }
-  // Exactly 7 links to SEO pages (5 Gu + 2 Dong)
+  // Exactly 9 links to SEO pages (5 Gu + 4 Dong)
   const seoLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-  assert.equal(seoLinks.length, 7, 'Hub must contain exactly 7 SEO links');
+  assert.equal(seoLinks.length, 9, 'Hub must contain exactly 9 SEO links');
 }
 console.log('   PASS: Zero dong links in HTML hub validated.');
 
@@ -193,7 +199,7 @@ if (fs.existsSync(sitemapFile)) {
     assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain unapproved dong slug: ${dong.slug}`);
   }
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 14, 'Sitemap must contain exactly 14 loc entries');
+  assert.equal(locCount, 16, 'Sitemap must contain exactly 16 loc entries');
 }
 console.log('   PASS: Zero dong URLs in XML sitemap validated.');
 

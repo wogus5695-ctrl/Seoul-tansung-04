@@ -11,11 +11,11 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
   const publishedPages = getPublishedSeoPages();
   const hubHtmlPath = path.join(DIST_DIR, 'sitemap-seoul.html');
 
-  test('1. Inventory check: Exactly 7 published pages, 39 unpublished, 46 total', () => {
+  test('1. Inventory check: Exactly 9 published pages, 37 unpublished, 46 total', () => {
     assert.strictEqual(SEO_PAGES.length, 46, 'Total SEO pages must be exactly 46 (24 Gu + 22 Dong)');
-    assert.strictEqual(publishedPages.length, 7, 'Published SEO pages must be exactly 7 (5 Gu + 2 Dong)');
+    assert.strictEqual(publishedPages.length, 9, 'Published SEO pages must be exactly 9 (5 Gu + 4 Dong)');
     const unpublished = SEO_PAGES.filter((p) => !publishedPages.includes(p));
-    assert.strictEqual(unpublished.length, 39, 'Unpublished SEO pages must be exactly 39 (19 Gu + 20 Dong)');
+    assert.strictEqual(unpublished.length, 37, 'Unpublished SEO pages must be exactly 37 (19 Gu + 18 Dong)');
   });
 
   test('2. All 7 published regional pages adopt the unified collapsible bottom layout', () => {
@@ -103,16 +103,18 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
 
     // Extract all regional SEO links from the hub
     const linkMatches = [...html.matchAll(/<a\s+href="(\/seo\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-    assert.strictEqual(linkMatches.length, 7, 'Must have exactly 7 published links on the Hub');
+    assert.strictEqual(linkMatches.length, 9, 'Must have exactly 9 published links on the Hub');
 
     const expectedKeywords = [
       { url: '/seo/elastic-coating/seoul-nowon-gu.html', keyword: '노원구 탄성코트' },
       { url: '/seo/elastic-coating/seoul-sanggye-dong.html', keyword: '상계동 탄성코트' },
       { url: '/seo/balcony-elastic-coating/seoul-nowon-gu.html', keyword: '노원구 베란다탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-sanggye-dong.html', keyword: '상계동 베란다탄성코트' },
       { url: '/seo/elastic-coating/seoul-dobong-gu.html', keyword: '도봉구 탄성코트' },
       { url: '/seo/elastic-coating/seoul-jungnang-gu.html', keyword: '중랑구 탄성코트' },
       { url: '/seo/elastic-coating/seoul-myeonmok-dong.html', keyword: '면목동 탄성코트' },
       { url: '/seo/balcony-elastic-coating/seoul-jungnang-gu.html', keyword: '중랑구 베란다탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-myeonmok-dong.html', keyword: '면목동 베란다탄성코트' },
     ];
 
     for (let i = 0; i < expectedKeywords.length; i++) {

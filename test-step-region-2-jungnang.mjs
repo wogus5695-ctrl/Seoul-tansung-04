@@ -103,7 +103,7 @@ console.log('   PASS: P0 Gate prevents publishing incomplete pages.');
 // [Test 8] HTML Generation in dist/seo/ for Jungnang
 console.log('8. Verifying HTML generated for Jungnang in dist/seo/ ...');
 const publishedPages = getPublishedSeoPages();
-assert.equal(publishedPages.length, 7, 'Exactly 7 pages must be published (5 Gu + 2 Dong)');
+assert.equal(publishedPages.length, 9, 'Exactly 9 pages must be published (5 Gu + 4 Dong)');
 
 const jungnangElasticHtml = path.resolve('dist', 'seo', 'elastic-coating', 'seoul-jungnang-gu.html');
 const jungnangBalconyHtml = path.resolve('dist', 'seo', 'balcony-elastic-coating', 'seoul-jungnang-gu.html');
@@ -118,7 +118,7 @@ if (fs.existsSync(hubPath)) {
   const hubHtml = fs.readFileSync(hubPath, 'utf8');
   assert.ok(hubHtml.includes('seoul-jungnang-gu.html'), 'Hub must contain link to Jungnang');
   const regionalLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-  assert.equal(regionalLinks.length, 7, 'Hub must contain EXACTLY 7 links');
+  assert.equal(regionalLinks.length, 9, 'Hub must contain EXACTLY 9 links');
 }
 console.log('   PASS: Jungnang links in HTML hub verified.');
 
@@ -129,7 +129,7 @@ if (fs.existsSync(sitemapPath)) {
   const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(sitemapXml.includes('seoul-jungnang-gu.html'), 'Sitemap must contain Jungnang URL');
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 14, 'Sitemap must contain exactly 14 loc entries');
+  assert.equal(locCount, 16, 'Sitemap must contain exactly 16 loc entries');
 }
 console.log('   PASS: Jungnang URLs in XML sitemap verified.');
 

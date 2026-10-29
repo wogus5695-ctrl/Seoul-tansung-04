@@ -40,7 +40,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(h1Text, '서울 탄성코트 시공지역 안내');
   });
 
-  test('3. Gu Groups count exactly 3 (H2) and Published Links count exactly 7', () => {
+  test('3. Gu Groups count exactly 3 (H2) and Published Links count exactly 9', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
     // Groups (H2: Gu-centric hierarchy in STEP STRUCTURE-1)
@@ -57,7 +57,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.ok(serviceNames.includes('탄성코트'), '탄성코트 sub-group exists');
     assert.ok(serviceNames.includes('베란다탄성코트'), '베란다탄성코트 sub-group exists');
 
-    // Published SEO Links (3 Elastic Gu + 2 Elastic Dong + 2 Balcony Elastic Gu = 7)
+    // Published SEO Links (3 Elastic Gu + 2 Balcony Elastic Gu + 2 Elastic Dong + 2 Balcony Elastic Dong = 9)
     const expectedUrls = [
       '/seo/elastic-coating/seoul-nowon-gu.html',
       '/seo/elastic-coating/seoul-dobong-gu.html',
@@ -66,6 +66,8 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
       '/seo/elastic-coating/seoul-myeonmok-dong.html',
       '/seo/balcony-elastic-coating/seoul-nowon-gu.html',
       '/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
+      '/seo/balcony-elastic-coating/seoul-sanggye-dong.html',
+      '/seo/balcony-elastic-coating/seoul-myeonmok-dong.html',
     ];
 
     for (const url of expectedUrls) {
@@ -73,7 +75,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     }
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.strictEqual(regionalLinks.length, 7, 'Must contain EXACTLY 7 published regional links');
+    assert.strictEqual(regionalLinks.length, 9, 'Must contain EXACTLY 9 published regional links');
 
     // STEP STRUCTURE-1 Clean Link Design: no "상세 안내 보기", no URL path text
     assert.equal(html.includes('상세 안내 보기'), false, 'Clean Link Design must NOT have "상세 안내 보기" text');
@@ -120,7 +122,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 14, 'Sitemap must contain exactly 14 URLs (1 home + 5 guides + 7 regional SEO + 1 hub)');
+    assert.strictEqual(locMatches.length, 16, 'Sitemap must contain exactly 16 URLs (1 home + 5 guides + 9 regional SEO + 1 hub)');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');

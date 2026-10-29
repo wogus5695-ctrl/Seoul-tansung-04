@@ -143,7 +143,7 @@ test('STEP 4-H-1: Component Extensions & Regression Test Suite', async (t) => {
       };
 
       const seoHtmlFiles = findHtml(seoDir);
-      assert.strictEqual(seoHtmlFiles.length, 7, 'Exactly 7 regional SEO pages should be generated under dist/seo');
+      assert.strictEqual(seoHtmlFiles.length, 9, 'Exactly 9 regional SEO pages should be generated under dist/seo');
     }
   });
 });

@@ -179,6 +179,6 @@ test('STEP 4-H-4A: Regional Unified Template Rollout Test Suite', async (t) => {
     };
 
     const files = findHtml(seoDir);
-    assert.strictEqual(files.length, 7, 'Exactly 7 approved regional pages allowed in dist/seo');
+    assert.strictEqual(files.length, 9, 'Exactly 9 approved regional pages allowed in dist/seo');
   });
 });

@@ -24,7 +24,7 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
     assert.equal(isPagePublished(myeonmokPage), true);
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 7, 'Exactly 7 pages published (5 Gu + 2 Dong)');
+    assert.equal(published.length, 9, 'Exactly 9 pages published (5 Gu + 4 Dong)');
   });
 
   test('2. Astro component template renders unified collapsible section after ConsultationBanner', () => {
