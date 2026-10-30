@@ -14,7 +14,7 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
   const sanggyePage = SEO_PAGES.find((p) => p.id === 'elastic-coating_nowon-sanggye');
   const myeonmokPage = SEO_PAGES.find((p) => p.id === 'elastic-coating_jungnang-myeonmok');
 
-  test('1. Sanggye and Myeonmok are approved and published (7 published total)', () => {
+  test('1. Sanggye and Myeonmok are approved and published (24 published total)', () => {
     assert.equal(sanggyePage.isPublished, true);
     assert.equal(sanggyePage.contentStatus, 'approved');
     assert.equal(isPagePublished(sanggyePage), true);
@@ -24,7 +24,7 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
     assert.equal(isPagePublished(myeonmokPage), true);
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 17, 'Exactly 17 pages published (5 Gu + 12 Dong)');
+    assert.equal(published.length, 24, 'Exactly 24 pages published (12 Gu + 12 Dong)');
   });
 
   test('2. Astro component template renders unified collapsible section after ConsultationBanner', () => {
@@ -58,7 +58,7 @@ describe('STEP DONG-1A: Dong SEO Relocation & Accordion Suite', () => {
 
   test('4. All Published Gu pages adopt unified layout with bottom accordion (STEP STRUCTURE-1)', () => {
     const publishedGu = getPublishedSeoPages().filter((p) => p.regionLevel === 'gu');
-    assert.equal(publishedGu.length, 5, 'Exactly 5 Gu pages published');
+    assert.equal(publishedGu.length, 12, 'Exactly 12 Gu pages published');
     for (const p of publishedGu) {
       assert.equal(p.regionLevel, 'gu');
       const htmlPath = path.join(DIST_DIR, 'seo', p.serviceSlug, `${p.districtSlug}.html`);

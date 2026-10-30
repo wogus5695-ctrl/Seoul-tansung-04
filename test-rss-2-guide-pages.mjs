@@ -238,13 +238,13 @@ test('STEP RSS-2: Guide Pages & RSS Foundation Test Suite', async (t) => {
     const dobongUrl = getRelatedSeoPageUrl('elastic-coating', 'dobong');
     assert.equal(dobongUrl, '/seo/elastic-coating/seoul-dobong-gu.html');
 
-    // 3. 강북구 탄성코트 (비공개 21개 중 1개) -> null 반환 (내부 링크 차단)
-    const gangbukUrl = getRelatedSeoPageUrl('elastic-coating', 'gangbuk');
-    assert.equal(gangbukUrl, null, 'Unpublished district must NOT generate internal link');
+    // 3. 은평구 탄성코트 (비공개 12개 구 중 1개) -> null 반환 (내부 링크 차단)
+    const eunpyeongUrl = getRelatedSeoPageUrl('elastic-coating', 'eunpyeong');
+    assert.equal(eunpyeongUrl, null, 'Unpublished district must NOT generate internal link');
 
-    // 4. 성북구 탄성코트 (비공개 21개 중 1개) -> null 반환
-    const seongbukUrl = getRelatedSeoPageUrl('elastic-coating', 'seongbuk');
-    assert.equal(seongbukUrl, null, 'Unpublished district must NOT generate internal link');
+    // 4. 서대문구 탄성코트 (비공개 12개 구 중 1개) -> null 반환
+    const seodaemunUrl = getRelatedSeoPageUrl('elastic-coating', 'seodaemun');
+    assert.equal(seodaemunUrl, null, 'Unpublished district must NOT generate internal link');
   });
 
   await t.test('14. HTML 삽입 콘텐츠 및 특수문자 안전 처리 검증', () => {

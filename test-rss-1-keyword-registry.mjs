@@ -439,9 +439,9 @@ test('STEP RSS-1: Dual Approval Gate & Internal Link Isolation', async (t) => {
     const dobongUrl = getRelatedSeoPageUrl('elastic-coating', 'dobong');
     assert.equal(dobongUrl, '/seo/elastic-coating/seoul-dobong-gu.html');
 
-    // 3. Unpublished district: gangbuk elastic coating -> returns null (link suppressed!)
-    const gangbukUrl = getRelatedSeoPageUrl('elastic-coating', 'gangbuk');
-    assert.equal(gangbukUrl, null);
+    // 3. Unpublished district: eunpyeong elastic coating -> returns null (link suppressed!)
+    const eunpyeongUrl = getRelatedSeoPageUrl('elastic-coating', 'eunpyeong');
+    assert.equal(eunpyeongUrl, null);
 
     // 4. Non-existent region/service -> returns null
     const invalidUrl = getRelatedSeoPageUrl('non-existent', 'unknown');

@@ -86,23 +86,23 @@ test('STEP RSS-4A: RSS 404 & Naver Feed Validation Repair Suite', async (t) => {
     }
   });
 
-  await t.test('10. Sitemap 공개 URL 총 12개 유지 및 비공개 URL 배제 (11 기존 + 1 신규 가이드)', () => {
+  await t.test('10. Sitemap 공개 URL 총 31개 유지 및 비공개 URL 배제', () => {
     assert.ok(fs.existsSync('dist/sitemap-0.xml'), 'sitemap-0.xml must exist');
     const sitemap = fs.readFileSync('dist/sitemap-0.xml', 'utf-8');
     const locs = sitemap.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 24, 'Exactly 24 URLs in sitemap');
+    assert.equal(locs.length, 31, 'Exactly 31 URLs in sitemap');
     assert.ok(locs.some((l) => l.includes('/sitemap-seoul.html')));
     assert.ok(locs.some((l) => l.includes('/guide.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-wall-peeling-check.html')));
     assert.ok(locs.some((l) => l.includes('/guide/dobong-laundry-room-pipe-wall-check.html')));
     assert.ok(locs.some((l) => l.includes('/guide/nowon-balcony-storage-masking-checklist.html')));
     assert.ok(locs.some((l) => l.includes('/guide/jungnang-wall-drying-check.html')));
-    assert.equal(sitemap.includes('gangbuk'), false, 'Unpublished page must NOT be in sitemap');
+    assert.equal(sitemap.includes('eunpyeong'), false, 'Unpublished page must NOT be in sitemap');
   });
 
-  await t.test('11. 비공개 지역 21개 완벽 격리 (dist에 파일 미생성)', () => {
-    const unpublishedSample = 'dist/seo/elastic-coating/seoul-gangbuk-gu.html';
-    assert.equal(fs.existsSync(unpublishedSample), false, 'Gangbuk must not exist in dist');
+  await t.test('11. 비공개 지역 76개 완벽 격리 (dist에 파일 미생성)', () => {
+    const unpublishedSample = 'dist/seo/elastic-coating/seoul-eunpyeong-gu.html';
+    assert.equal(fs.existsSync(unpublishedSample), false, 'Eunpyeong must not exist in dist');
   });
 
   await t.test('12. 기존 게시글 내용 및 발행일자(publishedAt) 무결성 보존', () => {

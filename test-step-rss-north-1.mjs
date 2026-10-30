@@ -72,18 +72,18 @@ describe('STEP RSS-NORTH-1: Jungnang Gu Guide Draft & Isolation Suite', () => {
 
   test('5. Existing SEO pages and sitemap invariant checks', () => {
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 17, 'Published SEO pages count is 17');
+    assert.equal(published.length, 24, 'Published SEO pages count is 24');
 
     const dongPages = SEO_PAGES.filter((p) => p.regionLevel === 'dong');
-    assert.equal(dongPages.length, 22, 'Dong pages count remains 22');
+    assert.equal(dongPages.length, 76, 'Dong pages count remains 76');
     const unpublishedDong = dongPages.filter((p) => !p.isPublished);
-    assert.equal(unpublishedDong.length, 10, '10 Dong pages remain draft');
+    assert.equal(unpublishedDong.length, 64, '64 Dong pages remain draft');
     for (const dp of unpublishedDong) {
       assert.equal(dp.isPublished, false);
       assert.equal(dp.contentStatus, 'draft');
     }
 
     const allCombined = getAllCombinedDynamicKeywords();
-    assert.equal(allCombined.length, 46, 'Total keywords count remains 46');
+    assert.equal(allCombined.length, 100, 'Total keywords count remains 100');
   });
 });

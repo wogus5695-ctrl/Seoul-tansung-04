@@ -32,7 +32,7 @@ describe('STEP DONG-1: Sanggye & Myeonmok Dong SEO Pilot Content Suite', () => {
     assert.equal(myeonmokPage.parentRegionId, 'jungnang');
   });
 
-  test('2. Approved and Published status for Sanggye and Myeonmok (5 Gu + 2 Dong = 7)', () => {
+  test('2. Approved and Published status for Sanggye and Myeonmok (12 Gu + 12 Dong = 24)', () => {
     for (const [name, page] of [['Sanggye', sanggyePage], ['Myeonmok', myeonmokPage]]) {
       assert.equal(page.isPublished, true, `${name} isPublished must be true`);
       assert.equal(page.contentStatus, 'approved', `${name} contentStatus must be 'approved'`);
@@ -40,7 +40,7 @@ describe('STEP DONG-1: Sanggye & Myeonmok Dong SEO Pilot Content Suite', () => {
     }
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 17, 'Exactly 17 pages published (5 Gu + 12 Dong)');
+    assert.equal(published.length, 24, 'Exactly 24 pages published (12 Gu + 12 Dong)');
     const publishedDong = published.filter((p) => p.regionLevel === 'dong');
     assert.equal(publishedDong.length, 12, 'Exactly 12 Dong pages published');
   });

@@ -31,16 +31,16 @@ describe('STEP REGION-3: Jungnang Gu SEO Production Release Suite', () => {
     assert.equal(isPagePublished(jungnangBalcony), true, 'isPagePublished must be true for jungnangBalcony');
   });
 
-  test('2. Total published SEO pages count is exactly 17 and Dong published count is 12', () => {
+  test('2. Total published SEO pages count is exactly 24 and Dong published count is 12', () => {
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 17, 'Exactly 17 regional SEO pages must be published');
+    assert.equal(published.length, 24, 'Exactly 24 regional SEO pages must be published');
 
     const publishedGu = published.filter((p) => p.regionLevel === 'gu');
     const publishedDong = published.filter((p) => p.regionLevel === 'dong');
-    assert.equal(publishedGu.length, 5, 'All 5 published pages are Gu level');
-    assert.equal(publishedDong.length, 12, 'Twelve Dong pages published');
+    assert.equal(publishedGu.length, 12, '12 published pages are Gu level');
+    assert.equal(publishedDong.length, 12, '12 Dong pages published');
 
-    // Expected 17 published page IDs
+    // Expected 24 published page IDs
     const publishedIds = published.map((p) => p.id).sort();
     const expectedIds = [
       'balcony-elastic-coating_jungnang',
@@ -48,6 +48,13 @@ describe('STEP REGION-3: Jungnang Gu SEO Production Release Suite', () => {
       'elastic-coating_dobong',
       'elastic-coating_jungnang',
       'elastic-coating_nowon',
+      'elastic-coating_seongbuk',
+      'balcony-elastic-coating_seongbuk',
+      'elastic-coating_dongdaemun',
+      'balcony-elastic-coating_dongdaemun',
+      'elastic-coating_gangbuk',
+      'balcony-elastic-coating_gangbuk',
+      'balcony-elastic-coating_dobong',
       'elastic-coating_nowon-sanggye',
       'elastic-coating_jungnang-myeonmok',
       'balcony-elastic-coating_nowon-sanggye',
@@ -64,11 +71,11 @@ describe('STEP REGION-3: Jungnang Gu SEO Production Release Suite', () => {
     assert.deepEqual(publishedIds, expectedIds);
   });
 
-  test('3. Remaining 10 Dong pages remain strictly Draft and unpublished', () => {
+  test('3. Remaining 64 Dong pages remain strictly Draft and unpublished', () => {
     const dongPages = SEO_PAGES.filter((p) => p.regionLevel === 'dong');
-    assert.equal(dongPages.length, 22, 'Must have 22 Dong pages');
+    assert.equal(dongPages.length, 76, 'Must have 76 Dong pages');
     const unpublishedDong = dongPages.filter((p) => !p.isPublished);
-    assert.equal(unpublishedDong.length, 10, 'Must have 10 unpublished Dong pages');
+    assert.equal(unpublishedDong.length, 64, 'Must have 64 unpublished Dong pages');
     for (const dp of unpublishedDong) {
       assert.equal(dp.isPublished, false, `Dong page ${dp.id} isPublished must be false`);
       assert.equal(dp.contentStatus, 'draft', `Dong page ${dp.id} contentStatus must be 'draft'`);
@@ -93,9 +100,9 @@ describe('STEP REGION-3: Jungnang Gu SEO Production Release Suite', () => {
       assert.ok(fs.existsSync(path.resolve(f)), `${f} must exist in dist`);
     }
 
-    // Ensure all 19 unpublished Gu pages and 18 unapproved Dong pages are NOT generated
+    // Ensure all 12 unpublished Gu pages and 64 unapproved Dong pages are NOT generated
     const unpublishedGu = SEO_PAGES.filter((p) => p.regionLevel === 'gu' && !p.isPublished);
-    assert.equal(unpublishedGu.length, 19, 'Must have 19 unpublished Gu pages');
+    assert.equal(unpublishedGu.length, 12, 'Must have 12 unpublished Gu pages');
     for (const p of unpublishedGu) {
       const fullPath = path.resolve('dist', p.urlPath.replace(/^\//, ''));
       assert.equal(fs.existsSync(fullPath), false, `Unpublished Gu HTML ${fullPath} must NOT exist`);
@@ -110,21 +117,21 @@ describe('STEP REGION-3: Jungnang Gu SEO Production Release Suite', () => {
     }
   });
 
-  test('5. HTML Hub (dist/sitemap-seoul.html) links count exactly 17 and groups are correct', () => {
+  test('5. HTML Hub (dist/sitemap-seoul.html) links count exactly 24 and groups are correct', () => {
     const hubHtml = fs.readFileSync(path.resolve(DIST_DIR, 'sitemap-seoul.html'), 'utf8');
 
-    // 17 regional links
+    // 24 regional links
     const regionalLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.equal(regionalLinks.length, 17, 'Hub must contain exactly 17 regional links');
+    assert.equal(regionalLinks.length, 24, 'Hub must contain exactly 24 regional links');
 
     assert.ok(hubHtml.includes('/seo/elastic-coating/seoul-jungnang-gu.html'), 'Jungnang elastic link in hub');
     assert.ok(hubHtml.includes('/seo/balcony-elastic-coating/seoul-jungnang-gu.html'), 'Jungnang balcony link in hub');
   });
 
-  test('6. XML Sitemap (dist/sitemap-0.xml) contains exactly 24 loc entries', () => {
+  test('6. XML Sitemap (dist/sitemap-0.xml) contains exactly 31 loc entries', () => {
     const sitemapXml = fs.readFileSync(path.resolve(DIST_DIR, 'sitemap-0.xml'), 'utf8');
     const locs = sitemapXml.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.equal(locs.length, 24, 'Sitemap must contain exactly 24 URLs');
+    assert.equal(locs.length, 31, 'Sitemap must contain exactly 31 URLs');
 
     assert.ok(sitemapXml.includes('/seo/elastic-coating/seoul-jungnang-gu.html'), 'Jungnang elastic in sitemap');
     assert.ok(sitemapXml.includes('/seo/balcony-elastic-coating/seoul-jungnang-gu.html'), 'Jungnang balcony in sitemap');

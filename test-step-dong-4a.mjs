@@ -29,9 +29,9 @@ describe('STEP DONG-4A: North Dong SEO Batch Expansion Suite (8 Drafts)', () => 
     return page;
   });
 
-  test('1. Exactly 8 target draft pages exist in SEO_PAGES and total count is 46', () => {
+  test('1. Exactly 8 target draft pages exist in SEO_PAGES and total count is 100', () => {
     assert.equal(targetPages.length, 8, 'Exactly 8 target pages');
-    assert.equal(SEO_PAGES.length, 46, 'Total SEO_PAGES must be exactly 46');
+    assert.equal(SEO_PAGES.length, 100, 'Total SEO_PAGES must be exactly 100');
   });
 
   test('2. Approved and Published status: isPublished=true, contentStatus=approved, isPagePublished=true', () => {
@@ -42,9 +42,9 @@ describe('STEP DONG-4A: North Dong SEO Batch Expansion Suite (8 Drafts)', () => 
     }
 
     const published = getPublishedSeoPages();
-    assert.equal(published.length, 17, 'Exactly 17 pages published (5 Gu + 12 Dong)');
+    assert.equal(published.length, 24, 'Exactly 24 pages published (12 Gu + 12 Dong)');
     const unpublished = SEO_PAGES.filter((p) => !published.includes(p));
-    assert.equal(unpublished.length, 29, 'Exactly 29 pages unpublished (19 Gu + 10 Dong)');
+    assert.equal(unpublished.length, 76, 'Exactly 76 pages unpublished (12 Gu + 64 Dong)');
   });
 
   test('3. Metadata conformity: Title ends with AS보장, H1 match, Meta Description starts with keyword', () => {
@@ -144,12 +144,12 @@ describe('STEP DONG-4A: North Dong SEO Batch Expansion Suite (8 Drafts)', () => 
     }
   });
 
-  test('6. Dist HTML count, Sitemap and Hub integrity verified for 17 published pages', () => {
+  test('6. Dist HTML count, Sitemap and Hub integrity verified for 24 published pages', () => {
     const hubPath = path.join(DIST_DIR, 'sitemap-seoul.html');
     if (fs.existsSync(hubPath)) {
       const hubHtml = fs.readFileSync(hubPath, 'utf8');
       const seoLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-      assert.equal(seoLinks.length, 17, 'Hub must contain exactly 17 links');
+      assert.equal(seoLinks.length, 24, 'Hub must contain exactly 24 links');
 
       for (const page of targetPages) {
         assert.equal(hubHtml.includes(page.urlPath), true, `Hub must link to published page: ${page.urlPath}`);
@@ -160,7 +160,7 @@ describe('STEP DONG-4A: North Dong SEO Batch Expansion Suite (8 Drafts)', () => 
     if (fs.existsSync(sitemapPath)) {
       const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
       const locs = sitemapXml.match(/<loc>[^<]+<\/loc>/g) || [];
-      assert.equal(locs.length, 24, 'Sitemap must contain exactly 24 URLs');
+      assert.equal(locs.length, 31, 'Sitemap must contain exactly 31 URLs');
 
       for (const page of targetPages) {
         const slug = page.districtSlug;

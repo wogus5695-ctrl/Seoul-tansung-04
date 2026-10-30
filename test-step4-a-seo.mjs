@@ -171,11 +171,13 @@ describe('STEP 4-A: Build Output & HTML Static Analysis Tests', () => {
     assert.match(robots, /User-agent:\s*\*/i);
   });
 
-  test('6. Exactly 3 approved pilot pages exist and 21 unpublished pages are absent in dist/seo', () => {
+  test('6. Exactly 12 approved Gu pages exist and 12 unpublished Gu pages are absent in dist/seo', () => {
     assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-nowon-gu.html')));
     assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-dobong-gu.html')));
     assert.ok(fs.existsSync(path.join(distDir, 'seo', 'balcony-elastic-coating', 'seoul-nowon-gu.html')));
-    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-gangbuk-gu.html')), false);
-    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-seongbuk-gu.html')), false);
+    assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-gangbuk-gu.html')));
+    assert.ok(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-seongbuk-gu.html')));
+    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-eunpyeong-gu.html')), false);
+    assert.equal(fs.existsSync(path.join(distDir, 'seo', 'elastic-coating', 'seoul-seodaemun-gu.html')), false);
   });
 });

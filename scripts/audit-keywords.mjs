@@ -248,13 +248,15 @@ const totalCount = rows.length;
 const guCount = rows.filter((r) => r.regionLevel === '구').length;
 const dongCount = rows.filter((r) => r.regionLevel === '동').length;
 const publishedPagesCount = rows.filter((r) => r.htmlGenerated === '생성 (O)').length;
+const publishedGuPagesCount = rows.filter((r) => r.regionLevel === '구' && r.htmlGenerated === '생성 (O)').length;
+const publishedDongPagesCount = rows.filter((r) => r.regionLevel === '동' && r.htmlGenerated === '생성 (O)').length;
 const unapprovedPagesCount = totalCount - publishedPagesCount;
 const publishedGuidesCount = rows.filter((r) => r.guideStatus === 'PUBLISHED').length;
 const dongGuideEligibleCount = rows.filter((r) => r.regionLevel === '동' && r.guideEligible === '가능 (O)').length;
 
 // 3. 콘솔 출력
 console.log('========================================================================================================');
-console.log('               올케어탄성 전체 동적키워드 46개 관리 현황표 (Gu 24 + Dong 22 Local Audit)               ');
+console.log(`               올케어탄성 전체 동적키워드 ${totalCount}개 관리 현황표 (Gu ${guCount} + Dong ${dongCount} Local Audit)               `);
 console.log('========================================================================================================');
 console.table(
   rows.map((r) => ({
@@ -285,13 +287,13 @@ if (!fs.existsSync(artifactsDir)) {
 }
 
 // 4-A. Markdown 현황표 생성
-const mdHeader = `# 올케어탄성 동적키워드 46개 관리 현황표 (Gu 24 + Dong 22)
+const mdHeader = `# 올케어탄성 동적키워드 ${totalCount}개 관리 현황표 (Gu ${guCount} + Dong ${dongCount})
 
 - **검수 일시**: ${new Date().toISOString()}
 - **기준 도메인**: https://www.seoulallcaretan.com/
 - **총 키워드 수**: ${totalCount}개 (구 단위 ${guCount}개 / 동 단위 ${dongCount}개)
-- **공개 승인 페이지**: ${publishedPagesCount}개 (노원 탄성, 노원 베란다, 도봉 탄성)
-- **비공개 격리 페이지**: ${unapprovedPagesCount}개 (구 단위 비공개 ${guCount - publishedPagesCount}개 + 동 단위 Draft ${dongCount}개)
+- **공개 승인 페이지**: ${publishedPagesCount}개 (노원 탄성/베란다, 도봉 탄성, 중랑 탄성/베란다 + 동 단위 12개)
+- **비공개 격리 페이지**: ${unapprovedPagesCount}개 (구 단위 비공개 ${guCount - publishedGuPagesCount}개 + 동 단위 Draft ${dongCount - publishedDongPagesCount}개)
 - **정보성 가이드 발행**: ${publishedGuidesCount}개
 - **동 단위 RSS 가이드 허용 수**: ${dongGuideEligibleCount}개 (동 단위 원천 차단)
 
@@ -306,7 +308,7 @@ const mdBody = rows
   )
   .join('\n');
 
-const mdFooter = `\n\n> **[격리 안전 원칙]**\n> 본 문서는 로컬 관리자용 현황표이며, public/ 및 dist/ 디렉토리에 포함되지 않아 외부로 노출되지 않습니다.\n> 동 단위 키워드 22개는 전원 Draft 상태이며, RSS 가이드 발행이 기술적으로 원천 차단됩니다.\n`;
+const mdFooter = `\n\n> **[격리 안전 원칙]**\n> 본 문서는 로컬 관리자용 현황표이며, public/ 및 dist/ 디렉토리에 포함되지 않아 외부로 노출되지 않습니다.\n> 동 단위 미승인 키워드 ${dongCount - publishedDongPagesCount}개는 전원 Draft 상태이며, RSS 가이드 발행이 기술적으로 원천 차단됩니다.\n`;
 
 fs.writeFileSync(path.join(artifactsDir, 'KEYWORD_STATUS.md'), mdHeader + mdBody + mdFooter, 'utf8');
 console.log(`[로컬 보고서 생성 완료] -> ${path.join('artifacts', 'KEYWORD_STATUS.md')}`);

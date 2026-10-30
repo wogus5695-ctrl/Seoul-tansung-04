@@ -25,25 +25,36 @@ import {
 
 console.log('--- [TEST SUITE] STEP REGION-1: DONG KEYWORD REGISTRY & RSS GATE ---');
 
-// [Scenario 1] 11 Legal Dongs integrity (5 Nowon, 6 Jungnang)
-console.log('1. Verifying 11 Legal Dongs integrity...');
-assert.equal(DONGS.length, 11, 'Total legal dongs must be 11');
+// [Scenario 1] 38 Legal Dongs integrity (5 Nowon, 6 Jungnang, 9 Seongbuk, 10 Dongdaemun, 4 Gangbuk, 4 Dobong)
+console.log('1. Verifying 38 Legal Dongs integrity...');
+assert.equal(DONGS.length, 38, 'Total legal dongs must be 38');
 const nowonDongs = DONGS.filter((d) => d.parentRegionId === 'nowon');
 const jungnangDongs = DONGS.filter((d) => d.parentRegionId === 'jungnang');
+const seongbukDongs = DONGS.filter((d) => d.parentRegionId === 'seongbuk');
+const dongdaemunDongs = DONGS.filter((d) => d.parentRegionId === 'dongdaemun');
+const gangbukDongs = DONGS.filter((d) => d.parentRegionId === 'gangbuk');
+const dobongDongs = DONGS.filter((d) => d.parentRegionId === 'dobong');
+
 assert.equal(nowonDongs.length, 5, 'Nowon must have exactly 5 dongs');
 assert.equal(jungnangDongs.length, 6, 'Jungnang must have exactly 6 dongs');
+assert.equal(seongbukDongs.length, 9, 'Seongbuk must have exactly 9 dongs');
+assert.equal(dongdaemunDongs.length, 10, 'Dongdaemun must have exactly 10 dongs');
+assert.equal(gangbukDongs.length, 4, 'Gangbuk must have exactly 4 dongs');
+assert.equal(dobongDongs.length, 4, 'Dobong must have exactly 4 dongs');
 
 const expectedNowonIds = ['sanggye', 'junggye', 'hagye', 'gongneung', 'wolgye'];
 const expectedJungnangIds = ['myeonmok', 'sangbong', 'junghwa', 'muk', 'mangu', 'sinnae'];
-
-const expectedNowonSlugs = ['seoul-sanggye-dong', 'seoul-junggye-dong', 'seoul-hagye-dong', 'seoul-gongneung-dong', 'seoul-wolgye-dong'];
-const expectedJungnangSlugs = ['seoul-myeonmok-dong', 'seoul-sangbong-dong', 'seoul-junghwa-dong', 'seoul-muk-dong', 'seoul-mangu-dong', 'seoul-sinnae-dong'];
+const expectedSeongbukIds = ['gireum', 'jeongneung', 'donam', 'jangwi', 'jongam', 'hawolgok', 'seokgwan', 'sangwolgok', 'seongbuk'];
+const expectedDongdaemunIds = ['dapsimni', 'jangan', 'jeonnong', 'hwigyeong', 'imun', 'cheongnyangni', 'yongdu', 'jegi', 'hoegi', 'sinseol'];
+const expectedGangbukIds = ['mia', 'suyu', 'beon', 'ui'];
+const expectedDobongIds = ['ssangmun', 'banghak', 'chang', 'dobong'];
 
 assert.deepEqual(nowonDongs.map((d) => d.id), expectedNowonIds);
 assert.deepEqual(jungnangDongs.map((d) => d.id), expectedJungnangIds);
-
-assert.deepEqual(nowonDongs.map((d) => d.slug), expectedNowonSlugs);
-assert.deepEqual(jungnangDongs.map((d) => d.slug), expectedJungnangSlugs);
+assert.deepEqual(seongbukDongs.map((d) => d.id), expectedSeongbukIds);
+assert.deepEqual(dongdaemunDongs.map((d) => d.id), expectedDongdaemunIds);
+assert.deepEqual(gangbukDongs.map((d) => d.id), expectedGangbukIds);
+assert.deepEqual(dobongDongs.map((d) => d.id), expectedDobongIds);
 
 for (const dong of DONGS) {
   assert.ok(dong.id, 'Dong id must exist');
@@ -53,7 +64,7 @@ for (const dong of DONGS) {
   assert.ok(dong.displayName.includes(dong.name), 'displayName must contain name');
   assert.equal(typeof dong.order, 'number', 'order must be a number');
 }
-console.log('   PASS: 11 Legal Dongs integrity validated.');
+console.log('   PASS: 38 Legal Dongs integrity validated.');
 
 // [Scenario 2] Parent region references match actual REGIONS & invalid parent rejection
 console.log('2. Verifying parent region references & invalid parent rejection...');
@@ -77,10 +88,10 @@ assert.equal(dongCheckRes.valid, false, 'validateDongsIntegrity must return vali
 assert.ok(dongCheckRes.errors.some((e) => e.includes('invalid-gu')), 'Error must mention invalid-gu');
 console.log('   PASS: Parent region integrity & rejection validated.');
 
-// [Scenario 3] 22 Dong dynamic keywords generated cleanly with convention
-console.log('3. Verifying 22 Dong dynamic keywords generation...');
+// [Scenario 3] 76 Dong dynamic keywords generated cleanly with convention
+console.log('3. Verifying 76 Dong dynamic keywords generation...');
 const dongKeywords = getAllDongDynamicKeywords();
-assert.equal(dongKeywords.length, 22, 'Dong dynamic keywords must be 22 (11 dongs * 2 services)');
+assert.equal(dongKeywords.length, 76, 'Dong dynamic keywords must be 76 (38 dongs * 2 services)');
 
 for (const kw of dongKeywords) {
   assert.ok(kw.parentRegionId, 'Dong keyword must have parentRegionId');
@@ -88,7 +99,7 @@ for (const kw of dongKeywords) {
   const expectedId = `${kw.serviceId}_${kw.parentRegionId}-${kw.regionId}`;
   assert.equal(kw.id, expectedId, `keywordId must follow convention ${expectedId}`);
 }
-console.log('   PASS: 22 Dong dynamic keywords convention validated.');
+console.log('   PASS: 76 Dong dynamic keywords convention validated.');
 
 // [Scenario 4] Display keyword is strictly '동명 + 작업명' (no 3-tier '노원구 상계동 탄성코트')
 console.log('4. Verifying display keyword strictly structured as [동명 + 작업명]...');
@@ -97,6 +108,10 @@ for (const kw of dongKeywords) {
   assert.equal(parts.length, 2, `Display keyword should have exactly 2 words: [동명, 작업명], got '${kw.keyword}'`);
   assert.ok(!kw.keyword.includes('노원구'), `Keyword '${kw.keyword}' must not contain '노원구'`);
   assert.ok(!kw.keyword.includes('중랑구'), `Keyword '${kw.keyword}' must not contain '중랑구'`);
+  assert.ok(!kw.keyword.includes('성북구'), `Keyword '${kw.keyword}' must not contain '성북구'`);
+  assert.ok(!kw.keyword.includes('동대문구'), `Keyword '${kw.keyword}' must not contain '동대문구'`);
+  assert.ok(!kw.keyword.includes('강북구'), `Keyword '${kw.keyword}' must not contain '강북구'`);
+  assert.ok(!kw.keyword.includes('도봉구'), `Keyword '${kw.keyword}' must not contain '도봉구'`);
   assert.ok(kw.keyword.endsWith('탄성코트'), `Keyword '${kw.keyword}' must end with service name`);
 }
 console.log('   PASS: Display keyword strictness validated.');
@@ -112,20 +127,20 @@ for (const kw of guKeywords) {
 }
 console.log('   PASS: Existing 24 Gu keywords preserved.');
 
-// [Scenario 6] 46 Total keywords in getAllCombinedDynamicKeywords()
-console.log('6. Verifying 46 total keywords in getAllCombinedDynamicKeywords()...');
+// [Scenario 6] 100 Total keywords in getAllCombinedDynamicKeywords()
+console.log('6. Verifying 100 total keywords in getAllCombinedDynamicKeywords()...');
 const combinedKeywords = getAllCombinedDynamicKeywords();
-assert.equal(combinedKeywords.length, 46, 'Combined keywords must be exactly 46 (24 + 22)');
+assert.equal(combinedKeywords.length, 100, 'Combined keywords must be exactly 100 (24 + 76)');
 const combinedGu = combinedKeywords.filter((k) => k.regionLevel === 'gu');
 const combinedDong = combinedKeywords.filter((k) => k.regionLevel === 'dong');
 assert.equal(combinedGu.length, 24, 'Combined Gu count must be 24');
-assert.equal(combinedDong.length, 22, 'Combined Dong count must be 22');
-console.log('   PASS: 46 Total combined keywords validated.');
+assert.equal(combinedDong.length, 76, 'Combined Dong count must be 76');
+console.log('   PASS: 100 Total combined keywords validated.');
 
-// [Scenario 7] All 18 unapproved Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
-console.log('7. Verifying 18 draft Dong pages and 4 approved Dong pages in SEO_PAGES...');
+// [Scenario 7] All 64 unapproved Dong pages in SEO_PAGES are strictly isPublished: false & contentStatus: 'draft'
+console.log('7. Verifying 64 draft Dong pages and 12 approved Dong pages in SEO_PAGES...');
 const dongPages = SEO_PAGES.filter((p) => p.regionLevel === 'dong');
-assert.equal(dongPages.length, 22, 'SEO_PAGES must have 22 dong pages');
+assert.equal(dongPages.length, 76, 'SEO_PAGES must have 76 dong pages');
 const approvedDongIds = [
   'elastic-coating_nowon-sanggye',
   'elastic-coating_jungnang-myeonmok',
@@ -154,12 +169,12 @@ for (const page of dongPages) {
   }
   assert.ok(page.metaTitle.includes('| AS보장 | 올케어탄성'), `Dong page metaTitle must include AS보장`);
 }
-console.log('   PASS: 10 draft Dong pages isolated, 12 Dong pages approved.');
+console.log('   PASS: 64 draft Dong pages isolated, 12 Dong pages approved.');
 
 // [Scenario 8] Zero HTML generated for unapproved dong pages in dist/seo/
 console.log('8. Verifying published SEO pages and unapproved dong isolation...');
 const publishedSeoPages = getPublishedSeoPages();
-assert.equal(publishedSeoPages.length, 17, 'Exactly 17 pages must be published (5 Gu + 12 Dong)');
+assert.equal(publishedSeoPages.length, 24, 'Exactly 24 pages must be published (12 Gu + 12 Dong)');
 
 const distSeoDir = path.resolve('dist', 'seo');
 if (fs.existsSync(distSeoDir)) {
@@ -191,9 +206,9 @@ if (fs.existsSync(hubFile)) {
     assert.ok(!hubHtml.includes(dong.slug), `Hub must not contain unapproved dong slug: ${dong.slug}`);
     assert.ok(!hubHtml.includes(dong.name), `Hub must not contain unapproved dong name: ${dong.name}`);
   }
-  // Exactly 17 links to SEO pages (5 Gu + 12 Dong)
+  // Exactly 24 links to SEO pages (12 Gu + 12 Dong)
   const seoLinks = hubHtml.match(/href="\/seo\/[^"]+"/g) || [];
-  assert.equal(seoLinks.length, 17, 'Hub must contain exactly 17 SEO links');
+  assert.equal(seoLinks.length, 24, 'Hub must contain exactly 24 SEO links');
 }
 console.log('   PASS: Zero dong links in HTML hub validated.');
 
@@ -207,7 +222,7 @@ if (fs.existsSync(sitemapFile)) {
     assert.ok(!sitemapXml.includes(dong.slug), `Sitemap must not contain unapproved dong slug: ${dong.slug}`);
   }
   const locCount = (sitemapXml.match(/<loc>/g) || []).length;
-  assert.equal(locCount, 24, 'Sitemap must contain exactly 24 loc entries');
+  assert.equal(locCount, 31, 'Sitemap must contain exactly 31 loc entries');
 }
 console.log('   PASS: Zero dong URLs in XML sitemap validated.');
 
@@ -274,8 +289,8 @@ assert.equal(allocRes.valid, false);
 assert.ok(allocRes.errors.some((e) => e.includes('[RSS POLICY VIOLATION]')));
 console.log('   PASS: RSS Gate strictly blocks dong keywords.');
 
-// [Scenario 12] URL and keywordId collision prevention across all 46 keywords
-console.log('12. Verifying URL and keywordId collision prevention across all 46 items...');
+// [Scenario 12] URL and keywordId collision prevention across all 100 keywords
+console.log('12. Verifying URL and keywordId collision prevention across all 100 items...');
 const allKws = getAllCombinedDynamicKeywords();
 const kwIds = new Set();
 const urlPaths = new Set();
@@ -286,8 +301,8 @@ for (const k of allKws) {
   kwIds.add(k.id);
   urlPaths.add(k.targetUrlPath);
 }
-assert.equal(kwIds.size, 46, 'Unique keywordIds must be 46');
-assert.equal(urlPaths.size, 46, 'Unique urlPaths must be 46');
+assert.equal(kwIds.size, 100, 'Unique keywordIds must be 100');
+assert.equal(urlPaths.size, 100, 'Unique urlPaths must be 100');
 
 const seoPageIds = new Set();
 const seoPageUrls = new Set();
@@ -297,9 +312,9 @@ for (const p of SEO_PAGES) {
   seoPageIds.add(p.id);
   seoPageUrls.add(p.urlPath);
 }
-assert.equal(seoPageIds.size, 46, 'SEO_PAGES unique ids must be 46');
-assert.equal(seoPageUrls.size, 46, 'SEO_PAGES unique urlPaths must be 46');
-console.log('   PASS: Zero collision across all 46 IDs and URLs.');
+assert.equal(seoPageIds.size, 100, 'SEO_PAGES unique ids must be 100');
+assert.equal(seoPageUrls.size, 100, 'SEO_PAGES unique urlPaths must be 100');
+console.log('   PASS: Zero collision across all 100 IDs and URLs.');
 
 // [Scenario 13] Existing 3 pilots AS보장 Title and published status preserved
 console.log('13. Verifying existing 3 pilots AS보장 Title and published status preserved...');

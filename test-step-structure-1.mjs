@@ -11,14 +11,14 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
   const publishedPages = getPublishedSeoPages();
   const hubHtmlPath = path.join(DIST_DIR, 'sitemap-seoul.html');
 
-  test('1. Inventory check: Exactly 17 published pages, 29 unpublished, 46 total', () => {
-    assert.strictEqual(SEO_PAGES.length, 46, 'Total SEO pages must be exactly 46 (24 Gu + 22 Dong)');
-    assert.strictEqual(publishedPages.length, 17, 'Published SEO pages must be exactly 17 (5 Gu + 12 Dong)');
+  test('1. Inventory check: Exactly 17 published pages, 83 unpublished, 100 total', () => {
+    assert.strictEqual(SEO_PAGES.length, 100, 'Total SEO pages must be exactly 100 (24 Gu + 76 Dong)');
+    assert.strictEqual(publishedPages.length, 24, 'Published SEO pages must be exactly 24 (12 Gu + 12 Dong)');
     const unpublished = SEO_PAGES.filter((p) => !publishedPages.includes(p));
-    assert.strictEqual(unpublished.length, 29, 'Unpublished SEO pages must be exactly 29 (19 Gu + 10 Dong)');
+    assert.strictEqual(unpublished.length, 76, 'Unpublished SEO pages must be exactly 76 (12 Gu + 64 Dong)');
   });
 
-  test('2. All 17 published regional pages adopt the unified collapsible bottom layout', () => {
+  test('2. All 24 published regional pages adopt the unified collapsible bottom layout', () => {
     for (const page of publishedPages) {
       const htmlPath = path.join(DIST_DIR, 'seo', page.serviceSlug, `${page.districtSlug}.html`);
       assert.ok(fs.existsSync(htmlPath), `HTML file for ${page.id} must exist at ${htmlPath}`);
@@ -73,12 +73,12 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
 
     // 1st tier: Gu headings (H2)
     const h2Matches = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
-    assert.strictEqual(h2Matches.length, 3, 'Must have exactly 3 Gu sections (H2)');
+    assert.strictEqual(h2Matches.length, 6, 'Must have exactly 6 Gu sections (H2)');
     const guNames = h2Matches.map((h2) => h2.replace(/<[^>]+>/g, '').trim());
-    assert.deepStrictEqual(guNames, ['노원구', '도봉구', '중랑구'], 'Gus must be in REGIONS order');
+    assert.deepStrictEqual(guNames, ['노원구', '도봉구', '강북구', '성북구', '동대문구', '중랑구'], 'Gus must be in REGIONS order');
 
     // Verify unpublished Gus do NOT have H2 sections
-    const unpublishedGus = REGIONS.filter((r) => !['nowon', 'dobong', 'jungnang'].includes(r.id));
+    const unpublishedGus = REGIONS.filter((r) => !['nowon', 'dobong', 'gangbuk', 'seongbuk', 'dongdaemun', 'jungnang'].includes(r.id));
     for (const ug of unpublishedGus) {
       assert.equal(
         guNames.includes(ug.name),
@@ -89,11 +89,11 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
 
     // 2nd tier: Service headings (H3)
     const h3Matches = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/gi) || [];
-    assert.strictEqual(h3Matches.length, 5, 'Must have exactly 5 service sub-sections across the 3 Gus');
+    assert.strictEqual(h3Matches.length, 12, 'Must have exactly 12 service sub-sections across the 6 Gus');
     const serviceNames = h3Matches.map((h3) => h3.replace(/<[^>]+>/g, '').trim());
     assert.deepStrictEqual(
       serviceNames,
-      ['탄성코트', '베란다탄성코트', '탄성코트', '탄성코트', '베란다탄성코트'],
+      ['탄성코트', '베란다탄성코트', '탄성코트', '베란다탄성코트', '탄성코트', '베란다탄성코트', '탄성코트', '베란다탄성코트', '탄성코트', '베란다탄성코트', '탄성코트', '베란다탄성코트'],
       'Service groups must appear in correct Gu and Service order'
     );
   });
@@ -103,7 +103,7 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
 
     // Extract all regional SEO links from the hub
     const linkMatches = [...html.matchAll(/<a\s+href="(\/seo\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-    assert.strictEqual(linkMatches.length, 17, 'Must have exactly 17 published links on the Hub');
+    assert.strictEqual(linkMatches.length, 24, 'Must have exactly 24 published links on the Hub');
 
     const expectedKeywords = [
       { url: '/seo/elastic-coating/seoul-nowon-gu.html', keyword: '노원구 탄성코트' },
@@ -115,6 +115,13 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
       { url: '/seo/balcony-elastic-coating/seoul-junggye-dong.html', keyword: '중계동 베란다탄성코트' },
       { url: '/seo/balcony-elastic-coating/seoul-hagye-dong.html', keyword: '하계동 베란다탄성코트' },
       { url: '/seo/elastic-coating/seoul-dobong-gu.html', keyword: '도봉구 탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-dobong-gu.html', keyword: '도봉구 베란다탄성코트' },
+      { url: '/seo/elastic-coating/seoul-gangbuk-gu.html', keyword: '강북구 탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-gangbuk-gu.html', keyword: '강북구 베란다탄성코트' },
+      { url: '/seo/elastic-coating/seoul-seongbuk-gu.html', keyword: '성북구 탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-seongbuk-gu.html', keyword: '성북구 베란다탄성코트' },
+      { url: '/seo/elastic-coating/seoul-dongdaemun-gu.html', keyword: '동대문구 탄성코트' },
+      { url: '/seo/balcony-elastic-coating/seoul-dongdaemun-gu.html', keyword: '동대문구 베란다탄성코트' },
       { url: '/seo/elastic-coating/seoul-jungnang-gu.html', keyword: '중랑구 탄성코트' },
       { url: '/seo/elastic-coating/seoul-myeonmok-dong.html', keyword: '면목동 탄성코트' },
       { url: '/seo/elastic-coating/seoul-sangbong-dong.html', keyword: '상봉동 탄성코트' },
@@ -139,7 +146,7 @@ describe('STEP STRUCTURE-1: Global SEO Layout Unification & Gu-Centric SEO Hub S
     assert.equal(html.includes('→'), false, 'Must NOT contain "→" arrows');
   });
 
-  test('5. Zero exposure of 29 unpublished dynamic keywords on SEO Hub', () => {
+  test('5. Zero exposure of 76 unpublished dynamic keywords on SEO Hub', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
     const unpublishedPages = SEO_PAGES.filter((p) => !publishedPages.includes(p));
 

@@ -151,8 +151,8 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
     assert.match(guideHtml, /<meta property="og:image:height" content="630"/);
   });
 
-  test('5. Site inventory: exactly 12 HTML pages, 4 RSS items, 12 Sitemap URLs, 19 unapproved pages absent', () => {
-    // 12 HTML pages (11 existing + 1 new guide)
+  test('5. Site inventory: exactly 12 Gu published, 4 RSS items, 31 Sitemap URLs, 12 unapproved Gu pages absent', () => {
+    // 19 HTML pages (12 Gu SEO + 1 main + 1 guide index + 4 guides + 1 hub)
     const expectedHtmls = [
       'dist/index.html',
       'dist/guide.html',
@@ -163,15 +163,22 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
       'dist/seo/elastic-coating/seoul-jungnang-gu.html',
+      'dist/seo/elastic-coating/seoul-seongbuk-gu.html',
+      'dist/seo/elastic-coating/seoul-dongdaemun-gu.html',
+      'dist/seo/elastic-coating/seoul-gangbuk-gu.html',
       'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-dobong-gu.html',
       'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-seongbuk-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-dongdaemun-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-gangbuk-gu.html',
       'dist/sitemap-seoul.html',
     ];
     for (const f of expectedHtmls) {
       assert.ok(fs.existsSync(f), `${f} must exist`);
     }
 
-    // 19 unapproved registered combinations must ALL be strictly absent
+    // 12 unapproved registered combinations must ALL be strictly absent
     const registeredRegions = [
       'seoul-nowon-gu', 'seoul-dobong-gu', 'seoul-gangbuk-gu', 'seoul-seongbuk-gu',
       'seoul-dongdaemun-gu', 'seoul-jungnang-gu', 'seoul-eunpyeong-gu', 'seoul-seodaemun-gu',
@@ -183,8 +190,15 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
       'dist/seo/elastic-coating/seoul-nowon-gu.html',
       'dist/seo/elastic-coating/seoul-dobong-gu.html',
       'dist/seo/elastic-coating/seoul-jungnang-gu.html',
+      'dist/seo/elastic-coating/seoul-seongbuk-gu.html',
+      'dist/seo/elastic-coating/seoul-dongdaemun-gu.html',
+      'dist/seo/elastic-coating/seoul-gangbuk-gu.html',
       'dist/seo/balcony-elastic-coating/seoul-nowon-gu.html',
-      'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html'
+      'dist/seo/balcony-elastic-coating/seoul-dobong-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-seongbuk-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-dongdaemun-gu.html',
+      'dist/seo/balcony-elastic-coating/seoul-gangbuk-gu.html',
     ]);
 
     let unapprovedCount = 0;
@@ -197,16 +211,16 @@ describe('STEP SERP-1: Naver Title / Description / Hero OG Image Verification Su
         }
       }
     }
-    assert.strictEqual(unapprovedCount, 19, 'Must have exactly 19 unapproved registered combinations');
+    assert.strictEqual(unapprovedCount, 12, 'Must have exactly 12 unapproved registered combinations');
 
     // RSS Feed has exactly 4 items
     const rssXml = fs.readFileSync('dist/rss.xml', 'utf8');
     const items = rssXml.match(/<item>/g);
     assert.strictEqual(items?.length, 4, 'RSS feed must have exactly 4 items');
 
-    // Sitemap has exactly 24 locs (1 home + 5 guides + 17 regional SEO + 1 hub)
+    // Sitemap has exactly 31 locs
     const sitemap0 = fs.readFileSync('dist/sitemap-0.xml', 'utf8');
     const locs = sitemap0.match(/<loc>/g);
-    assert.strictEqual(locs?.length, 24, 'Sitemap must have exactly 24 url loc entries');
+    assert.strictEqual(locs?.length, 31, 'Sitemap must have exactly 31 url loc entries');
   });
 });

@@ -40,16 +40,19 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(h1Text, '서울 탄성코트 시공지역 안내');
   });
 
-  test('3. Gu Groups count exactly 3 (H2) and Published Links count exactly 9', () => {
+  test('3. Gu Groups count exactly 6 (H2) and Published Links count exactly 24', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
     // Groups (H2: Gu-centric hierarchy in STEP STRUCTURE-1)
     const h2Matches = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
-    assert.strictEqual(h2Matches.length, 3, 'Exactly 3 Gu group headings (H2: 노원구, 도봉구, 중랑구)');
+    assert.strictEqual(h2Matches.length, 6, 'Exactly 6 Gu group headings (H2: 노원구, 도봉구, 중랑구, 성북구, 동대문구, 강북구)');
     const guNames = h2Matches.map((h2) => h2.replace(/<[^>]+>/g, '').trim());
     assert.ok(guNames.includes('노원구'), '노원구 group exists');
     assert.ok(guNames.includes('도봉구'), '도봉구 group exists');
     assert.ok(guNames.includes('중랑구'), '중랑구 group exists');
+    assert.ok(guNames.includes('성북구'), '성북구 group exists');
+    assert.ok(guNames.includes('동대문구'), '동대문구 group exists');
+    assert.ok(guNames.includes('강북구'), '강북구 group exists');
 
     // Service subgroups (H3)
     const h3Matches = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/gi) || [];
@@ -57,15 +60,22 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.ok(serviceNames.includes('탄성코트'), '탄성코트 sub-group exists');
     assert.ok(serviceNames.includes('베란다탄성코트'), '베란다탄성코트 sub-group exists');
 
-    // Published SEO Links (3 Elastic Gu + 2 Balcony Elastic Gu + 2 Elastic Dong + 2 Balcony Elastic Dong = 9)
+    // Published SEO Links
     const expectedUrls = [
       '/seo/elastic-coating/seoul-nowon-gu.html',
       '/seo/elastic-coating/seoul-dobong-gu.html',
       '/seo/elastic-coating/seoul-jungnang-gu.html',
+      '/seo/elastic-coating/seoul-seongbuk-gu.html',
+      '/seo/elastic-coating/seoul-dongdaemun-gu.html',
+      '/seo/elastic-coating/seoul-gangbuk-gu.html',
       '/seo/elastic-coating/seoul-sanggye-dong.html',
       '/seo/elastic-coating/seoul-myeonmok-dong.html',
       '/seo/balcony-elastic-coating/seoul-nowon-gu.html',
+      '/seo/balcony-elastic-coating/seoul-dobong-gu.html',
       '/seo/balcony-elastic-coating/seoul-jungnang-gu.html',
+      '/seo/balcony-elastic-coating/seoul-seongbuk-gu.html',
+      '/seo/balcony-elastic-coating/seoul-dongdaemun-gu.html',
+      '/seo/balcony-elastic-coating/seoul-gangbuk-gu.html',
       '/seo/balcony-elastic-coating/seoul-sanggye-dong.html',
       '/seo/balcony-elastic-coating/seoul-myeonmok-dong.html',
     ];
@@ -75,13 +85,13 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     }
 
     const regionalLinks = html.match(/href="\/seo\/[^"]+"/g) || [];
-    assert.strictEqual(regionalLinks.length, 17, 'Must contain EXACTLY 17 published regional links');
+    assert.strictEqual(regionalLinks.length, 24, 'Must contain EXACTLY 24 published regional links');
 
     // STEP STRUCTURE-1 Clean Link Design: no "상세 안내 보기", no URL path text
     assert.equal(html.includes('상세 안내 보기'), false, 'Clean Link Design must NOT have "상세 안내 보기" text');
   });
 
-  test('4. Complete isolation of 19 unpublished regional SEO combinations', () => {
+  test('4. Complete isolation of 12 unpublished regional SEO combinations', () => {
     const html = fs.readFileSync(hubHtmlPath, 'utf8');
 
     const publishedPages = getPublishedSeoPages();
@@ -101,7 +111,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
       }
     }
 
-    assert.strictEqual(unpublishedCount, 19, 'Must verify all 19 unpublished combinations');
+    assert.strictEqual(unpublishedCount, 12, 'Must verify all 12 unpublished combinations');
   });
 
   test('5. Canonical and Robots integrity on Hub', () => {
@@ -116,13 +126,13 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
     assert.equal(html.includes('noindex'), false, 'Hub must allow indexing in production mode');
   });
 
-  test('6. XML Sitemap count incremented to exactly 12 URLs', () => {
+  test('6. XML Sitemap count incremented to exactly 31 URLs', () => {
     const sitemapPath = path.join(DIST_DIR, 'sitemap-0.xml');
     assert.ok(fs.existsSync(sitemapPath), 'sitemap-0.xml must exist');
 
     const sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
     const locMatches = sitemapContent.match(/<loc>[^<]+<\/loc>/g) || [];
-    assert.strictEqual(locMatches.length, 24, 'Sitemap must contain exactly 24 URLs (1 home + 5 guides + 17 regional SEO + 1 hub)');
+    assert.strictEqual(locMatches.length, 31, 'Sitemap must contain exactly 31 URLs');
 
     // Ensure hub is included in sitemap
     assert.match(sitemapContent, /\/sitemap-seoul\.html<\/loc>/, 'Hub must be included in XML sitemap');
@@ -156,7 +166,7 @@ describe('STEP HUB-1: Dynamic Keyword HTML Hub & Management Audit Suite', () => 
 
     const mdContent = fs.readFileSync(mdPath, 'utf8');
     const rows = mdContent.split('\n').filter((l) => l.startsWith('|') && !l.includes('Keyword ID') && !l.includes(':---'));
-    assert.ok(rows.length === 24 || rows.length === 46, 'Markdown report must have 24 (Gu only) or 46 (Gu + Dong) keyword rows');
+    assert.ok(rows.length === 24 || rows.length === 46 || rows.length === 100, 'Markdown report must have 24 (Gu only) or 46 (Gu + Dong) or 100 keyword rows');
 
     // Check unique keywordIds
     const allKeywords = getAllDynamicKeywords(REGIONS, SERVICES);
